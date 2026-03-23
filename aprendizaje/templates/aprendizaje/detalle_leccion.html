@@ -1,0 +1,61 @@
+{% extends 'aprendizaje/base.html' %}
+
+{% block title %}Lección {{ leccion.orden }} - RedOwl{% endblock %}
+
+{% block content %}
+    <h1 style="color: var(--accent-color);">📖 {{ leccion.titulo }}</h1>
+    <p>Curso: <strong>{{ leccion.curso.nombre }}</strong></p>
+    
+    <br>
+    <h2>Ejercicios de esta lección:</h2>
+
+    {% if mensaje %}
+        {% if es_correcto %}
+            <div style="padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb;">
+                ✅ {{ mensaje }}
+            </div>
+        {% else %}
+            <div style="padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; background-color: #f8d7da; color: #721c24; border: 2px solid #f5c6cb;">
+                ⚠️ {{ mensaje }}
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% for ejercicio in ejercicios %}
+        <div class="card">
+            <h3>Reto: {{ ejercicio.get_tipo_ejercicio_display }}</h3>
+            <p><strong>Instrucciones:</strong></p>
+            <p>{{ ejercicio.enunciado|linebreaks }}</p>
+            <p style="color: #ffaa00; font-weight: bold;">⭐ Recompensa: {{ ejercicio.xp_recompensa }} XP</p>
+            
+            <hr style="border-color: var(--bg-color); margin: 15px 0;">
+
+            {% if ejercicio.tipo_ejercicio == 'C' %}
+                <h4>💻 Tu Código:</h4>
+                {% if ejercicio.retocodigo %}
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <textarea name="codigo_alumno" class="editor-codigo" placeholder="Escribe tu código aquí...">{% if codigo_previo %}{{ codigo_previo }}{% else %}{{ ejercicio.retocodigo.codigo_base }}{% endif %}</textarea>
+                        
+                        <button type="submit" class="btn" style="background-color: #58cc02;">Ejecutar Código ▶️</button>
+                    </form>
+
+                {% else %}
+                    <p style="color: red;">⚠️ Error: Este ejercicio no tiene un Reto de Código asociado.</p>
+                {% endif %}
+
+            {% elif ejercicio.tipo_ejercicio == 'Q' %}
+                <h4>🧠 Pregunta de Quiz:</h4>
+                <p><em>(Aquí programaremos las opciones pronto)</em></p>
+                <button class="btn" style="background-color: #1cb0f6;">Enviar Respuesta 📝</button>
+            {% endif %}
+
+        </div>
+    {% empty %}
+        <p>Esta lección aún no tiene ejercicios asignados.</p>
+    {% endfor %}
+
+    <br>
+    <a href="{% url 'detalle_curso' leccion.curso.id %}" class="btn">⬅️ Volver a la Ruta</a>
+{% endblock %}

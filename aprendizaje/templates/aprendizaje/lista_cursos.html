@@ -1,0 +1,22 @@
+{% extends 'aprendizaje/base.html' %}
+
+{% block title %}Cursos - RedOwl{% endblock %}
+
+{% block content %}
+    <h1 style="color: var(--accent-color);">🚀 Cursos Disponibles</h1>
+    <p>Elige un curso para comenzar tu entrenamiento:</p>
+
+    {% for curso in cursos %}
+        <div class="card">
+            <h2>{{ curso.nombre }}</h2>
+            <p><strong>Lenguaje:</strong> {{ curso.lenguaje }}</p>
+            {% if curso.es_ingles_tecnico %}
+                <p><em>🇬🇧 Inglés Técnico</em></p>
+            {% endif %}
+            
+            <a href="{% url 'detalle_curso' curso.id %}" class="btn">Ver Lecciones</a>
+        </div>
+    {% empty %}
+        <p>Aún no hay cursos disponibles.</p>
+    {% endfor %}
+{% endblock %}

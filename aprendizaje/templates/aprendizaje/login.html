@@ -1,0 +1,15 @@
+{% extends 'aprendizaje/base.html' %}
+{% block title %}Entrar - RedOwl{% endblock %}
+
+{% block content %}
+    <div class="card" style="max-width: 400px; margin: 0 auto;">
+        <h2 style="color: var(--accent-color); text-align: center;">Bienvenido de vuelta 🦉</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn" style="width: 100%;">Entrar</button>
+        </form>
+        <br>
+        <p style="text-align: center;">¿No tienes cuenta? <a href="{% url 'registro' %}" style="color: var(--accent-color); background: none; padding: 0;">Regístrate aquí</a></p>
+    </div>
+{% endblock %}

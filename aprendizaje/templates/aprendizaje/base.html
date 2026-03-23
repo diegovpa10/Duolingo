@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}RedOwl Academy{% endblock %}</title>
+    <style>
+        /* 1. TEMA OSCURO (Principal) */
+        :root {
+            --bg-color: #1a1a1a;        /* Fondo oscuro */
+            --text-color: #ffffff;      /* Letras blancas */
+            --accent-color: #ff3333;    /* Toques rojos */
+            --card-bg: #2d2d2d;         /* Fondo de las tarjetas */
+        }
+
+        /* 2. TEMA CLARO (Secundario) - Se activa con un botón */
+        [data-theme="light"] {
+            --bg-color: #ffffff;        /* Fondo blanco */
+            --text-color: #000000;      /* Letras negras */
+            --accent-color: #002244;    /* Toques azules oscuros */
+            --card-bg: #f5f5f5;         /* Fondo de las tarjetas claro */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease; /* Transición suave al cambiar de color */
+        }
+
+        /* Barra de navegación superior */
+        .navbar {
+            background-color: var(--card-bg);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--accent-color);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .theme-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Contenedor central donde irá el contenido de cada página */
+        .container {
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Estilo base para las tarjetas de cursos y lecciones */
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 6px solid var(--accent-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        /* Botones generales */
+        a.btn {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Estilos para el editor de código interactivo */
+        .editor-codigo {
+            width: 100%;
+            height: 150px;
+            background-color: #1e1e1e; /* Color oscuro típico de VS Code */
+            color: #d4d4d4;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            padding: 15px;
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            resize: vertical; /* Permite al usuario hacer la caja más grande */
+            margin-bottom: 10px;
+        }
+        
+        .editor-codigo:focus {
+            outline: none;
+            border-color: #58cc02; /* Se pone verde al hacer clic adentro */
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="{% url 'lista_cursos' %}" class="logo">🦉 RedOwl Academy</a>
+        
+        <div style="display: flex; align-items: center; gap: 15px;">
+            {% if user.is_authenticated %}
+                <span style="font-weight: bold; color: #ffaa00; font-size: 18px;">⭐ {{ user.estudiante.xp }} XP</span>
+                <span>Hola, <strong>{{ user.username }}</strong></span>
+                
+                <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn" style="background-color: #555; padding: 6px 12px; margin-top: 0;">Salir</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn" style="background-color: transparent; border: 2px solid var(--accent-color); margin-top: 0; padding: 6px 12px;">Entrar</a>
+                <a href="{% url 'registro' %}" class="btn" style="margin-top: 0; padding: 6px 12px;">Registrarse</a>
+            {% endif %}
+            
+            <button class="theme-btn" onclick="toggleTheme()">🌓</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.documentElement;
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme'); // Vuelve al oscuro
+            } else {
+                body.setAttribute('data-theme', 'light'); // Cambia al claro
+            }
+        }
+    </script>
+</body>
+</html>

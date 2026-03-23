@@ -1,0 +1,27 @@
+{% extends 'aprendizaje/base.html' %}
+
+{% block title %}{{ curso.nombre }} - RedOwl{% endblock %}
+
+{% block content %}
+    <h1 style="color: var(--accent-color);">🗺️ Ruta: {{ curso.nombre }}</h1>
+    <p>Lenguaje principal: <strong>{{ curso.lenguaje }}</strong></p>
+
+    <br>
+
+    {% for leccion in lecciones %}
+        <div class="card" {% if leccion.completada %}style="border-left-color: #4CAF50;"{% endif %}>
+            <h3>Lección {{ leccion.orden }}: {{ leccion.titulo }}</h3>
+            {% if leccion.completada %}
+                <p>✅ ¡Completada!</p>
+            {% else %}
+                <p>⏳ Pendiente</p>
+            {% endif %}
+            <a href="{% url 'detalle_leccion' leccion.id %}" class="btn">Entrar a la Lección</a>
+        </div>
+    {% empty %}
+        <p>Este curso aún no tiene lecciones.</p>
+    {% endfor %}
+
+    <br>
+    <a href="{% url 'lista_cursos' %}" class="btn">⬅️ Volver a Cursos</a>
+{% endblock %}
