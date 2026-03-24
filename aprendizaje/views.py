@@ -1,8 +1,14 @@
 import sys
 import io
+
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import *
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.shortcuts import redirect
+from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, get_object_or_404
 from .models import Curso, Leccion, Ejercicio, Estudiante
 
@@ -88,3 +94,31 @@ def registro(request):
         form = UserCreationForm()
     
     return render(request, 'aprendizaje/registro.html', {'form': form})
+
+def login_usuario(request):
+
+    if request.method == 'POST':
+
+        username = request.POST['username']
+        password = request.POST['password']
+
+        try:
+            usuario = User.objects.get(username=username)
+
+            if check_password(password, usuario.password):
+
+                # Guardar sesión
+                request.session['usuario_id'] = usuario.id
+                request.session['username'] = usuario.username
+
+                return redirect('home')
+
+            else:
+                messages.error(request, "la contraseña esta inorreta carnal :)")
+
+        except User.DoesNotExist:
+            messages.error(request, "No esta registrado ve a registrarte :)")
+
+        return redirect('login')
+
+    return render(request, 'aprendizaje/login.html')

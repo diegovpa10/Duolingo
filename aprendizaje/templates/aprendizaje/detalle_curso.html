@@ -3,25 +3,320 @@
 {% block title %}{{ curso.nombre }} - RedOwl{% endblock %}
 
 {% block content %}
-    <h1 style="color: var(--accent-color);">🗺️ Ruta: {{ curso.nombre }}</h1>
-    <p>Lenguaje principal: <strong>{{ curso.lenguaje }}</strong></p>
+<style>
+    /* --- GRID DEL DASHBOARD (3 Columnas) --- */
+    .dashboard-layout {
+        display: grid;
+        /* Redujimos un poco la columna izquierda y aumentamos el GAP (espaciado) a 80px */
+        grid-template-columns: 200px 1fr 280px;
+        gap: 80px; 
+        min-height: 80vh;
+        margin-top: -20px;
+    }
 
-    <br>
+    /* --- 1. MENÚ LATERAL --- */
+    .sidebar-menu {
+        position: sticky;
+        top: 90px;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
 
-    {% for leccion in lecciones %}
-        <div class="card" {% if leccion.completada %}style="border-left-color: #4CAF50;"{% endif %}>
-            <h3>Lección {{ leccion.orden }}: {{ leccion.titulo }}</h3>
-            {% if leccion.completada %}
-                <p>✅ ¡Completada!</p>
-            {% else %}
-                <p>⏳ Pendiente</p>
-            {% endif %}
-            <a href="{% url 'detalle_leccion' leccion.id %}" class="btn">Entrar a la Lección</a>
+    .menu-btn {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 20px;
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.9rem;
+        border-radius: 12px;
+        border: 2px solid transparent;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .menu-btn:hover { background-color: var(--secondary-accent); }
+    .menu-btn.active {
+        background-color: rgba(255, 51, 51, 0.1);
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+    }
+    .menu-icon { font-size: 1.5rem; }
+
+    /* --- 2. ÁREA CENTRAL (RUTA) --- */
+    .main-path-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+    }
+
+    .etapa-banner {
+        background-color: var(--accent-color);
+        color: white;
+        width: 100%;
+        max-width: 600px; /* Aumentamos a 600px para que ocupe bien el espacio central */
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 15px rgba(255, 51, 51, 0.2);
+    }
+
+    .etapa-banner h2 { margin: 0; font-size: 1.2rem; font-weight: 800; }
+    .etapa-banner p { margin: 0; font-size: 0.8rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
+
+    .ruta-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+        width: 100%;
+    }
+
+    .nodo-leccion {
+        position: relative;
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 8px 0 #222; 
+        background-color: var(--card-bg);
+        border: 4px solid var(--secondary-accent);
+        z-index: 2;
+    }
+
+    .nodo-disponible { border-color: var(--accent-color); box-shadow: 0 8px 0 #990000; }
+    .nodo-completado { background-color: var(--accent-color); border-color: #fff; box-shadow: 0 8px 0 #990000; }
+    .nodo-leccion:active { transform: translateY(4px); box-shadow: 0 4px 0 #222; }
+    .nodo-disponible:active { box-shadow: 0 4px 0 #990000; }
+    .nodo-icon { font-size: 1.5rem; color: var(--text-color); }
+    .nodo-completado .nodo-icon { color: white; }
+
+    /* Zig-Zag */
+    .ruta-container a:nth-child(4n+1) { transform: translateX(0px); }
+    .ruta-container a:nth-child(4n+2) { transform: translateX(45px); }
+    .ruta-container a:nth-child(4n+3) { transform: translateX(65px); }
+    .ruta-container a:nth-child(4n+4) { transform: translateX(45px); }
+    .ruta-container a:nth-child(4n+5) { transform: translateX(0px); }
+    .ruta-container a:nth-child(4n+6) { transform: translateX(-45px); }
+    .ruta-container a:nth-child(4n+7) { transform: translateX(-65px); }
+    .ruta-container a:nth-child(4n+8) { transform: translateX(-45px); }
+
+    .tooltip-empezar {
+        position: absolute;
+        top: -45px;
+        background: white;
+        color: black;
+        padding: 8px 15px;
+        border-radius: 10px;
+        font-weight: 800;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        animation: flotar 2s infinite ease-in-out;
+    }
+    
+    .tooltip-empezar::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid white;
+    }
+
+    @keyframes flotar {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+        100% { transform: translateY(0px); }
+    }
+
+    /* --- 3. PANEL DERECHO --- */
+    .right-panel {
+        position: sticky;
+        top: 90px;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .top-stats-card {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        background-color: var(--card-bg);
+        border: 2px solid var(--secondary-accent);
+        border-radius: 12px;
+        padding: 15px;
+    }
+
+    .stats-row {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--secondary-accent);
+    }
+
+    .xp-stat { font-weight: bold; color: #1cb0f6; font-size: 1rem; }
+    .streak-stat { font-weight: bold; color: #ffaa00; font-size: 1rem; }
+
+    /* SELECTOR DE IDIOMAS */
+    .lang-selector {
+        display: flex;
+        background-color: #000;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--secondary-accent);
+    }
+
+    .lang-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 5px;
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 0.85rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .lang-btn:hover { background-color: #1a1a1a; color: #fff; }
+
+    .lang-btn.active {
+        background-color: var(--accent-color);
+        color: white;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .flag-icon { font-size: 1.3rem; }
+
+    /* Tarjetas Laterales */
+    .side-card {
+        background-color: var(--card-bg);
+        border: 2px solid var(--secondary-accent);
+        border-radius: 15px;
+        padding: 20px;
+    }
+
+    .side-card h3 { font-size: 1rem; margin-bottom: 15px; color: var(--text-color); border-bottom: 1px solid #333; padding-bottom: 10px; }
+
+</style>
+
+<div class="dashboard-layout">
+    
+    <aside class="sidebar-menu">
+        <a href="{% url 'lista_cursos' %}" class="menu-btn active">
+            <span class="menu-icon">🏠</span> Aprender
+        </a>
+        <a href="{% url 'lista_cursos' %}" class="menu-btn">
+            <span class="menu-icon">📚</span> Cursos
+        </a>
+        <a href="#" class="menu-btn">
+            <span class="menu-icon">🛡️</span> Ligas
+        </a>
+        <a href="#" class="menu-btn">
+            <span class="menu-icon">🎁</span> Desafíos
+        </a>
+        <a href="#" class="menu-btn">
+            <span class="menu-icon">👤</span> Perfil
+        </a>
+    </aside>
+
+    <main class="main-path-area">
+        <div class="etapa-banner">
+            <div>
+                <p>Módulo de aprendizaje</p>
+                <h2>{{ curso.nombre }}</h2>
+            </div>
+            <div style="font-size: 2rem;">🦉</div>
         </div>
-    {% empty %}
-        <p>Este curso aún no tiene lecciones.</p>
-    {% endfor %}
 
-    <br>
-    <a href="{% url 'lista_cursos' %}" class="btn">⬅️ Volver a Cursos</a>
+        <div class="ruta-container">
+            {% for leccion in lecciones %}
+                <a href="{% url 'detalle_leccion' leccion.id %}" 
+                   class="nodo-leccion {% if leccion.completada %}nodo-completado{% else %}nodo-disponible{% endif %}">
+                    {% if forloop.first and not leccion.completada %}
+                        <div class="tooltip-empezar">EMPEZAR</div>
+                    {% endif %}
+                    <div class="nodo-icon">
+                        {% if leccion.completada %}✓{% else %}⭐{% endif %}
+                    </div>
+                </a>
+                {% if forloop.counter|divisibleby:3 %}
+                    <div class="nodo-leccion" style="border-style: dashed; border-color: #666; transform: translateX(0) scale(0.8);">
+                        <div class="nodo-icon">📦</div>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <p style="color: #666; font-style: italic;">SISTEMA: No hay datos de lecciones.</p>
+            {% endfor %}
+            
+            <div class="nodo-leccion" style="margin-top: 20px; border-color: #ffaa00;">
+                <div class="nodo-icon">🏆</div>
+            </div>
+        </div>
+    </main>
+
+    <aside class="right-panel">
+        
+        <div class="top-stats-card">
+            <div class="stats-row">
+                <span class="streak-stat" title="Racha de días">🔥 1</span>
+                <span class="xp-stat" title="Experiencia total">💎 {{ user.estudiante.xp|default:"0" }}</span>
+            </div>
+            
+            <div class="lang-selector">
+                <button class="lang-btn {% if not curso.es_ingles_tecnico %}active{% endif %}">
+                    <span class="flag-icon">🇲🇽</span> ESP
+                </button>
+                <button class="lang-btn {% if curso.es_ingles_tecnico %}active{% endif %}">
+                    <span class="flag-icon">🇺🇸</span> ENG
+                </button>
+            </div>
+        </div>
+
+        <div class="side-card">
+            <h3>¡Compite en las Ligas!</h3>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="font-size: 2rem; opacity: 0.5;">🛡️</div>
+                <p style="font-size: 0.8rem; color: #888; margin: 0;">Completa 3 lecciones más para empezar a competir.</p>
+            </div>
+        </div>
+
+        <div class="side-card">
+            <h3>Desafíos del día</h3>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+                <span style="font-size: 1.5rem; color: #ffaa00;">⚡</span>
+                <span style="font-size: 0.8rem; font-weight: bold;">Gana 50 EXP</span>
+            </div>
+            <div style="width: 100%; height: 10px; background-color: #333; border-radius: 5px; overflow: hidden;">
+                <div style="width: 20%; height: 100%; background-color: #ffaa00;"></div>
+            </div>
+            <p style="text-align: right; font-size: 0.7rem; color: #888; margin-top: 5px;">10 / 50</p>
+        </div>
+    </aside>
+
+</div>
+
 {% endblock %}

@@ -1,14 +1,77 @@
 {% extends 'aprendizaje/base.html' %}
-{% block title %}Registro - RedOwl{% endblock %}
+
+{% block title %}Registro - RedOwl Academy{% endblock %}
 
 {% block content %}
-    <div class="card" style="max-width: 400px; margin: 0 auto;">
-        <h2 style="color: var(--accent-color); text-align: center;">Crea tu cuenta 🦉</h2>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }} <button type="submit" class="btn" style="width: 100%;">Registrarse</button>
-        </form>
-        <br>
-        <p style="text-align: center;">¿Ya tienes cuenta? <a href="{% url 'login' %}" style="color: var(--accent-color); background: none; padding: 0;">Inicia sesión aquí</a></p>
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+        <div class="card" style="max-width: 450px; width: 100%; border-color: var(--secondary-accent); padding: 2.5rem;">
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2 style="color: var(--accent-color); font-weight: 800; letter-spacing: -1px; text-transform: uppercase; margin-bottom: 0.5rem;">
+                    Nuevo Usuario
+                </h2>
+                <p style="color: #666; font-size: 0.8rem; letter-spacing: 1px;">CREE UNA IDENTIDAD EN EL SISTEMA</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                
+                <style>
+                    /* Estilo para los inputs generados por Django form.as_p */
+                    form p { margin-bottom: 1.2rem; }
+                    form label { 
+                        display: block; 
+                        font-size: 0.7rem; 
+                        text-transform: uppercase; 
+                        color: #555; 
+                        margin-bottom: 4px; 
+                        font-weight: bold;
+                        letter-spacing: 1px;
+                    }
+                    form input { 
+                        width: 100%; 
+                        background-color: #000; 
+                        border: 1px solid var(--secondary-accent); 
+                        color: var(--text-color); 
+                        padding: 10px; 
+                        border-radius: 2px;
+                        outline: none;
+                        box-sizing: border-box;
+                        font-family: inherit;
+                    }
+                    form input:focus { border-color: var(--accent-color); }
+                    /* Estilo para textos de ayuda de Django (ej. requisitos de contraseña) */
+                    .helptext { 
+                        display: block; 
+                        font-size: 0.65rem; 
+                        color: #444; 
+                        margin-top: 5px; 
+                        line-height: 1.2;
+                    }
+                    ul.errorlist {
+                        color: #ff3333;
+                        font-size: 0.75rem;
+                        padding-left: 0;
+                        list-style: none;
+                        margin-bottom: 10px;
+                    }
+                </style>
+
+                {{ form.as_p }}
+
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem; letter-spacing: 2px; font-weight: bold;">
+                    REGISTRAR CUENTA
+                </button>
+            </form>
+
+            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #222; text-align: center;">
+                <p style="font-size: 0.8rem; color: #444;">
+                    ¿YA TIENE UNA CUENTA? 
+                    <a href="{% url 'login' %}" style="color: var(--text-color); text-decoration: none; font-weight: bold; margin-left: 5px; border-bottom: 1px solid var(--accent-color);">
+                        INICIAR SESIÓN
+                    </a>
+                </p>
+            </div>
+        </div>
     </div>
 {% endblock %}

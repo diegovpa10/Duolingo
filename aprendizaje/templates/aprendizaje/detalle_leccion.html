@@ -3,59 +3,71 @@
 {% block title %}Lección {{ leccion.orden }} - RedOwl{% endblock %}
 
 {% block content %}
-    <h1 style="color: var(--accent-color);">📖 {{ leccion.titulo }}</h1>
-    <p>Curso: <strong>{{ leccion.curso.nombre }}</strong></p>
-    
-    <br>
-    <h2>Ejercicios de esta lección:</h2>
+    <div style="margin-bottom: 2.5rem; border-left: 2px solid var(--accent-color); padding-left: 20px;">
+        <span style="color: #666; font-size: 0.8rem; font-weight: bold; letter-spacing: 2px;">
+            CURSO: {{ leccion.curso.nombre | upper }}
+        </span>
+        <h1 style="color: var(--text-color); margin-top: 5px; font-weight: 800;">
+            {{ leccion.orden }}. {{ leccion.titulo }}
+        </h1>
+    </div>
 
     {% if mensaje %}
         {% if es_correcto %}
-            <div style="padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb;">
-                ✅ {{ mensaje }}
+            <div class="card" style="padding: 1rem; margin-bottom: 2rem; border-color: #444;">
+                <span style="color: #fff;">●</span> <span style="color: #aaa; margin-left: 10px;">{{ mensaje }}</span>
             </div>
         {% else %}
-            <div style="padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; background-color: #f8d7da; color: #721c24; border: 2px solid #f5c6cb;">
-                ⚠️ {{ mensaje }}
+            <div class="card" style="padding: 1rem; margin-bottom: 2rem; border-color: #ff3333;">
+                <span style="color: #ff3333; font-weight: bold;">!</span> <span style="color: #ff3333; margin-left: 10px;">{{ mensaje }}</span>
             </div>
         {% endif %}
     {% endif %}
 
     {% for ejercicio in ejercicios %}
-        <div class="card">
-            <h3>Reto: {{ ejercicio.get_tipo_ejercicio_display }}</h3>
-            <p><strong>Instrucciones:</strong></p>
-            <p>{{ ejercicio.enunciado|linebreaks }}</p>
-            <p style="color: #ffaa00; font-weight: bold;">⭐ Recompensa: {{ ejercicio.xp_recompensa }} XP</p>
+        <div class="card" style="border-color: var(--secondary-accent); margin-bottom: 2rem;">
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.25rem; margin: 0;">{{ ejercicio.get_tipo_ejercicio_display }}</h3>
+                <p style="font-size: 0.85rem; color: #666; margin-top: 5px;">RECOMPENSA: {{ ejercicio.xp_recompensa }} XP</p>
+            </div>
             
-            <hr style="border-color: var(--bg-color); margin: 15px 0;">
+            <div style="color: #bbb; font-size: 0.95rem; margin-bottom: 2rem;">
+                <p style="text-transform: uppercase; font-size: 0.7rem; color: #555; font-weight: bold; margin-bottom: 8px;">Instrucciones</p>
+                {{ ejercicio.enunciado|linebreaks }}
+            </div>
 
             {% if ejercicio.tipo_ejercicio == 'C' %}
-                <h4>💻 Tu Código:</h4>
                 {% if ejercicio.retocodigo %}
-                    
                     <form method="POST">
                         {% csrf_token %}
-                        <textarea name="codigo_alumno" class="editor-codigo" placeholder="Escribe tu código aquí...">{% if codigo_previo %}{{ codigo_previo }}{% else %}{{ ejercicio.retocodigo.codigo_base }}{% endif %}</textarea>
+                        <div style="position: relative;">
+                            <textarea name="codigo_alumno" class="editor-codigo" spellcheck="false">{% if codigo_previo %}{{ codigo_previo }}{% else %}{{ ejercicio.retocodigo.codigo_base }}{% endif %}</textarea>
+                        </div>
                         
-                        <button type="submit" class="btn" style="background-color: #58cc02;">Ejecutar Código ▶️</button>
+                        <button type="submit" class="btn" style="margin-top: 15px; width: 100%; letter-spacing: 1px;">
+                            EJECUTAR PRUEBA
+                        </button>
                     </form>
-
                 {% else %}
-                    <p style="color: red;">⚠️ Error: Este ejercicio no tiene un Reto de Código asociado.</p>
+                    <div style="border: 1px dashed #333; padding: 20px; text-align: center; color: #ff3333; font-size: 0.8rem;">
+                        [ ERROR: RETO DE CÓDIGO NO VINCULADO ]
+                    </div>
                 {% endif %}
 
             {% elif ejercicio.tipo_ejercicio == 'Q' %}
-                <h4>🧠 Pregunta de Quiz:</h4>
-                <p><em>(Aquí programaremos las opciones pronto)</em></p>
-                <button class="btn" style="background-color: #1cb0f6;">Enviar Respuesta 📝</button>
+                <div style="background-color: #000; padding: 20px; border: 1px solid #222; text-align: center;">
+                    <p style="font-style: italic; color: #444; font-size: 0.8rem; margin-bottom: 15px;">(Módulo de Quiz en desarrollo...)</p>
+                    <button type="button" class="btn btn-outline" style="width: 100%;">ENVIAR RESPUESTA</button>
+                </div>
             {% endif %}
-
         </div>
     {% empty %}
-        <p>Esta lección aún no tiene ejercicios asignados.</p>
+        <p style="color: #444; font-style: italic;">No hay ejercicios disponibles para esta lección.</p>
     {% endfor %}
 
-    <br>
-    <a href="{% url 'detalle_curso' leccion.curso.id %}" class="btn">⬅️ Volver a la Ruta</a>
+    <div style="margin-top: 4rem; border-top: 1px solid var(--secondary-accent); padding-top: 2rem;">
+        <a href="{% url 'detalle_curso' leccion.curso.id %}" class="btn btn-outline" style="font-size: 11px; letter-spacing: 1px;">
+            VOLVER A LA RUTA
+        </a>
+    </div>
 {% endblock %}

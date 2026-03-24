@@ -1,22 +1,53 @@
 {% extends 'aprendizaje/base.html' %}
 
-{% block title %}Cursos - RedOwl{% endblock %}
+{% block title %}Catálogo - RedOwl Academy{% endblock %}
 
 {% block content %}
-    <h1 style="color: var(--accent-color);">🚀 Cursos Disponibles</h1>
-    <p>Elige un curso para comenzar tu entrenamiento:</p>
+    <div style="margin-bottom: 3rem; border-bottom: 1px solid var(--secondary-accent); padding-bottom: 1.5rem;">
+        <h1 style="color: var(--accent-color); font-weight: 800; letter-spacing: -1.5px; text-transform: uppercase;">
+            Explorar Programas
+        </h1>
+        <p style="color: #666; font-size: 0.95rem; letter-spacing: 0.5px;">
+            Selecciona una ruta especializada para comenzar el despliegue de conocimientos.
+        </p>
+    </div>
 
-    {% for curso in cursos %}
-        <div class="card">
-            <h2>{{ curso.nombre }}</h2>
-            <p><strong>Lenguaje:</strong> {{ curso.lenguaje }}</p>
-            {% if curso.es_ingles_tecnico %}
-                <p><em>🇬🇧 Inglés Técnico</em></p>
-            {% endif %}
-            
-            <a href="{% url 'detalle_curso' curso.id %}" class="btn">Ver Lecciones</a>
-        </div>
-    {% empty %}
-        <p>Aún no hay cursos disponibles.</p>
-    {% endfor %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+        {% for curso in cursos %}
+            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; border-color: var(--secondary-accent); transition: border-color 0.3s ease;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                        <h2 style="font-size: 1.4rem; margin: 0; color: var(--text-color); font-weight: 700;">
+                            {{ curso.nombre }}
+                        </h2>
+                        {% if curso.es_ingles_tecnico %}
+                            <span style="font-size: 10px; border: 1px solid #444; padding: 2px 6px; color: #888; letter-spacing: 1px;">
+                                EN_US
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    <p style="font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem;">
+                        Core: <span style="color: var(--text-color);">{{ curso.lenguaje }}</span>
+                    </p>
+                </div>
+
+                <div style="border-top: 1px solid #222; padding-top: 1.5rem; margin-top: auto;">
+                    <a href="{% url 'detalle_curso' curso.id %}" class="btn" style="width: 100%; text-align: center; font-size: 12px; letter-spacing: 1px;">
+                        ACCEDER AL CURSO
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem; border-style: dashed;">
+                <p style="color: #444; font-style: italic; margin: 0;">
+                    SISTEMA: No se han encontrado despliegues de cursos activos.
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div style="margin-top: 5rem; text-align: center;">
+        <p style="font-size: 11px; color: #333; letter-spacing: 2px;">REDOWL ACADEMY // TERMINAL_V.1.0</p>
+    </div>
 {% endblock %}
