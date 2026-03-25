@@ -1,7 +1,5 @@
 import sys
 import io
-
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import *
 from django.contrib import messages
@@ -58,6 +56,20 @@ def detalle_leccion(request, leccion_id):
 
             leccion.completada = True
             leccion.save()
+            # =========================================================
+            # ¡NUEVO: AQUÍ LE DAMOS LA EXPERIENCIA AL ESTUDIANTE! 🦉⭐
+            # =========================================================
+            if request.user.is_authenticated:
+                # Preguntamos si este usuario realmente tiene un perfil de estudiante
+                if hasattr(request.user, 'estudiante'):
+                    estudiante = request.user.estudiante
+                    estudiante.xp_total += 15 
+                    estudiante.save()
+                else:
+                    # Si es un administrador o no tiene perfil, solo imprimimos en la consola 
+                    # para saberlo, pero evitamos que la página explote.
+                    print(f"El usuario {request.user.username} no es un estudiante válido.")
+            # =========================================================
             
         except Exception as e:
             # Si el código del alumno tiene un error, entramos aquí
@@ -96,22 +108,22 @@ def registro(request):
     return render(request, 'aprendizaje/registro.html', {'form': form})
 
 def login_usuario(request):
-
     if request.method == 'POST':
-
         username = request.POST['username']
         password = request.POST['password']
 
         try:
             usuario = User.objects.get(username=username)
 
+            # Validamos la contraseña
             if check_password(password, usuario.password):
+                
+                # CORRECCIÓN 1: Usamos la función oficial de Django para iniciar sesión.
+                # Esto asegura que el "user.is_authenticated" de tu HTML funcione perfecto.
+                login(request, usuario)
 
-                # Guardar sesión
-                request.session['usuario_id'] = usuario.id
-                request.session['username'] = usuario.username
-
-                return redirect('home')
+                # CORRECCIÓN 2: Cambiamos 'home' por 'lista_cursos' que es tu ruta real
+                return redirect('lista_cursos')
 
             else:
                 messages.error(request, "la contraseña esta inorreta carnal :)")

@@ -282,8 +282,9 @@
         
         <div class="top-stats-card">
             <div class="stats-row">
-                <span class="streak-stat" title="Racha de días">🔥 1</span>
-                <span class="xp-stat" title="Experiencia total">💎 {{ user.estudiante.xp|default:"0" }}</span>
+                <span class="streak-stat" title="Racha de días">🔥 {{ user.estudiante.racha_dias|default:"0" }}</span>
+                
+                <span class="xp-stat" title="Experiencia total">💎 {{ user.estudiante.xp_total|default:"0" }}</span>
             </div>
             
             <div class="lang-selector">
@@ -310,10 +311,12 @@
                 <span style="font-size: 1.5rem; color: #ffaa00;">⚡</span>
                 <span style="font-size: 0.8rem; font-weight: bold;">Gana 50 EXP</span>
             </div>
+            
             <div style="width: 100%; height: 10px; background-color: #333; border-radius: 5px; overflow: hidden;">
-                <div style="width: 20%; height: 100%; background-color: #ffaa00;"></div>
+                <div style="width: {% widthratio user.estudiante.xp_total 50 100 %}%; max-width: 100%; height: 100%; background-color: #ffaa00; transition: width 0.5s ease-in-out;"></div>
             </div>
-            <p style="text-align: right; font-size: 0.7rem; color: #888; margin-top: 5px;">10 / 50</p>
+            
+            <p style="text-align: right; font-size: 0.7rem; color: #888; margin-top: 5px;">{{ user.estudiante.xp_total|default:"0" }} / 50</p>
         </div>
     </aside>
 

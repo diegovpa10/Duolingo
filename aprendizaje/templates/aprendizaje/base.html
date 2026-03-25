@@ -159,7 +159,7 @@
         
         <div class="d-flex align-items-center" style="gap: 20px;">
             {% if user.is_authenticated %}
-                <span style="font-size: 0.8rem; color: #888;">{{ user.username }} | <b style="color: var(--accent-color);">{{ user.estudiante.xp }} XP</b></span>
+                <span style="font-size: 0.8rem; color: #888;">{{ user.username }} | <b style="color: var(--accent-color);">{{ user.estudiante.xp_total|default:"0"}} XP</b></span>
                 <form action="{% url 'logout' %}" method="post" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline" style="padding: 5px 15px; font-size: 10px;">SALIR</button>
