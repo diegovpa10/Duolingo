@@ -30,6 +30,19 @@ def detalle_curso(request, curso_id):
 def detalle_leccion(request, leccion_id):
     leccion = get_object_or_404(Leccion, id=leccion_id)
     ejercicios = Ejercicio.objects.filter(leccion=leccion)
+
+    if leccion.orden > 1:
+        # Buscamos la lección inmediatamente anterior del mismo curso
+        leccion_anterior = Leccion.objects.filter(curso=leccion.curso, orden=leccion.orden - 1).first()
+        
+        # Si la lección anterior existe pero NO está completada... ¡Lo regresamos!
+        if leccion_anterior and not leccion_anterior.completada:
+            # Le mandamos un mensaje de advertencia
+            messages.warning(request, "¡Tranquilo, pequeño búho! 🦉 Debes completar la lección anterior primero.")
+            
+            # Lo redirigimos de vuelta a la ruta del curso (Ajusta 'detalle_curso' si tu URL se llama distinto)
+            # Nota: Necesitas pasarle el ID del curso para que sepa a dónde regresar
+            return redirect('detalle_curso', curso_id=leccion.curso.id)
     
     # Variables para enviar a la plantilla
     mensaje = None
