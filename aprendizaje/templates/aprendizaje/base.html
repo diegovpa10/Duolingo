@@ -229,13 +229,13 @@ body {
         <a href="{% url 'lista_cursos' %}" class="menu-btn {% if request.path == '/' or '/curso/' in request.path %}active{% endif %}">
             <span class="menu-icon">🏠</span> Aprender
         </a>
-        <a href="{% url 'ligas' %}" class="menu-btn {% if request.path == '/ligas/' %}active{% endif %}">
+        <a href="#" class="menu-btn {% if request.path == '/ligas/' %}active{% endif %}">
             <span class="menu-icon">🛡️</span> Ligas
         </a>
-        <a href="{% url 'desafios' %}" class="menu-btn {% if request.path == '/desafios/' %}active{% endif %}">
+        <a href="#" class="menu-btn {% if request.path == '/desafios/' %}active{% endif %}">
             <span class="menu-icon">🎁</span> Desafíos
         </a>
-        <a href="{% url 'perfil' %}" class="menu-btn {% if request.path == '/perfil/' %}active{% endif %}">
+        <a href="#" class="menu-btn {% if request.path == '/perfil/' %}active{% endif %}">
             <span class="menu-icon">👤</span> Perfil
         </a>
     </aside>

@@ -65,10 +65,12 @@
 
     .nodo-disponible { border-color: var(--accent-color); box-shadow: 0 8px 0 #990000; }
     .nodo-completado { background-color: var(--accent-color); border-color: #fff; box-shadow: 0 8px 0 #990000; }
+    .nodo-bloqueado { background-color: #333; border-color: #555; box-shadow: 0 8px 0 #111; cursor: not-allowed; opacity: 0.7; }
     .nodo-leccion:active { transform: translateY(4px); box-shadow: 0 4px 0 #222; }
     .nodo-disponible:active { box-shadow: 0 4px 0 #990000; }
     .nodo-icon { font-size: 1.5rem; color: var(--text-color); }
     .nodo-completado .nodo-icon { color: white; }
+    .nodo-bloqueado .nodo-icon { color: #666; }
 
     /* Zig-Zag */
     .ruta-container a:nth-child(4n+1) { transform: translateX(0px); }
@@ -202,20 +204,31 @@
 
         <div class="ruta-container">
             {% for leccion in lecciones %}
-                <a href="{% url 'detalle_leccion' leccion.id %}" 
-                   class="nodo-leccion {% if leccion.completada %}nodo-completado{% else %}nodo-disponible{% endif %}">
-                    {% if forloop.first and not leccion.completada %}
-                        <div class="tooltip-empezar">EMPEZAR</div>
-                    {% endif %}
-                    <div class="nodo-icon">
-                        {% if leccion.completada %}✓{% else %}⭐{% endif %}
+                
+                {% if leccion.esta_bloqueada %}
+                    <div class="nodo-leccion nodo-bloqueado" title="Debes completar la lección anterior">
+                        <div class="nodo-icon">🔒</div>
                     </div>
-                </a>
+                {% else %}
+                    <a href="{% url 'detalle_leccion' leccion.id %}" 
+                       class="nodo-leccion {% if leccion.completada %}nodo-completado{% else %}nodo-disponible{% endif %}">
+                        
+                        {% if not leccion.completada %}
+                            <div class="tooltip-empezar">EMPEZAR</div>
+                        {% endif %}
+                        
+                        <div class="nodo-icon">
+                            {% if leccion.completada %}✓{% else %}⭐{% endif %}
+                        </div>
+                    </a>
+                {% endif %}
+
                 {% if forloop.counter|divisibleby:3 %}
                     <div class="nodo-leccion" style="border-style: dashed; border-color: #666; transform: translateX(0) scale(0.8);">
                         <div class="nodo-icon">📦</div>
                     </div>
                 {% endif %}
+                
             {% empty %}
                 <p style="color: #666; font-style: italic;">SISTEMA: No hay datos de lecciones.</p>
             {% endfor %}

@@ -78,6 +78,23 @@ class Leccion(models.Model):
 
     def __str__(self):
         return f"{self.orden}. {self.titulo} ({self.curso.nombre})"
+    
+    # 👇 ¡FÍJATE EN LOS ESPACIOS AQUÍ! Debe estar alineado con el def __str__ 👇
+    @property
+    def esta_bloqueada(self):
+        # La lección 1 nunca está bloqueada
+        if self.orden == 1:
+            return False
+            
+        # --- ¡NUEVA LÓGICA! ---
+        # Obtenemos TODAS las lecciones anteriores del mismo curso en orden
+        lecciones_anteriores = Leccion.objects.filter(curso=self.curso, orden__lt=self.orden)
+            
+        # Usamos 'all()' para verificar que CADA UNA de las lecciones anteriores esté completada.
+        # Si NO todas están completadas (not all(...)), entonces esta lección está bloqueada.
+        if not all(leccion.completada for leccion in lecciones_anteriores):
+            return True   
+        return False
 
 class Ejercicio(models.Model):
     TIPOS = [('C', 'Código'), ('Q', 'Quiz')]
