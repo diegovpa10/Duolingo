@@ -3,74 +3,163 @@
 {% block title %}Acceso - RedOwl Academy{% endblock %}
 
 {% block content %}
-    <div style="display: flex; justify-content: center; align-items: center; min-height: 60vh;">
-        <div class="card" style="max-width: 400px; width: 100%; border-color: var(--secondary-accent); padding: 2.5rem;">
-            
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <h2 style="color: var(--accent-color); font-weight: 800; letter-spacing: -1px; text-transform: uppercase; margin-bottom: 0.5rem;">
-                    Identificación
-                </h2>
-                <p style="color: #666; font-size: 0.8rem; letter-spacing: 1px;">INGRESE SUS CREDENCIALES DE ACCESO</p>
-            </div>
+<style>
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh; /* Centrado un poco mejor en pantallas altas */
+    }
 
-            <form method="POST">
-                {% csrf_token %}
-                
-                <style>
-                    /* Estilo específico para los inputs generados por Django form.as_p */
-                    form p { margin-bottom: 1.5rem; }
-                    form label { 
-                        display: block; 
-                        font-size: 0.7rem; 
-                        text-transform: uppercase; 
-                        color: #555; 
-                        margin-bottom: 5px; 
-                        font-weight: bold;
-                        letter-spacing: 1px;
-                    }
-                    form input { 
-                        width: 100%; 
-                        background-color: #000; 
-                        border: 1px solid var(--secondary-accent); 
-                        color: var(--text-color); 
-                        padding: 10px; 
-                        border-radius: 2px;
-                        outline: none;
-                        box-sizing: border-box;
-                    }
-                    form input:focus { border-color: var(--accent-color); }
-                </style>
+    .login-card {
+        max-width: 400px;
+        width: 100%;
+        background-color: var(--card-bg);
+        border: 2px solid var(--secondary-accent);
+        border-radius: 15px; /* Bordes redondeados modernos */
+        padding: 3rem 2.5rem; /* Un poco más de aire interior */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
 
-                {% if messages %}
-                    <div style="background-color: #ff333320; border: 1px solid #ff3333; color: #ff4444; padding: 10px; text-align: center; margin-bottom: 1rem; border-radius: 4px; font-weight: bold;">
-                        {% for message in messages %}
-                            {{ message }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
+    .login-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
 
-                <p>
-                    <label for="username">Usuario:</label>
-                    <input type="text" name="username" id="username" placeholder="Tu nombre de usuario" required>
-                </p>
-                <p>
-                    <label for="password">Contraseña:</label>
-                    <input type="password" name="password" id="password" placeholder="Tu contraseña secreta" required>
-                </p>
+    .login-title {
+        color: var(--accent-color);
+        font-weight: 800;
+        font-size: 2rem;
+        letter-spacing: -1px;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
 
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem; letter-spacing: 2px; font-weight: bold;">
-                    AUTENTICAR
-                </button>
-            </form>
+    .login-subtitle {
+        color: #666;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        font-weight: bold;
+    }
 
-            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #222; text-align: center;">
-                <p style="font-size: 0.8rem; color: #444;">
-                    ¿NUEVO USUARIO? 
-                    <a href="{% url 'registro' %}" style="color: var(--text-color); text-decoration: none; font-weight: bold; margin-left: 5px; border-bottom: 1px solid var(--accent-color);">
-                        CREAR CUENTA
-                    </a>
-                </p>
-            </div>
+    /* Estilos del Formulario */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: #888;
+        margin-bottom: 8px;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    .form-input {
+        width: 100%;
+        background-color: #050505; /* Un fondo un poco más oscuro que la tarjeta */
+        border: 2px solid var(--secondary-accent);
+        color: var(--text-color);
+        padding: 12px 15px;
+        border-radius: 10px; /* Campos de texto redondeados */
+        outline: none;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .form-input:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 10px rgba(255, 51, 51, 0.1);
+    }
+
+    .form-input::placeholder {
+        color: #444;
+    }
+
+    .alert-error {
+        background-color: rgba(255, 51, 51, 0.1);
+        border: 2px solid var(--accent-color);
+        color: var(--accent-color);
+        padding: 12px;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .login-footer {
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--secondary-accent);
+        text-align: center;
+    }
+
+    .signup-text {
+        font-size: 0.8rem;
+        color: #666;
+        font-weight: bold;
+    }
+
+    .signup-link {
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: 800;
+        margin-left: 5px;
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 2px;
+        transition: color 0.2s ease;
+    }
+
+    .signup-link:hover {
+        color: var(--accent-color);
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-card">
+        
+        <div class="login-header">
+            <h2 class="login-title">Identificación</h2>
+            <p class="login-subtitle">INGRESE SUS CREDENCIALES DE ACCESO</p>
         </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {% if messages %}
+                <div class="alert-error">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label class="form-label" for="username">Usuario:</label>
+                <input class="form-input" type="text" name="username" id="username" placeholder="Tu nombre de usuario" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">Contraseña:</label>
+                <input class="form-input" type="password" name="password" id="password" placeholder="Tu contraseña secreta" required>
+            </div>
+
+            <button type="submit" class="btn" style="width: 100%; margin-top: 1rem; padding: 15px; font-size: 1rem;">
+                AUTENTICAR
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <p class="signup-text">
+                ¿NUEVO USUARIO? 
+                <a href="{% url 'registro' %}" class="signup-link">CREAR CUENTA</a>
+            </p>
+        </div>
+        
     </div>
+</div>
 {% endblock %}
