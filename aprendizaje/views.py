@@ -13,6 +13,7 @@ from .models import Curso, Leccion, Ejercicio, Estudiante
 from django.utils import timezone
 from datetime import timedelta
 
+@login_required(login_url='login')
 def lista_cursos(request):
     # Obtenemos todos los cursos
     cursos = Curso.objects.all() 
