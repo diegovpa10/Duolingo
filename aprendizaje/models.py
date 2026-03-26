@@ -9,10 +9,9 @@ from django.contrib.auth.models import User
 class Estudiante(models.Model):
     # ¡AQUÍ ESTÁ EL CAMBIO MÁGICO! Cambiamos 'Usuario' por 'User'
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    
     racha_dias = models.IntegerField(default=0)
-    # Nota: Quité los validators temporalmente para simplificar, pero puedes dejarlos si ya los importaste
     xp_total = models.BigIntegerField(default=0)
+    fecha_ultima_leccion = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f"Estudiante: {self.usuario.username}"

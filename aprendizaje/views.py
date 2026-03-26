@@ -9,6 +9,8 @@ from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, get_object_or_404
 from .models import Curso, Leccion, Ejercicio, Estudiante
+from django.utils import timezone
+from datetime import timedelta
 
 def lista_cursos(request):
     # Obtenemos todos los cursos
@@ -60,14 +62,32 @@ def detalle_leccion(request, leccion_id):
             # ¡NUEVO: AQUÍ LE DAMOS LA EXPERIENCIA AL ESTUDIANTE! 🦉⭐
             # =========================================================
             if request.user.is_authenticated:
-                # Preguntamos si este usuario realmente tiene un perfil de estudiante
                 if hasattr(request.user, 'estudiante'):
                     estudiante = request.user.estudiante
+                    
+                    # 1. Le sumamos los 15 puntos de XP
                     estudiante.xp_total += 15 
+                    
+                    # 2. Calculamos la racha de días
+                    hoy = timezone.now().date()
+                    ayer = hoy - timedelta(days=1)
+                    
+                    if estudiante.fecha_ultima_leccion == hoy:
+                        # Si ya había practicado hoy, la racha se mantiene igual (no suma doble)
+                        pass 
+                    elif estudiante.fecha_ultima_leccion == ayer:
+                        # Si practicó ayer, ¡excelente! La racha sube en 1
+                        estudiante.racha_dias += 1
+                    else:
+                        # Si pasaron más días (perdió la racha) o es su primera lección, empieza en 1
+                        estudiante.racha_dias = 1
+                        
+                    # 3. Actualizamos la fecha a HOY para que mañana pueda volver a sumar
+                    estudiante.fecha_ultima_leccion = hoy
+                    
+                    # Guardamos la mochila actualizada
                     estudiante.save()
                 else:
-                    # Si es un administrador o no tiene perfil, solo imprimimos en la consola 
-                    # para saberlo, pero evitamos que la página explote.
                     print(f"El usuario {request.user.username} no es un estudiante válido.")
             # =========================================================
             
