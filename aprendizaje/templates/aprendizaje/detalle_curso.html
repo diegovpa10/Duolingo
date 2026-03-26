@@ -4,51 +4,17 @@
 
 {% block content %}
 <style>
-    /* --- GRID DEL DASHBOARD (3 Columnas) --- */
+    /* --- GRID DEL CONTENIDO (2 Columnas: Ruta + Panel Derecho) --- */
     .dashboard-layout {
         display: grid;
-        /* Redujimos un poco la columna izquierda y aumentamos el GAP (espaciado) a 80px */
-        grid-template-columns: 200px 1fr 280px;
+        /* Como la base ya tiene el menú izquierdo, aquí solo necesitamos el centro y la derecha */
+        grid-template-columns: 1fr 280px;
         gap: 80px; 
         min-height: 80vh;
         margin-top: -20px;
     }
 
-    /* --- 1. MENÚ LATERAL --- */
-    .sidebar-menu {
-        position: sticky;
-        top: 90px;
-        height: fit-content;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .menu-btn {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 12px 20px;
-        color: var(--text-color);
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 0.9rem;
-        border-radius: 12px;
-        border: 2px solid transparent;
-        transition: all 0.2s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .menu-btn:hover { background-color: var(--secondary-accent); }
-    .menu-btn.active {
-        background-color: rgba(255, 51, 51, 0.1);
-        border-color: var(--accent-color);
-        color: var(--accent-color);
-    }
-    .menu-icon { font-size: 1.5rem; }
-
-    /* --- 2. ÁREA CENTRAL (RUTA) --- */
+    /* --- 1. ÁREA CENTRAL (RUTA) --- */
     .main-path-area {
         display: flex;
         flex-direction: column;
@@ -60,7 +26,7 @@
         background-color: var(--accent-color);
         color: white;
         width: 100%;
-        max-width: 600px; /* Aumentamos a 600px para que ocupe bien el espacio central */
+        max-width: 600px;
         padding: 20px;
         border-radius: 15px;
         margin-bottom: 40px;
@@ -145,7 +111,7 @@
         100% { transform: translateY(0px); }
     }
 
-    /* --- 3. PANEL DERECHO --- */
+    /* --- 2. PANEL DERECHO --- */
     .right-panel {
         position: sticky;
         top: 90px;
@@ -225,24 +191,6 @@
 
 <div class="dashboard-layout">
     
-    <aside class="sidebar-menu">
-        <a href="{% url 'lista_cursos' %}" class="menu-btn active">
-            <span class="menu-icon">🏠</span> Aprender
-        </a>
-        <a href="{% url 'lista_cursos' %}" class="menu-btn">
-            <span class="menu-icon">📚</span> Cursos
-        </a>
-        <a href="#" class="menu-btn">
-            <span class="menu-icon">🛡️</span> Ligas
-        </a>
-        <a href="#" class="menu-btn">
-            <span class="menu-icon">🎁</span> Desafíos
-        </a>
-        <a href="#" class="menu-btn">
-            <span class="menu-icon">👤</span> Perfil
-        </a>
-    </aside>
-
     <main class="main-path-area">
         <div class="etapa-banner">
             <div>

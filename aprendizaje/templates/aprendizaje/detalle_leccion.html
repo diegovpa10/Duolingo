@@ -3,71 +3,195 @@
 {% block title %}Lección {{ leccion.orden }} - RedOwl{% endblock %}
 
 {% block content %}
-    <div style="margin-bottom: 2.5rem; border-left: 2px solid var(--accent-color); padding-left: 20px;">
-        <span style="color: #666; font-size: 0.8rem; font-weight: bold; letter-spacing: 2px;">
-            CURSO: {{ leccion.curso.nombre | upper }}
-        </span>
-        <h1 style="color: var(--text-color); margin-top: 5px; font-weight: 800;">
-            {{ leccion.orden }}. {{ leccion.titulo }}
-        </h1>
+<style>
+    .leccion-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding-top: 20px;
+    }
+
+    .leccion-header {
+        margin-bottom: 2.5rem; 
+        border-left: 4px solid var(--accent-color); 
+        padding-left: 20px;
+        background-color: rgba(255, 51, 51, 0.05);
+        padding: 20px 20px 20px 30px;
+        border-radius: 0 15px 15px 0;
+    }
+
+    .curso-label {
+        color: #888; 
+        font-size: 0.8rem; 
+        font-weight: bold; 
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .leccion-title {
+        color: var(--text-color); 
+        margin-top: 5px; 
+        font-size: 2rem;
+        font-weight: 800;
+    }
+
+    .alert-box {
+        padding: 1rem 1.5rem; 
+        margin-bottom: 2rem; 
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: bold;
+    }
+
+    .alert-success {
+        background-color: rgba(0, 255, 65, 0.1);
+        border: 2px solid #00ff41;
+        color: #00ff41;
+    }
+
+    .alert-error {
+        background-color: rgba(255, 51, 51, 0.1);
+        border: 2px solid var(--accent-color);
+        color: var(--accent-color);
+    }
+
+    .ejercicio-card {
+        background-color: var(--card-bg);
+        border: 2px solid var(--secondary-accent);
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .ejercicio-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--secondary-accent);
+        padding-bottom: 15px;
+    }
+
+    .ejercicio-tipo { font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--text-color); }
+    .xp-badge { background-color: #ffaa00; color: #000; padding: 5px 10px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; }
+
+    .instrucciones-label {
+        text-transform: uppercase; 
+        font-size: 0.75rem; 
+        color: var(--accent-color); 
+        font-weight: 900; 
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .instrucciones-texto {
+        color: #bbb; 
+        font-size: 1rem; 
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        background-color: #0a0a0a;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #222;
+    }
+
+    .terminal-container {
+        position: relative;
+        margin-top: 10px;
+    }
+
+    .terminal-container::before {
+        content: "Terminal de Código";
+        position: absolute;
+        top: -10px;
+        left: 15px;
+        background-color: #000;
+        padding: 0 10px;
+        font-size: 0.7rem;
+        color: var(--accent-color);
+        font-weight: bold;
+        z-index: 10;
+        letter-spacing: 1px;
+    }
+
+</style>
+
+<div class="leccion-container">
+    
+    <div class="leccion-header">
+        <span class="curso-label">CURSO: {{ leccion.curso.nombre }}</span>
+        <h1 class="leccion-title">{{ leccion.orden }}. {{ leccion.titulo }}</h1>
     </div>
 
     {% if mensaje %}
         {% if es_correcto %}
-            <div class="card" style="padding: 1rem; margin-bottom: 2rem; border-color: #444;">
-                <span style="color: #fff;">●</span> <span style="color: #aaa; margin-left: 10px;">{{ mensaje }}</span>
+            <div class="alert-box alert-success">
+                <span style="font-size: 1.5rem;">✅</span> 
+                <span>{{ mensaje }}</span>
             </div>
         {% else %}
-            <div class="card" style="padding: 1rem; margin-bottom: 2rem; border-color: #ff3333;">
-                <span style="color: #ff3333; font-weight: bold;">!</span> <span style="color: #ff3333; margin-left: 10px;">{{ mensaje }}</span>
+            <div class="alert-box alert-error">
+                <span style="font-size: 1.5rem;">⚠️</span> 
+                <span>{{ mensaje }}</span>
             </div>
         {% endif %}
     {% endif %}
 
     {% for ejercicio in ejercicios %}
-        <div class="card" style="border-color: var(--secondary-accent); margin-bottom: 2rem;">
-            <div style="margin-bottom: 1.5rem;">
-                <h3 style="font-size: 1.25rem; margin: 0;">{{ ejercicio.get_tipo_ejercicio_display }}</h3>
-                <p style="font-size: 0.85rem; color: #666; margin-top: 5px;">RECOMPENSA: {{ ejercicio.xp_recompensa }} XP</p>
+        <div class="ejercicio-card">
+            
+            <div class="ejercicio-header">
+                <h3 class="ejercicio-tipo">{{ ejercicio.get_tipo_ejercicio_display }}</h3>
+                <span class="xp-badge">+{{ ejercicio.xp_recompensa }} XP</span>
             </div>
             
-            <div style="color: #bbb; font-size: 0.95rem; margin-bottom: 2rem;">
-                <p style="text-transform: uppercase; font-size: 0.7rem; color: #555; font-weight: bold; margin-bottom: 8px;">Instrucciones</p>
-                {{ ejercicio.enunciado|linebreaks }}
+            <div>
+                <p class="instrucciones-label">Instrucciones</p>
+                <div class="instrucciones-texto">
+                    {{ ejercicio.enunciado|linebreaks }}
+                </div>
             </div>
 
             {% if ejercicio.tipo_ejercicio == 'C' %}
                 {% if ejercicio.retocodigo %}
                     <form method="POST">
                         {% csrf_token %}
-                        <div style="position: relative;">
+                        <div class="terminal-container">
                             <textarea name="codigo_alumno" class="editor-codigo" spellcheck="false">{% if codigo_previo %}{{ codigo_previo }}{% else %}{{ ejercicio.retocodigo.codigo_base }}{% endif %}</textarea>
                         </div>
                         
-                        <button type="submit" class="btn" style="margin-top: 15px; width: 100%; letter-spacing: 1px;">
-                            EJECUTAR PRUEBA
+                        <button type="submit" class="btn" style="margin-top: 25px; width: 100%; font-size: 1rem; padding: 15px;">
+                            ▶ EJECUTAR PRUEBA
                         </button>
                     </form>
                 {% else %}
-                    <div style="border: 1px dashed #333; padding: 20px; text-align: center; color: #ff3333; font-size: 0.8rem;">
+                    <div style="border: 2px dashed #ff3333; background-color: rgba(255, 51, 51, 0.05); padding: 20px; text-align: center; color: #ff3333; font-weight: bold; border-radius: 10px;">
                         [ ERROR: RETO DE CÓDIGO NO VINCULADO ]
                     </div>
                 {% endif %}
 
             {% elif ejercicio.tipo_ejercicio == 'Q' %}
-                <div style="background-color: #000; padding: 20px; border: 1px solid #222; text-align: center;">
-                    <p style="font-style: italic; color: #444; font-size: 0.8rem; margin-bottom: 15px;">(Módulo de Quiz en desarrollo...)</p>
-                    <button type="button" class="btn btn-outline" style="width: 100%;">ENVIAR RESPUESTA</button>
+                <div style="background-color: #000; padding: 30px; border: 1px solid #222; text-align: center; border-radius: 10px;">
+                    <span style="font-size: 3rem; opacity: 0.5;">🧩</span>
+                    <p style="font-style: italic; color: #666; font-size: 0.9rem; margin: 15px 0;">(Módulo de Quiz en desarrollo...)</p>
+                    <button type="button" class="btn btn-outline" style="width: 100%; max-width: 300px;">ENVIAR RESPUESTA</button>
                 </div>
             {% endif %}
+
         </div>
     {% empty %}
-        <p style="color: #444; font-style: italic;">No hay ejercicios disponibles para esta lección.</p>
+        <div style="text-align: center; padding: 40px; background-color: var(--card-bg); border-radius: 15px; border: 1px solid var(--secondary-accent);">
+            <p style="color: #666; font-style: italic;">No hay ejercicios disponibles para esta lección por el momento.</p>
+        </div>
     {% endfor %}
 
-    <div style="margin-top: 4rem; border-top: 1px solid var(--secondary-accent); padding-top: 2rem;">
-        <a href="{% url 'detalle_curso' leccion.curso.id %}" class="btn btn-outline" style="font-size: 11px; letter-spacing: 1px;">
-            VOLVER A LA RUTA
+    <div style="margin-top: 3rem; text-align: center; padding-bottom: 2rem;">
+        <a href="{% url 'detalle_curso' leccion.curso.id %}" class="btn btn-outline" style="min-width: 200px;">
+            ← VOLVER A LA RUTA
         </a>
     </div>
+
+</div>
 {% endblock %}
