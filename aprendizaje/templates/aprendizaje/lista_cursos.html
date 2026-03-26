@@ -3,51 +3,160 @@
 {% block title %}Catálogo - RedOwl Academy{% endblock %}
 
 {% block content %}
-    <div style="margin-bottom: 3rem; border-bottom: 1px solid var(--secondary-accent); padding-bottom: 1.5rem;">
-        <h1 style="color: var(--accent-color); font-weight: 800; letter-spacing: -1.5px; text-transform: uppercase;">
-            Explorar Programas
-        </h1>
-        <p style="color: #666; font-size: 0.95rem; letter-spacing: 0.5px;">
-            Selecciona una ruta especializada para comenzar el despliegue de conocimientos.
-        </p>
-    </div>
+<style>
+    .catalogo-header {
+        margin-bottom: 3rem;
+        border-bottom: 1px solid var(--secondary-accent);
+        padding-bottom: 1.5rem;
+    }
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
-        {% for curso in cursos %}
-            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; border-color: var(--secondary-accent); transition: border-color 0.3s ease;">
-                <div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                        <h2 style="font-size: 1.4rem; margin: 0; color: var(--text-color); font-weight: 700;">
-                            {{ curso.nombre }}
-                        </h2>
-                        {% if curso.es_ingles_tecnico %}
-                            <span style="font-size: 10px; border: 1px solid #444; padding: 2px 6px; color: #888; letter-spacing: 1px;">
-                                EN_US
-                            </span>
-                        {% endif %}
-                    </div>
-                    
-                    <p style="font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem;">
-                        Core: <span style="color: var(--text-color);">{{ curso.lenguaje }}</span>
-                    </p>
-                </div>
+    .catalogo-title {
+        color: var(--accent-color);
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
 
-                <div style="border-top: 1px solid #222; padding-top: 1.5rem; margin-top: auto;">
-                    <a href="{% url 'detalle_curso' curso.id %}" class="btn" style="width: 100%; text-align: center; font-size: 12px; letter-spacing: 1px;">
-                        ACCEDER AL CURSO
-                    </a>
+    .catalogo-subtitle {
+        color: #888;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+    }
+
+    .catalogo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+    }
+
+    .curso-card {
+        background-color: var(--card-bg);
+        border: 2px solid var(--secondary-accent);
+        border-radius: 15px; /* Bordes redondeados modernos */
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 240px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .curso-card:hover {
+        border-color: var(--accent-color);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(255, 51, 51, 0.15);
+    }
+
+    .curso-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .curso-title {
+        font-size: 1.4rem;
+        margin: 0;
+        color: var(--text-color);
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .badge-en {
+        font-size: 0.7rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid #555;
+        padding: 4px 8px;
+        border-radius: 6px;
+        color: #aaa;
+        letter-spacing: 1px;
+        font-weight: bold;
+    }
+
+    .curso-core {
+        font-size: 0.85rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+
+    .curso-core span {
+        color: var(--text-color);
+        background-color: #000;
+        padding: 3px 8px;
+        border-radius: 4px;
+        border: 1px solid #333;
+        margin-left: 5px;
+    }
+
+    .curso-footer {
+        border-top: 1px solid var(--secondary-accent);
+        padding-top: 1.5rem;
+        margin-top: auto;
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem 2rem;
+        border: 2px dashed var(--secondary-accent);
+        border-radius: 15px;
+        background-color: rgba(255,255,255,0.02);
+    }
+
+    .terminal-footer {
+        margin-top: 5rem;
+        text-align: center;
+        font-size: 0.7rem;
+        color: #444;
+        letter-spacing: 3px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+</style>
+
+<div class="catalogo-header">
+    <h1 class="catalogo-title">Explorar Programas</h1>
+    <p class="catalogo-subtitle">Selecciona una ruta especializada para comenzar el despliegue de conocimientos.</p>
+</div>
+
+<div class="catalogo-grid">
+    {% for curso in cursos %}
+        <div class="curso-card">
+            <div>
+                <div class="curso-header">
+                    <h2 class="curso-title">{{ curso.nombre }}</h2>
+                    {% if curso.es_ingles_tecnico %}
+                        <span class="badge-en">EN_US</span>
+                    {% endif %}
                 </div>
-            </div>
-        {% empty %}
-            <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem; border-style: dashed;">
-                <p style="color: #444; font-style: italic; margin: 0;">
-                    SISTEMA: No se han encontrado despliegues de cursos activos.
+                
+                <p class="curso-core">
+                    Core: <span>{{ curso.lenguaje }}</span>
                 </p>
             </div>
-        {% endfor %}
-    </div>
 
-    <div style="margin-top: 5rem; text-align: center;">
-        <p style="font-size: 11px; color: #333; letter-spacing: 2px;">REDOWL ACADEMY // TERMINAL_V.1.0</p>
-    </div>
+            <div class="curso-footer">
+                <a href="{% url 'detalle_curso' curso.id %}" class="btn" style="width: 100%; font-size: 0.85rem; padding: 12px;">
+                    ACCEDER AL CURSO
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="empty-state">
+            <span style="font-size: 2.5rem; opacity: 0.5; display: block; margin-bottom: 15px;">📡</span>
+            <p style="color: #666; font-style: italic; margin: 0; font-size: 1.1rem;">
+                SISTEMA: No se han encontrado despliegues de cursos activos.
+            </p>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="terminal-footer">
+    REDOWL ACADEMY // TERMINAL_V.1.0
+</div>
 {% endblock %}
