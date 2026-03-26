@@ -4,10 +4,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import *
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout # Importamos logout aquí
 from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required # Importamos el decorador aquí
 from .models import Curso, Leccion, Ejercicio, Estudiante
 from django.utils import timezone
 from datetime import timedelta
@@ -30,19 +31,6 @@ def detalle_curso(request, curso_id):
 def detalle_leccion(request, leccion_id):
     leccion = get_object_or_404(Leccion, id=leccion_id)
     ejercicios = Ejercicio.objects.filter(leccion=leccion)
-
-    if leccion.orden > 1:
-        # Buscamos la lección inmediatamente anterior del mismo curso
-        leccion_anterior = Leccion.objects.filter(curso=leccion.curso, orden=leccion.orden - 1).first()
-        
-        # Si la lección anterior existe pero NO está completada... ¡Lo regresamos!
-        if leccion_anterior and not leccion_anterior.completada:
-            # Le mandamos un mensaje de advertencia
-            messages.warning(request, "¡Tranquilo, pequeño búho! 🦉 Debes completar la lección anterior primero.")
-            
-            # Lo redirigimos de vuelta a la ruta del curso (Ajusta 'detalle_curso' si tu URL se llama distinto)
-            # Nota: Necesitas pasarle el ID del curso para que sepa a dónde regresar
-            return redirect('detalle_curso', curso_id=leccion.curso.id)
     
     # Variables para enviar a la plantilla
     mensaje = None
@@ -167,3 +155,24 @@ def login_usuario(request):
         return redirect('login')
 
     return render(request, 'aprendizaje/login.html')
+
+# =========================================================
+# NUEVAS VISTAS: PERFIL, LIGAS, DESAFÍOS Y LOGOUT
+# =========================================================
+
+@login_required(login_url='login')
+def perfil(request):
+    if request.method == 'POST':
+        # Manejamos el botón de cerrar sesión que pusimos en perfil.html
+        logout(request)
+        return redirect('login')
+        
+    return render(request, 'aprendizaje/perfil.html')
+
+@login_required(login_url='login')
+def ligas(request):
+    return render(request, 'aprendizaje/ligas.html')
+
+@login_required(login_url='login')
+def desafios(request):
+    return render(request, 'aprendizaje/desafios.html')
