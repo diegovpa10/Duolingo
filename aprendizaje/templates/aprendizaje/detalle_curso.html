@@ -73,14 +73,14 @@
     .nodo-bloqueado .nodo-icon { color: #666; }
 
     /* Zig-Zag */
-    .ruta-container a:nth-child(4n+1) { transform: translateX(0px); }
-    .ruta-container a:nth-child(4n+2) { transform: translateX(45px); }
-    .ruta-container a:nth-child(4n+3) { transform: translateX(65px); }
-    .ruta-container a:nth-child(4n+4) { transform: translateX(45px); }
-    .ruta-container a:nth-child(4n+5) { transform: translateX(0px); }
-    .ruta-container a:nth-child(4n+6) { transform: translateX(-45px); }
-    .ruta-container a:nth-child(4n+7) { transform: translateX(-65px); }
-    .ruta-container a:nth-child(4n+8) { transform: translateX(-45px); }
+    .ruta-container a:nth-child(4n+1), .ruta-container div.nodo-leccion:nth-child(4n+1) { transform: translateX(0px); }
+    .ruta-container a:nth-child(4n+2), .ruta-container div.nodo-leccion:nth-child(4n+2) { transform: translateX(45px); }
+    .ruta-container a:nth-child(4n+3), .ruta-container div.nodo-leccion:nth-child(4n+3) { transform: translateX(65px); }
+    .ruta-container a:nth-child(4n+4), .ruta-container div.nodo-leccion:nth-child(4n+4) { transform: translateX(45px); }
+    .ruta-container a:nth-child(4n+5), .ruta-container div.nodo-leccion:nth-child(4n+5) { transform: translateX(0px); }
+    .ruta-container a:nth-child(4n+6), .ruta-container div.nodo-leccion:nth-child(4n+6) { transform: translateX(-45px); }
+    .ruta-container a:nth-child(4n+7), .ruta-container div.nodo-leccion:nth-child(4n+7) { transform: translateX(-65px); }
+    .ruta-container a:nth-child(4n+8), .ruta-container div.nodo-leccion:nth-child(4n+8) { transform: translateX(-45px); }
 
     .tooltip-empezar {
         position: absolute;
@@ -205,26 +205,46 @@
         <div class="ruta-container">
             {% for leccion in lecciones %}
                 
-                {% if leccion.esta_bloqueada %}
-                    <div class="nodo-leccion nodo-bloqueado" title="Debes completar la lección anterior">
-                        <div class="nodo-icon">🔒</div>
-                    </div>
-                {% else %}
-                    <a href="{% url 'detalle_leccion' leccion.id %}" 
-                       class="nodo-leccion {% if leccion.completada %}nodo-completado{% else %}nodo-disponible{% endif %}">
-                        
-                        {% if not leccion.completada %}
-                            <div class="tooltip-empezar">EMPEZAR</div>
-                        {% endif %}
-                        
-                        <div class="nodo-icon">
-                            {% if leccion.completada %}✓{% else %}⭐{% endif %}
+                {% if forloop.last %}
+                    {% if leccion.esta_bloqueada %}
+                        <div class="nodo-leccion nodo-bloqueado" title="Debes completar la lección anterior" style="border-color: #ffaa00; box-shadow: 0 8px 0 #cc8800; background-color: #222;">
+                            <div class="nodo-icon" style="opacity: 0.5;">🏆</div>
                         </div>
-                    </a>
+                    {% else %}
+                        <a href="{% url 'detalle_leccion' leccion.id %}" 
+                           class="nodo-leccion {% if leccion.completada %}nodo-completado{% else %}nodo-disponible{% endif %}"
+                           style="border-color: #ffaa00; box-shadow: 0 8px 0 #cc8800; background-color: #222;">
+                            
+                            {% if not leccion.completada %}
+                                <div class="tooltip-empezar" style="background: #ffaa00;">FINAL</div>
+                            {% endif %}
+                            
+                            <div class="nodo-icon">🏆</div>
+                        </a>
+                    {% endif %}
+
+                {% else %}
+                    {% if leccion.esta_bloqueada %}
+                        <div class="nodo-leccion nodo-bloqueado" title="Debes completar la lección anterior">
+                            <div class="nodo-icon">🔒</div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'detalle_leccion' leccion.id %}" 
+                           class="nodo-leccion {% if leccion.completada %}nodo-completado{% else %}nodo-disponible{% endif %}">
+                            
+                            {% if not leccion.completada %}
+                                <div class="tooltip-empezar">EMPEZAR</div>
+                            {% endif %}
+                            
+                            <div class="nodo-icon">
+                                {% if leccion.completada %}✓{% else %}⭐{% endif %}
+                            </div>
+                        </a>
+                    {% endif %}
                 {% endif %}
 
-                {% if forloop.counter|divisibleby:3 %}
-                    <div class="nodo-leccion" style="border-style: dashed; border-color: #666; transform: translateX(0) scale(0.8);">
+                {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                    <div class="nodo-leccion" style="border-style: dashed; border-color: #666; transform: translateX(0) scale(0.8); cursor: default; box-shadow: none;">
                         <div class="nodo-icon">📦</div>
                     </div>
                 {% endif %}
@@ -233,9 +253,6 @@
                 <p style="color: #666; font-style: italic;">SISTEMA: No hay datos de lecciones.</p>
             {% endfor %}
             
-            <div class="nodo-leccion" style="margin-top: 20px; border-color: #ffaa00;">
-                <div class="nodo-icon">🏆</div>
-            </div>
         </div>
     </main>
 
