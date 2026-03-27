@@ -148,7 +148,7 @@ def login_usuario(request):
                 return redirect('lista_cursos')
 
             else:
-                messages.error(request, "la contraseña esta inorreta carnal :)")
+                messages.error(request, "la contraseña esta incorrecta carnal :)")
 
         except User.DoesNotExist:
             messages.error(request, "No esta registrado ve a registrarte :)")
