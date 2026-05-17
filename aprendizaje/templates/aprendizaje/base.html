@@ -9,22 +9,33 @@
 
 <style>
 :root {
-    /* PALETA REDOWL ACADEMY */
+    /* 🔴 EL DOMINIO DE ARQUÍMEDES (ROJO) */
     --bg-color: #0a0a0a;          /* Negro profundo */
     --card-bg: #121212;           /* Gris casi negro para tarjetas */
     --text-color: #e0e0e0;        /* Gris claro para lectura */
-    --accent-color: #ff3333;      /* ROJO REDOWL */
+    --accent-color: #ff3333;      /* ROJO REDOWL NEÓN */
     --secondary-accent: #222222;  /* Gris oscuro para bordes */
     --btn-hover: #cc0000;         /* Rojo oscuro */
+
+    /* 🔵 EL DOMINIO DE HEDWIG (AZUL SOPORTE) */
+    --support-color: #00e5ff;     /* Azul Cyan neón para resaltar en negro */
+    --support-bg: rgba(0, 229, 255, 0.1); /* Fondo azul transparente */
+    --support-border: #00acc1;    /* Borde azul brillante */
 }
 
 [data-theme="light"] {
+    /* 🔴 ARQUÍMEDES DE DÍA */
     --bg-color: #ffffff;
     --card-bg: #f5f5f5;
     --text-color: #1a1a1a;
     --accent-color: #d32f2f;
     --secondary-accent: #e0e0e0;
     --btn-hover: #b71c1c;
+
+    /* 🔵 HEDWIG DE DÍA */
+    --support-color: #007bb5;     /* Azul profesional oscuro */
+    --support-bg: rgba(0, 123, 181, 0.1);
+    --support-border: #0288d1;
 }
 
 * {
@@ -181,9 +192,51 @@ body {
     max-width: 100%;
 }
 
-/* Ocultar menú en celulares */
+/* =========================================
+   📱 NAVEGACIÓN MÓVIL (APP STYLE)
+   ========================================= */
+.mobile-bottom-nav { display: none; } /* Oculto en PC */
+
 @media (max-width: 768px) {
-    .sidebar-menu { display: none; } 
+    .sidebar-menu { display: none; } /* Oculta el menú lateral en PC */
+    
+    .app-container {
+        margin-bottom: 80px; /* Deja espacio para que el menú no tape el contenido */
+        padding: 0 15px;
+    }
+
+    /* Barra inferior estilo App */
+    .mobile-bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-color);
+        border-top: 1px solid var(--secondary-accent);
+        z-index: 2000;
+        justify-content: space-around;
+        padding: 12px 0;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+    }
+
+    .mobile-nav-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #888;
+        text-decoration: none;
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        gap: 5px;
+        transition: color 0.2s;
+    }
+
+    .mobile-nav-btn .menu-icon { font-size: 1.4rem; filter: grayscale(100%); }
+    
+    .mobile-nav-btn.active { color: var(--accent-color); }
+    .mobile-nav-btn.active .menu-icon { filter: drop-shadow(0 0 5px rgba(255,51,51,0.5)) grayscale(0%); }
 }
 
 .menu-btn {
@@ -214,6 +267,46 @@ body {
 
 .menu-icon { 
     font-size: 1.5rem; 
+}
+
+/* =========================================
+   🔵 HEDWIG: ASISTENTE DE CÓDIGO
+   ========================================= */
+.hedwig-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    background-color: var(--support-bg);
+    border: 2px solid var(--support-border);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    animation: aparecer 0.3s ease-out; /* Una pequeña animación de entrada */
+}
+
+.hedwig-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 5px var(--support-color)); /* Le da un brillo mágico/tech */
+}
+
+.hedwig-text {
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.hedwig-text span {
+    color: var(--support-color);
+    font-weight: 800;
+}
+
+/* Animación para que Hedwig no aparezca de golpe */
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 </style>
@@ -274,6 +367,23 @@ body {
     </main>
 
 </div>
+
+{% if user.is_authenticated %}
+    <nav class="mobile-bottom-nav">
+        <a href="{% url 'lista_cursos' %}" class="mobile-nav-btn {% if request.path == '/' or '/curso/' in request.path %}active{% endif %}">
+            <span class="menu-icon">🏠</span> Aprender
+        </a>
+        <a href="{% url 'ligas' %}" class="mobile-nav-btn {% if request.path == '/ligas/' %}active{% endif %}">
+            <span class="menu-icon">🛡️</span> Ligas
+        </a>
+        <a href="{% url 'desafios' %}" class="mobile-nav-btn {% if request.path == '/desafios/' %}active{% endif %}">
+            <span class="menu-icon">🎁</span> Desafíos
+        </a>
+        <a href="{% url 'perfil' %}" class="mobile-nav-btn {% if request.path == '/perfil/' %}active{% endif %}">
+            <span class="menu-icon">👤</span> Perfil
+        </a>
+    </nav>
+    {% endif %}
 
 <script>
     function toggleTheme() {

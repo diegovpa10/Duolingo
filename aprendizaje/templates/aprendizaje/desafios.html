@@ -4,53 +4,227 @@
 
 {% block content %}
 <style>
-    .desafios-header { margin-bottom: 3rem; border-bottom: 1px solid var(--secondary-accent); padding-bottom: 1.5rem; }
-    .desafios-title { color: var(--accent-color); font-size: 2.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; }
+    .desafios-header { 
+        margin-bottom: 3rem; 
+        border-bottom: 1px solid var(--secondary-accent); 
+        padding-bottom: 1.5rem; 
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .header-icon {
+        font-size: 3.5rem;
+        filter: drop-shadow(0 0 15px rgba(255, 51, 51, 0.4));
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .desafios-title { 
+        color: var(--text-color); 
+        font-size: 2.5rem; 
+        font-weight: 900; 
+        text-transform: uppercase; 
+        letter-spacing: -1px; 
+        margin-bottom: 5px;
+    }
+
+    .desafios-title span { color: var(--accent-color); }
     
-    .desafio-card {
-        background-color: var(--card-bg); border: 2px solid var(--secondary-accent);
-        border-radius: 15px; padding: 25px; margin-bottom: 20px;
-        display: flex; align-items: center; gap: 20px;
+    .desafios-subtitle {
+        color: #888; 
+        font-size: 0.95rem; 
+        letter-spacing: 2px; 
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        margin: 0;
     }
     
-    .desafio-icon { font-size: 2.5rem; background-color: #000; padding: 15px; border-radius: 12px; border: 1px solid #333; }
+    .desafio-card {
+        background-color: var(--card-bg); 
+        border: 2px solid var(--secondary-accent);
+        border-radius: 16px; 
+        padding: 30px; 
+        margin-bottom: 25px;
+        display: flex; 
+        align-items: center; 
+        gap: 25px;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+        overflow: hidden;
+    }
     
-    .desafio-info { flex: 1; }
-    .desafio-nombre { font-size: 1.2rem; font-weight: bold; margin: 0 0 5px 0; color: var(--text-color); }
-    .desafio-recompensa { font-size: 0.8rem; color: #ffaa00; font-weight: 900; letter-spacing: 1px; }
+    .desafio-card:hover {
+        border-color: var(--accent-color);
+        transform: translateX(8px);
+        box-shadow: -5px 10px 20px rgba(255, 51, 51, 0.1);
+    }
+
+    /* Brillo lateral decorativo */
+    .desafio-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+    }
+
+    .desafio-card:hover::before {
+        background-color: var(--accent-color);
+        box-shadow: 0 0 15px var(--accent-color);
+    }
     
-    .progress-bg { width: 100%; height: 12px; background-color: #222; border-radius: 6px; margin-top: 15px; overflow: hidden; }
-    .progress-bar { height: 100%; background-color: var(--accent-color); border-radius: 6px; transition: width 0.5s ease; }
+    .desafio-icon { 
+        font-size: 2.5rem; 
+        background-color: #050505; 
+        width: 80px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 14px; 
+        border: 2px solid #333; 
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        z-index: 2;
+    }
+    
+    .desafio-info { flex: 1; z-index: 2; }
+    
+    .desafio-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .desafio-nombre { 
+        font-size: 1.3rem; 
+        font-weight: 800; 
+        margin: 0; 
+        color: var(--text-color); 
+        line-height: 1.2;
+    }
+    
+    .desafio-recompensa { 
+        font-size: 0.85rem; 
+        color: #000; 
+        background-color: #ffaa00;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: 900; 
+        letter-spacing: 1px; 
+        box-shadow: 0 0 10px rgba(255, 170, 0, 0.4);
+    }
+    
+    .progress-bg { 
+        width: 100%; 
+        height: 14px; 
+        background-color: #1a1a1a; 
+        border-radius: 8px; 
+        margin-top: 15px; 
+        overflow: hidden; 
+        border: 1px solid #333;
+    }
+    
+    .progress-bar { 
+        height: 100%; 
+        border-radius: 8px; 
+        transition: width 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); 
+        
+        /* Efecto de rayas diagonales tecnológicas */
+        background-image: linear-gradient(
+            45deg, 
+            rgba(255, 255, 255, 0.15) 25%, 
+            transparent 25%, 
+            transparent 50%, 
+            rgba(255, 255, 255, 0.15) 50%, 
+            rgba(255, 255, 255, 0.15) 75%, 
+            transparent 75%, 
+            transparent
+        );
+        background-size: 1rem 1rem;
+    }
+
+    /* Colores dinámicos para las barras */
+    .bar-gold { background-color: #ffaa00; box-shadow: 0 0 10px #ffaa00; }
+    .bar-red { background-color: var(--accent-color); box-shadow: 0 0 10px var(--accent-color); }
+    .bar-blue { background-color: var(--support-color); box-shadow: 0 0 10px var(--support-color); }
+
+    .progress-text {
+        text-align: right; 
+        font-size: 0.85rem; 
+        color: #888; 
+        margin-top: 8px;
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+    }
 </style>
 
 <div class="desafios-header">
-    <h1 class="desafios-title">Desafíos del Día</h1>
-    <p style="color: #888; font-size: 0.9rem;">COMPLETA LAS MISIONES PARA OBTENER RECOMPENSAS EXTRA</p>
+    <div class="header-icon">🎯</div>
+    <div>
+        <h1 class="desafios-title">Misiones <span>Diarias</span></h1>
+        <p class="desafios-subtitle">>_ STATUS: ESPERANDO EJECUCIÓN</p>
+    </div>
 </div>
 
-<div style="max-width: 800px;">
+<div style="max-width: 800px; margin: 0 auto;">
+    
     <div class="desafio-card">
         <div class="desafio-icon">⚡</div>
         <div class="desafio-info">
-            <h3 class="desafio-nombre">Gana 50 de Experiencia</h3>
-            <span class="desafio-recompensa">+ 10 XP EXTRA</span>
-            <div class="progress-bg">
-                <div class="progress-bar" style="width: 60%; background-color: #ffaa00;"></div>
+            <div class="desafio-header-row">
+                <h3 class="desafio-nombre">Recolección de Datos</h3>
+                <span class="desafio-recompensa">+ 10 XP EXTRA</span>
             </div>
-            <p style="text-align: right; font-size: 0.75rem; color: #666; margin-top: 5px;">30 / 50 XP</p>
+            <p style="margin: 0; color: #777; font-size: 0.9rem;">Obtén 50 puntos de experiencia hoy.</p>
+            
+            <div class="progress-bg">
+                <div class="progress-bar bar-gold" style="width: 60%;"></div>
+            </div>
+            <p class="progress-text">30 / 50 XP</p>
         </div>
     </div>
 
     <div class="desafio-card">
-        <div class="desafio-icon">🎯</div>
+        <div class="desafio-icon">💻</div>
         <div class="desafio-info">
-            <h3 class="desafio-nombre">Completa 2 lecciones perfectas</h3>
-            <span class="desafio-recompensa">+ 15 XP EXTRA</span>
-            <div class="progress-bg">
-                <div class="progress-bar" style="width: 50%;"></div>
+            <div class="desafio-header-row">
+                <h3 class="desafio-nombre">Ejecución Sin Errores</h3>
+                <span class="desafio-recompensa">+ 15 XP EXTRA</span>
             </div>
-            <p style="text-align: right; font-size: 0.75rem; color: #666; margin-top: 5px;">1 / 2</p>
+            <p style="margin: 0; color: #777; font-size: 0.9rem;">Completa 2 lecciones perfectas.</p>
+            
+            <div class="progress-bg">
+                <div class="progress-bar bar-red" style="width: 50%;"></div>
+            </div>
+            <p class="progress-text">1 / 2 COMPLETA</p>
         </div>
     </div>
+
+    <div class="desafio-card" style="opacity: 0.6; cursor: not-allowed;">
+        <div class="desafio-icon" style="filter: grayscale(100%);">🔥</div>
+        <div class="desafio-info">
+            <div class="desafio-header-row">
+                <h3 class="desafio-nombre">Mantener Conexión</h3>
+                <span class="desafio-recompensa" style="background-color: #444; color: #888; box-shadow: none;">COMPLETADO</span>
+            </div>
+            <p style="margin: 0; color: #555; font-size: 0.9rem;">Extiende tu racha de días de estudio.</p>
+            
+            <div class="progress-bg">
+                <div class="progress-bar bar-blue" style="width: 100%;"></div>
+            </div>
+            <p class="progress-text" style="color: var(--support-color);">MÁXIMA CAPACIDAD ALCANZADA</p>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

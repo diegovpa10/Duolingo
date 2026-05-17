@@ -168,13 +168,3 @@ class RespuestaForo(models.Model):
 
     def __str__(self):
         return f"Respuesta de {self.estudiante.usuario.email}"
-
-class Perfil(models.Model):
-    # OneToOneField significa que cada Usuario tendrá exactamente UN Perfil (una mochila)
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    
-    # Aquí guardaremos los puntos. Empezarán en 0.
-    xp_total = models.IntegerField(default=0)
-
-    def __str__(self):
-        return f"Perfil de {self.usuario.username} - {self.xp_total} XP"

@@ -148,14 +148,19 @@
 
     {% if mensaje %}
         {% if es_correcto %}
-            <div class="alert-box alert-success">
-                <span style="font-size: 1.5rem;">✅</span> 
-                <span>{{ mensaje }}</span>
+            <div class="alert-box alert-success" style="border-color: #00ff41; background-color: rgba(0, 255, 65, 0.1); color: #00ff41;">
+                <span style="font-size: 1.5rem;">🔥</span> 
+                <span>¡Excelente trabajo! {{ mensaje }}</span>
             </div>
         {% else %}
-            <div class="alert-box alert-error">
-                <span style="font-size: 1.5rem;">⚠️</span> 
-                <span>{{ mensaje }}</span>
+            <div class="hedwig-box">
+                <div class="hedwig-icon">🦉</div>
+                <div class="hedwig-text">
+                    <span>¡Hoot! Analicé tu código y encontré un detalle:</span><br>
+                    <div style="margin-top: 8px; font-family: 'Courier New', monospace; background-color: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border-left: 3px solid var(--support-color);">
+                        {{ mensaje }}
+                    </div>
+                </div>
             </div>
         {% endif %}
     {% endif %}

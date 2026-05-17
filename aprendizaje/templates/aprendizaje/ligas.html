@@ -4,41 +4,181 @@
 
 {% block content %}
 <style>
-    .ligas-header { text-align: center; margin-bottom: 3rem; }
-    .ligas-title { color: var(--accent-color); font-size: 2.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; }
-    .ligas-subtitle { color: #888; font-size: 0.9rem; letter-spacing: 1px; }
+    .ligas-header { 
+        text-align: center; 
+        margin-bottom: 3rem; 
+        padding-top: 2rem;
+    }
+    
+    .shield-icon {
+        font-size: 4rem;
+        filter: drop-shadow(0 0 20px rgba(255, 170, 0, 0.4));
+        margin-bottom: 15px;
+        display: inline-block;
+        animation: float 3s ease-in-out infinite;
+    }
 
-    .liga-container { max-width: 600px; margin: 0 auto; }
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    .ligas-title { 
+        color: #ffaa00; /* Dorado para la liga Bronce */
+        font-size: 2.5rem; 
+        font-weight: 900; 
+        text-transform: uppercase; 
+        letter-spacing: -1px; 
+        margin-bottom: 5px;
+        text-shadow: 0 0 10px rgba(255, 170, 0, 0.2);
+    }
+    
+    .ligas-subtitle { 
+        color: #888; 
+        font-size: 0.95rem; 
+        letter-spacing: 2px; 
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+    }
+
+    .liga-container { 
+        max-width: 650px; 
+        margin: 0 auto; 
+        padding-bottom: 2rem;
+    }
+    
+    /* Indicador de Zona de Ascenso */
+    .zone-indicator {
+        text-align: center;
+        color: #00ff41;
+        font-family: 'Courier New', monospace;
+        font-size: 0.8rem;
+        font-weight: bold;
+        letter-spacing: 3px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .zone-indicator::before, .zone-indicator::after {
+        content: "";
+        height: 1px;
+        width: 50px;
+        background-color: #00ff41;
+        opacity: 0.5;
+    }
     
     .liga-rango {
-        display: flex; justify-content: space-between; align-items: center;
-        background-color: var(--card-bg); border: 2px solid var(--secondary-accent);
-        padding: 15px 25px; border-radius: 12px; margin-bottom: 15px;
-        transition: all 0.2s ease;
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        background-color: var(--card-bg); 
+        border: 2px solid var(--secondary-accent);
+        padding: 15px 25px; 
+        border-radius: 12px; 
+        margin-bottom: 12px;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+        overflow: hidden;
     }
-    .liga-rango:hover { border-color: var(--accent-color); transform: translateX(5px); }
     
-    .rango-top { background-color: rgba(255, 170, 0, 0.1); border-color: #ffaa00; }
-    .rango-yo { border-left: 4px solid var(--accent-color); background-color: rgba(255, 51, 51, 0.05); }
+    .liga-rango:hover { 
+        border-color: var(--support-border); 
+        transform: scale(1.02); 
+    }
+    
+    /* Estilos para el Top 1 */
+    .rango-top-1 { 
+        background: linear-gradient(90deg, rgba(255, 170, 0, 0.15) 0%, var(--card-bg) 50%);
+        border-color: #ffaa00; 
+        box-shadow: 0 0 15px rgba(255, 170, 0, 0.1);
+    }
+    .rango-top-1 .user-pos { color: #ffaa00; text-shadow: 0 0 5px rgba(255,170,0,0.5); }
+    
+    /* Estilos para el Top 2 y 3 */
+    .rango-top { background-color: rgba(255, 255, 255, 0.02); }
+    
+    /* Estilos para el usuario actual (Tú) */
+    .rango-yo { 
+        border: 2px solid var(--accent-color); 
+        background-color: rgba(255, 51, 51, 0.05); 
+        box-shadow: 0 0 20px rgba(255, 51, 51, 0.15);
+        margin-top: 15px; /* Un poco más de separación */
+    }
+    
+    /* Efecto de "escáner" en tu tarjeta */
+    .rango-yo::before {
+        content: "";
+        position: absolute;
+        left: 0; top: 0;
+        height: 100%; width: 4px;
+        background-color: var(--accent-color);
+        box-shadow: 0 0 10px var(--accent-color);
+    }
 
-    .user-info { display: flex; align-items: center; gap: 15px; }
-    .user-pos { font-size: 1.2rem; font-weight: 900; color: #555; width: 30px; }
-    .rango-top .user-pos { color: #ffaa00; }
-    .user-name { font-weight: bold; font-size: 1rem; color: var(--text-color); }
-    .user-xp { color: #1cb0f6; font-weight: 800; font-size: 0.9rem; }
+    .user-info { display: flex; align-items: center; gap: 15px; z-index: 2; position: relative; }
+    
+    .user-pos { 
+        font-size: 1.3rem; 
+        font-weight: 900; 
+        color: #666; 
+        width: 35px; 
+        text-align: center; 
+        font-family: 'Courier New', monospace;
+    }
+    
+    .avatar-icon { font-size: 1.8rem; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); }
+    
+    .user-name { font-weight: 800; font-size: 1.1rem; color: var(--text-color); }
+    
+    /* Etiqueta de "Tú" */
+    .badge-tu {
+        font-size: 0.65rem;
+        background-color: var(--accent-color);
+        color: #fff;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Color de experiencia usando a Hedwig (Support Color) */
+    .user-xp { 
+        color: var(--support-color); 
+        font-weight: 900; 
+        font-size: 1rem; 
+        letter-spacing: 0.5px;
+        z-index: 2; 
+        position: relative;
+    }
+
+    .leaderboard-spacer {
+        text-align: center;
+        color: #444;
+        font-size: 1.5rem;
+        letter-spacing: 5px;
+        margin: 10px 0;
+        font-weight: bold;
+    }
 </style>
 
 <div class="ligas-header">
-    <div style="font-size: 3rem; margin-bottom: 10px;">🛡️</div>
+    <div class="shield-icon">🛡️</div>
     <h1 class="ligas-title">Liga Bronce</h1>
-    <p class="ligas-subtitle">COMPITE CON OTROS OPERADORES Y ASCIENDE DE RANGO</p>
+    <p class="ligas-subtitle">>_ STATUS: COMPETENCIA ACTIVA</p>
 </div>
 
 <div class="liga-container">
-    <div class="liga-rango rango-top">
+    
+    <div class="zone-indicator">ZONA DE ASCENSO</div>
+
+    <div class="liga-rango rango-top-1">
         <div class="user-info">
             <span class="user-pos">1</span>
-            <span style="font-size: 1.5rem;">🤖</span>
+            <span class="avatar-icon">👑</span>
             <span class="user-name">CyberNinja99</span>
         </div>
         <span class="user-xp">1450 XP</span>
@@ -47,19 +187,34 @@
     <div class="liga-rango rango-top">
         <div class="user-info">
             <span class="user-pos">2</span>
-            <span style="font-size: 1.5rem;">👻</span>
+            <span class="avatar-icon">👻</span>
             <span class="user-name">CodeGhost</span>
         </div>
         <span class="user-xp">1200 XP</span>
     </div>
+    
+    <div class="liga-rango rango-top">
+        <div class="user-info">
+            <span class="user-pos">3</span>
+            <span class="avatar-icon">👾</span>
+            <span class="user-name">ByteMaster</span>
+        </div>
+        <span class="user-xp">1150 XP</span>
+    </div>
+
+    <div class="leaderboard-spacer">. . .</div>
 
     <div class="liga-rango rango-yo">
         <div class="user-info">
             <span class="user-pos">14</span>
-            <span style="font-size: 1.5rem;">🦉</span>
-            <span class="user-name">{{ user.username }} (Tú)</span>
+            <span class="avatar-icon">🦉</span>
+            <div>
+                <span class="user-name">{{ user.username|default:"Operador" }}</span>
+                <span class="badge-tu">Tú</span>
+            </div>
         </div>
         <span class="user-xp">{{ user.estudiante.xp_total|default:"350" }} XP</span>
     </div>
+
 </div>
 {% endblock %}

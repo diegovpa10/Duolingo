@@ -145,28 +145,36 @@ def detalle_leccion(request, leccion_id):
             # SISTEMA DE EXPERIENCIA Y RACHAS 🦉⭐
             # =========================================================
             if es_correcto:
-                leccion.completada = True
-                leccion.save()
-                
-                if request.user.is_authenticated:
-                    if hasattr(request.user, 'estudiante'):
-                        estudiante = request.user.estudiante
-                        estudiante.xp_total += 15 
-                        
-                        hoy = timezone.now().date()
-                        ayer = hoy - timedelta(days=1)
-                        
-                        if estudiante.fecha_ultima_leccion == hoy:
-                            pass 
-                        elif estudiante.fecha_ultima_leccion == ayer:
-                            estudiante.racha_dias += 1
-                        else:
-                            estudiante.racha_dias = 1
+                # 1. Verificamos que la lección NO se haya completado antes para evitar trampas de XP infinita
+                if not leccion.completada:
+                    
+                    if request.user.is_authenticated:
+                        if hasattr(request.user, 'estudiante'):
+                            estudiante = request.user.estudiante
                             
-                        estudiante.fecha_ultima_leccion = hoy
-                        estudiante.save()
-                    else:
-                        print(f"El usuario {request.user.username} no es un estudiante válido.")
+                            # 2. Obtenemos la XP dinámica del ejercicio (o 15 por defecto si algo falla)
+                            puntos_a_ganar = ejercicio_actual.xp_recompensa if ejercicio_actual else 15
+                            estudiante.xp_total += puntos_a_ganar 
+                            
+                            hoy = timezone.now().date()
+                            ayer = hoy - timedelta(days=1)
+                            
+                            if estudiante.fecha_ultima_leccion == hoy:
+                                pass 
+                            elif estudiante.fecha_ultima_leccion == ayer:
+                                estudiante.racha_dias += 1
+                            else:
+                                estudiante.racha_dias = 1
+                                
+                            estudiante.fecha_ultima_leccion = hoy
+                            estudiante.save()
+                            
+                            # Opcional: Mandarle un mensaje de felicitación por los puntos
+                            mensaje += f" ¡Ganaste {puntos_a_ganar} XP!"
+                            
+                    # 3. Solo hasta que dimos los puntos, marcamos la lección como completada
+                    leccion.completada = True
+                    leccion.save()
 
         except subprocess.TimeoutExpired:
             mensaje = "Tu código tardó demasiado. ¿Tienes un ciclo infinito?"
