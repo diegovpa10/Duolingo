@@ -1,0 +1,16 @@
+# Entornos virtuales
+venv/
+env/
+
+# Archivos compilados de Python (los gremlins)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Base de datos local (¡Muy importante para que no haya conflictos!)
+db.sqlite3
+
+# Archivos de sistema (Mac/Windows)
+.DS_Store
+Thumbs.db
