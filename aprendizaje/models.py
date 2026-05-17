@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # --- 1. SISTEMA DE USUARIOS ---
 
@@ -11,7 +12,9 @@ class Estudiante(models.Model):
     racha_dias = models.IntegerField(default=0)
     xp_total = models.BigIntegerField(default=0)
     fecha_ultima_leccion = models.DateField(null=True, blank=True)
-    vidas = models.IntegerField(default=5) 
+    fecha_ultima_recarga = models.DateTimeField(default=timezone.now, null=True, blank=True)
+    energia = models.IntegerField(default=5) 
+    racha_ejercicios = models.IntegerField(default=0)
     avatar = models.ImageField(upload_to='avatares/', default='avatares/default_owl.png', null=True, blank=True)
     escuela = models.CharField(max_length=200, blank=True, null=True)
 

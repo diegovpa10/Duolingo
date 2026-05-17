@@ -63,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'aprendizaje.context_processors.regeneracion_energia',  # Nuestro procesador personalizado
             ],
         },
     },
@@ -119,10 +120,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # A dónde ir después de entrar con éxito
-LOGIN_REDIRECT_URL = 'lista_cursos'
+LOGIN_REDIRECT_URL = '/'
 
 # A dónde ir después de cerrar sesión
-LOGOUT_REDIRECT_URL = 'lista_cursos'
+LOGOUT_REDIRECT_URL = '/lista_cursos/'
 
 # =========================================
 # 📂 CONFIGURACIÓN DE ARCHIVOS MULTIMEDIA (MEDIA)

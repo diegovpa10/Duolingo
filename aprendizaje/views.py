@@ -45,10 +45,25 @@ def detalle_leccion(request, leccion_id):
     es_correcto = False
     codigo_previo = ""
 
+    # =========================================================================
+    # PROCESAMIENTO DEL FORMULARIO (POST)
+    # =========================================================================
     if request.method == 'POST':
         codigo_recibido = request.POST.get('codigo_alumno', '')
         codigo_previo = codigo_recibido # Guardamos lo que escribió para que no se le borre
         
+        # 🛡️ [NUEVO] ESCUDO DE SEGURIDAD BACKEND: Evita ejecuciones si no hay energía
+        if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
+            if request.user.estudiante.energia <= 0:
+                context = {
+                    'leccion': leccion,
+                    'ejercicios': ejercicios,
+                    'mensaje': "❌ Operación abortada por el servidor. Tu terminal no tiene suficiente energía (⚡ 0/5). Espera a la recarga automática.",
+                    'es_correcto': False,
+                    'codigo_previo': codigo_previo
+                }
+                return render(request, 'aprendizaje/detalle_leccion.html', context)
+
         # 1. Detectamos el lenguaje basado en el nombre del curso
         nombre_curso = leccion.curso.nombre.lower()
         if 'javascript' in nombre_curso or 'js' in nombre_curso:
@@ -77,17 +92,14 @@ def detalle_leccion(request, leccion_id):
 
         try:
             # =========================================================
-            # NUEVO MOTOR DE EJECUCIÓN SEGURO
+            # MOTOR DE EJECUCIÓN SEGURO
             # =========================================================
             if lenguaje == 'java':
-                # Ejecutamos Java usando un directorio temporal
                 with tempfile.TemporaryDirectory() as temp_dir:
                     file_path = os.path.join(temp_dir, 'Main.java')
-                    
                     with open(file_path, 'w', encoding='utf-8') as f:
                         f.write(codigo_recibido)
                     
-                    # Compilamos el código (javac)
                     compilacion = subprocess.run(
                         ['javac', 'Main.java'],
                         cwd=temp_dir, capture_output=True, text=True, timeout=5
@@ -96,7 +108,6 @@ def detalle_leccion(request, leccion_id):
                     if compilacion.returncode != 0:
                         error_texto = f"Error de sintaxis en Java:\n{compilacion.stderr.strip()}"
                     else:
-                        # Ejecutamos el código compilado (java Main)
                         ejecucion = subprocess.run(
                             ['java', 'Main'],
                             cwd=temp_dir, capture_output=True, text=True, timeout=3
@@ -104,17 +115,13 @@ def detalle_leccion(request, leccion_id):
                         salida_texto = ejecucion.stdout.strip()
                         error_texto = ejecucion.stderr.strip()
             elif lenguaje == 'javascript':
-                # ¡NUEVO! Ejecutamos JavaScript usando Node.js
-                # Node nos permite evaluar código en texto usando "-e" (eval)
                 resultado = subprocess.run(
                     ['node', '-e', codigo_recibido],
                     capture_output=True, text=True, timeout=3
                 )
                 salida_texto = resultado.stdout.strip()
                 error_texto = resultado.stderr.strip()
-                
             else:
-                # Ejecutamos Python de forma segura
                 resultado = subprocess.run(
                     ['python', '-c', codigo_recibido],
                     capture_output=True, text=True, timeout=3
@@ -126,11 +133,9 @@ def detalle_leccion(request, leccion_id):
             # VALIDACIÓN DE RESULTADOS
             # =========================================================
             if error_texto and not salida_texto:
-                # Si hubo un error en el código
                 mensaje = f"Ups, encontramos un error:\n{error_texto}"
                 es_correcto = False
             else:
-                # Comparamos con el JSON de la base de datos
                 if expected_output:
                     if salida_texto == expected_output:
                         mensaje = f"¡Perfecto! Tu código imprimió exactamente: {salida_texto}"
@@ -139,42 +144,71 @@ def detalle_leccion(request, leccion_id):
                         mensaje = f"Salida incorrecta. Se esperaba '{expected_output}', pero tu código imprimió: '{salida_texto}'"
                         es_correcto = False
                 else:
-                    # Si no hay JSON configurado, aprobamos si corrió sin errores
                     mensaje = f"¡Tu código corrió sin errores! Resultado: {salida_texto}"
                     es_correcto = True
+
+            # =========================================================
+            # SISTEMA DE ENERGÍA (⚡) Y RACHAS
+            # =========================================================
+            if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
+                estudiante = request.user.estudiante
+                
+                # SI ACERTÓ:
+                if es_correcto:
+                    estudiante.racha_ejercicios += 1
+                    
+                    # Premios por racha (Topamos la energía máxima a 5)
+                    if estudiante.racha_ejercicios == 3:
+                        estudiante.energia = min(5, estudiante.energia + 1)
+                        mensaje += "\n\n⚡ ¡Racha de 3 aciertos! Has recuperado 1 de energía."
+                    elif estudiante.racha_ejercicios == 5:
+                        estudiante.energia = min(5, estudiante.energia + 2)
+                        mensaje += "\n\n⚡ ¡Racha de 5 aciertos! Has recuperado 2 de energía."
+                    elif estudiante.racha_ejercicios == 7:
+                        estudiante.energia = min(5, estudiante.energia + 3)
+                        mensaje += "\n\n⚡ ¡Imparable! (7 aciertos) Has recuperado 3 de energía."
+                        
+                # SI FALLÓ:
+                else:
+                    estudiante.racha_ejercicios = 0 
+                    
+                    if estudiante.energia > 0:
+                        # Si su energía estaba al máximo (5) y va a empezar a bajar,
+                        # marcamos este momento exacto para que inicie el contador de recarga de 20 mins.
+                        if estudiante.energia == 5:
+                            estudiante.fecha_ultima_recarga = timezone.now()
+                            
+                        estudiante.energia -= 1
+                        mensaje += f"\n\n⚠️ ¡Código inestable! Pierdes 1 de energía. Nivel actual: {estudiante.energia}/5 ⚡."
+                    else:
+                        mensaje = "❌ ¡ENERGÍA AGOTADA! Sistema bloqueado. No puedes ejecutar código hasta recargar."
+                
+                estudiante.save()
 
             # =========================================================
             # SISTEMA DE EXPERIENCIA Y RACHAS 🦉⭐
             # =========================================================
             if es_correcto:
-                # 1. Verificamos que la lección NO se haya completado antes para evitar trampas de XP infinita
                 if not leccion.completada:
-                    
-                    if request.user.is_authenticated:
-                        if hasattr(request.user, 'estudiante'):
-                            estudiante = request.user.estudiante
+                    if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
+                        estudiante = request.user.estudiante
+                        puntos_a_ganar = ejercicio_actual.xp_recompensa if ejercicio_actual else 15
+                        estudiante.xp_total += puntos_a_ganar 
+                        
+                        hoy = timezone.now().date()
+                        ayer = hoy - timedelta(days=1)
+                        
+                        if estudiante.fecha_ultima_leccion == hoy:
+                            pass 
+                        elif estudiante.fecha_ultima_leccion == ayer:
+                            estudiante.racha_dias += 1
+                        else:
+                            estudiante.racha_dias = 1
                             
-                            # 2. Obtenemos la XP dinámica del ejercicio (o 15 por defecto si algo falla)
-                            puntos_a_ganar = ejercicio_actual.xp_recompensa if ejercicio_actual else 15
-                            estudiante.xp_total += puntos_a_ganar 
+                        estudiante.fecha_ultima_leccion = hoy
+                        estudiante.save()
+                        mensaje += f" ¡Ganaste {puntos_a_ganar} XP!"
                             
-                            hoy = timezone.now().date()
-                            ayer = hoy - timedelta(days=1)
-                            
-                            if estudiante.fecha_ultima_leccion == hoy:
-                                pass 
-                            elif estudiante.fecha_ultima_leccion == ayer:
-                                estudiante.racha_dias += 1
-                            else:
-                                estudiante.racha_dias = 1
-                                
-                            estudiante.fecha_ultima_leccion = hoy
-                            estudiante.save()
-                            
-                            # Opcional: Mandarle un mensaje de felicitación por los puntos
-                            mensaje += f" ¡Ganaste {puntos_a_ganar} XP!"
-                            
-                    # 3. Solo hasta que dimos los puntos, marcamos la lección como completada
                     leccion.completada = True
                     leccion.save()
 
@@ -324,7 +358,7 @@ def login_usuario(request):
         if form.is_valid():
             usuario = form.get_user()
             login(request, usuario)
-            return redirect('perfil')
+            return redirect('lista_cursos')
     else:
         form = AuthenticationForm()
         
