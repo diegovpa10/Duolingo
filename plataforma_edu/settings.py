@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -122,3 +123,10 @@ LOGIN_REDIRECT_URL = 'lista_cursos'
 
 # A dónde ir después de cerrar sesión
 LOGOUT_REDIRECT_URL = 'lista_cursos'
+
+# =========================================
+# 📂 CONFIGURACIÓN DE ARCHIVOS MULTIMEDIA (MEDIA)
+# =========================================
+# Carpeta física en tu disco duro donde se guardarán las imágenes
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

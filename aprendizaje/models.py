@@ -7,11 +7,13 @@ from django.contrib.auth.models import User
 # La clase usuario creada a mano fue eliminado para usar la predefinida de Django
 
 class Estudiante(models.Model):
-    # ¡AQUÍ ESTÁ EL CAMBIO MÁGICO! Cambiamos 'Usuario' por 'User'
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     racha_dias = models.IntegerField(default=0)
     xp_total = models.BigIntegerField(default=0)
     fecha_ultima_leccion = models.DateField(null=True, blank=True)
+    vidas = models.IntegerField(default=5) 
+    avatar = models.ImageField(upload_to='avatares/', default='avatares/default_owl.png', null=True, blank=True)
+    escuela = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f"Estudiante: {self.usuario.username}"
@@ -168,3 +170,18 @@ class RespuestaForo(models.Model):
 
     def __str__(self):
         return f"Respuesta de {self.estudiante.usuario.email}"
+    
+class Amistad(models.Model):
+    # El usuario que envía o tiene al amigo
+    usuario = models.ForeignKey(User, related_name='mis_amigos', on_delete=models.CASCADE)
+    # El usuario que fue agregado
+    amigo = models.ForeignKey(User, related_name='amigo_de', on_delete=models.CASCADE)
+    # Cuándo se hicieron amigos
+    fecha_conexion = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Esto evita que un usuario agregue a la misma persona dos veces
+        unique_together = ('usuario', 'amigo')
+
+    def __str__(self):
+        return f"{self.usuario.username} es amigo de {self.amigo.username}"

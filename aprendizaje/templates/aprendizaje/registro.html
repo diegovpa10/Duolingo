@@ -125,6 +125,60 @@
     .action-link:hover {
         color: var(--accent-color);
     }
+
+    /* =========================================
+       ESTILOS DEL FORMULARIO REDOWL (CORREGIDOS)
+       ========================================= */
+    /* Contenedor general de los botones */
+    #id_tipo_usuario {
+        display: flex;
+        flex-direction: column; /* Ponlo en 'row' si prefieres que estén lado a lado */
+        gap: 12px;
+        padding: 0;
+        margin: 10px 0 20px 0;
+    }
+
+    /* Django usa divs o li dependiendo de la versión, neutralizamos ambos */
+    #id_tipo_usuario div, #id_tipo_usuario li {
+        list-style: none;
+        width: 100%;
+        margin: 0;
+    }
+
+    /* EL SECRETO: Sobrescribir el display: block global */
+    #id_tipo_usuario label {
+        display: flex !important; /* Obliga a alinearse en horizontal */
+        align-items: center;
+        gap: 15px;
+        background-color: #0a0a0a;
+        border: 2px solid #333;
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin: 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        color: #888;
+    }
+
+    /* Efecto hover neón */
+    #id_tipo_usuario label:hover {
+        border-color: var(--accent-color);
+        background-color: rgba(255, 51, 51, 0.05);
+        color: white;
+    }
+
+    /* Ajustar el circulito para que no tome el 100% de ancho */
+    #id_tipo_usuario input[type="radio"] {
+        width: auto !important; 
+        background-color: transparent;
+        border: none;
+        transform: scale(1.4);
+        margin: 0;
+        cursor: pointer;
+        accent-color: var(--accent-color);
+        box-shadow: none; /* Quita el brillo rojo del focus global */
+    }
 </style>
 
 <div class="auth-container">
@@ -154,4 +208,41 @@
         
     </div>
 </div>
+
+<script>
+    // =========================================
+    // LÓGICA DE INTERFAZ (MOSTRAR/OCULTAR CAMPOS)
+    // =========================================
+    document.addEventListener("DOMContentLoaded", function() {
+        // Django genera estos IDs automáticamente
+        const radioEstudiante = document.getElementById("id_tipo_usuario_0");
+        const radioReclutador = document.getElementById("id_tipo_usuario_1");
+        
+        // Buscamos los inputs de empresa y escuela
+        const inputEmpresa = document.getElementById("id_empresa");
+        const inputEscuela = document.getElementById("id_escuela");
+        
+        // Django envuelve los campos en etiquetas <p> o <div>. 
+        // Seleccionamos el contenedor padre para ocultar todo (label + input)
+        const containerEmpresa = inputEmpresa ? inputEmpresa.closest('p') || inputEmpresa.closest('div') : null;
+        const containerEscuela = inputEscuela ? inputEscuela.closest('p') || inputEscuela.closest('div') : null;
+
+        function actualizarCampos() {
+            if (radioEstudiante && radioEstudiante.checked) {
+                if (containerEmpresa) containerEmpresa.style.display = "none";
+                if (containerEscuela) containerEscuela.style.display = "block";
+            } else if (radioReclutador && radioReclutador.checked) {
+                if (containerEmpresa) containerEmpresa.style.display = "block";
+                if (containerEscuela) containerEscuela.style.display = "none";
+            }
+        }
+
+        // Escuchamos cada vez que el usuario hace clic en los radios
+        if (radioEstudiante) radioEstudiante.addEventListener("change", actualizarCampos);
+        if (radioReclutador) radioReclutador.addEventListener("change", actualizarCampos);
+
+        // Ejecutamos la función al cargar la página por primera vez
+        actualizarCampos();
+    });
+</script>
 {% endblock %}

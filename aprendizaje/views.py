@@ -14,9 +14,11 @@ from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Curso, Leccion, Ejercicio, Estudiante
+from .models import Curso, Leccion, Ejercicio, Estudiante, Reclutador, PerfilProfesional, Amistad
+from .forms import RegistroRedOwlForm, EditarEstudianteForm, EditarPerfilProfesionalForm
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.auth.forms import AuthenticationForm
 
 @login_required(login_url='login')
 def lista_cursos(request):
@@ -193,62 +195,120 @@ def detalle_leccion(request, leccion_id):
 
 def registro(request):
     if request.method == 'POST':
-        # Volvemos a usar el formulario original de Django
-        form = UserCreationForm(request.POST) 
+        # Usamos nuestro formulario personalizado
+        form = RegistroRedOwlForm(request.POST) 
+        
         if form.is_valid():
-            # Esto guarda al User de Django (con su contraseña segura)
+            # 1. Guardamos al User base (email, pass, etc)
             user_django = form.save()
             
-            # Creamos la mochila del Estudiante conectada a ese User
-            # Usamos xp_total=0 porque así se llama en tu modelo
-            Estudiante.objects.create(usuario=user_django, xp_total=0, racha_dias=0)
+            # 2. Averiguamos qué eligió en los Radio Buttons
+            tipo = form.cleaned_data.get('tipo_usuario')
             
+            # 3. Ramificación de la lógica
+            if tipo == 'estudiante':
+                # Creamos su mochila de Estudiante y su Perfil Profesional vacío
+                nombre_escuela = form.cleaned_data.get('escuela') or "Sin escuela"
+                estudiante = Estudiante.objects.create(usuario=user_django, xp_total=0, racha_dias=0, escuela=nombre_escuela)
+                PerfilProfesional.objects.create(estudiante=estudiante)
+                
+            elif tipo == 'reclutador':
+                # Si es reclutador, sacamos el nombre de la empresa (o le damos uno por defecto)
+                nombre_empresa = form.cleaned_data.get('empresa') or "Independiente"
+                Reclutador.objects.create(usuario=user_django, empresa=nombre_empresa)
+            
+            # 4. Iniciar sesión automáticamente y redirigir
             login(request, user_django)
             return redirect('lista_cursos')
     else:
-        form = UserCreationForm()
+        # Si entra por primera vez a la página, mostramos el formulario vacío
+        form = RegistroRedOwlForm()
     
     return render(request, 'aprendizaje/registro.html', {'form': form})
 
-def login_usuario(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-
-        try:
-            usuario = User.objects.get(username=username)
-
-            # Validamos la contraseña
-            if check_password(password, usuario.password):
-                
-                # Usamos la función oficial de Django para iniciar sesión.
-                login(request, usuario)
-
-                # Cambiamos 'home' por 'lista_cursos' que es tu ruta real
-                return redirect('lista_cursos')
-
-            else:
-                messages.error(request, "la contraseña esta incorrecta carnal :)")
-
-        except User.DoesNotExist:
-            messages.error(request, "No esta registrado ve a registrarte :)")
-
-        return redirect('login')
-
-    return render(request, 'aprendizaje/login.html')
+@login_required
+def perfil(request):
+    user = request.user
+    
+    # Verificamos qué tipo de usuario es para saber qué renderizar
+    es_estudiante = hasattr(user, 'estudiante')
+    
+    if es_estudiante:
+        estudiante = user.estudiante
+        # Obtenemos o creamos su perfil profesional por si acaso
+        perfil_prof, created = PerfilProfesional.objects.get_or_create(estudiante=estudiante)
+        
+        if request.method == 'POST':
+            # ¡ATENCIÓN! request.FILES es obligatorio para que se guarden las imágenes
+            form_estudiante = EditarEstudianteForm(request.POST, request.FILES, instance=estudiante)
+            form_perfil = EditarPerfilProfesionalForm(request.POST, instance=perfil_prof)
+            
+            if form_estudiante.is_valid() and form_perfil.is_valid():
+                form_estudiante.save()
+                form_perfil.save()
+                return redirect('perfil')
+        else:
+            form_estudiante = EditarEstudianteForm(instance=estudiante)
+            form_perfil = EditarPerfilProfesionalForm(instance=perfil_prof)
+            
+        context = {
+            'es_estudiante': True,
+            'estudiante': estudiante,
+            'perfil_prof': perfil_prof,
+            'form_estudiante': form_estudiante,
+            'form_perfil': form_perfil,
+        }
+    else:
+        # Lógica para cuando entra un Reclutador
+        reclutador = user.reclutador
+        context = {
+            'es_estudiante': False,
+            'reclutador': reclutador,
+        }
+        
+    return render(request, 'aprendizaje/perfil.html', context)
 
 # =========================================================
-# VISTAS: PERFIL, LIGAS, DESAFÍOS Y LOGOUT
+# VISTAS: AMISTAD, LIGAS, DESAFÍOS, LOGIN Y LOGOUT
 # =========================================================
 
 @login_required(login_url='login')
-def perfil(request):
+def red_amigos(request):
+    usuario_actual = request.user
+    mensaje = None
+    
     if request.method == 'POST':
-        # Manejamos el botón de cerrar sesión que pusimos en perfil.html
-        logout(request)
-        return redirect('login')
+        # Descubrimos qué botón presionó el usuario
+        accion = request.POST.get('accion')
         
-    return render(request, 'aprendizaje/perfil.html')
+        # 1. LÓGICA PARA AGREGAR
+        if accion == 'vincular':
+            nombre_buscar = request.POST.get('buscar_usuario')
+            if nombre_buscar:
+                try:
+                    usuario_encontrado = User.objects.get(username=nombre_buscar)
+                    if usuario_encontrado == usuario_actual:
+                        mensaje = "No puedes agregarte a ti mismo como amigo."
+                    else:
+                        Amistad.objects.get_or_create(usuario=usuario_actual, amigo=usuario_encontrado)
+                        mensaje = f"¡Has conectado con {usuario_encontrado.username} exitosamente!"
+                except User.DoesNotExist:
+                    mensaje = "No se encontró a ningún operador con ese código/nombre."
+                    
+        # 2. LÓGICA PARA ELIMINAR
+        elif accion == 'eliminar':
+            amigo_id = request.POST.get('amigo_id')
+            # Buscamos la conexión específica y la destruimos
+            Amistad.objects.filter(usuario=usuario_actual, amigo__id=amigo_id).delete()
+            mensaje = "> ENLACE DESTRUIDO."
+
+    # OBTENER LA LISTA DE AMIGOS ACTUALES
+    conexiones = Amistad.objects.filter(usuario=usuario_actual)
+    
+    return render(request, 'aprendizaje/amigos.html', {
+        'conexiones': conexiones,
+        'mensaje': mensaje
+    })
 
 @login_required(login_url='login')
 def ligas(request):
@@ -257,3 +317,15 @@ def ligas(request):
 @login_required(login_url='login')
 def desafios(request):
     return render(request, 'aprendizaje/desafios.html')
+
+def login_usuario(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            usuario = form.get_user()
+            login(request, usuario)
+            return redirect('perfil')
+    else:
+        form = AuthenticationForm()
+        
+    return render(request, 'aprendizaje/login.html', {'form': form})

@@ -4,182 +4,226 @@
 
 {% block content %}
 <style>
-    .perfil-container { 
-        display: grid; 
-        grid-template-columns: 320px 1fr; 
-        gap: 40px; 
-        margin-top: 2rem; 
-        align-items: start; /* Evita que la tarjeta se estire hacia abajo innecesariamente */
-    }
+    /* ... (TUS ESTILOS ANTERIORES SE MANTIENEN INTACTOS HASTA btn-logout) ... */
+    .perfil-container { display: grid; grid-template-columns: 320px 1fr; gap: 40px; margin-top: 2rem; align-items: start; }
+    @media (max-width: 768px) { .perfil-container { grid-template-columns: 1fr; } }
     
-    /* Adaptación para pantallas pequeñas (celulares) */
-    @media (max-width: 768px) {
-        .perfil-container { grid-template-columns: 1fr; }
-    }
+    .id-card { background-color: var(--card-bg); border: 2px solid var(--secondary-accent); border-radius: 16px; padding: 40px 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15); position: relative; overflow: hidden; }
+    .id-card::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: linear-gradient(90deg, var(--accent-color), var(--support-color)); }
     
-    /* GAFETE DE IDENTIFICACIÓN */
-    .id-card {
-        background-color: var(--card-bg); 
-        border: 2px solid var(--secondary-accent);
-        border-radius: 16px; 
-        padding: 40px 30px; 
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-        position: relative;
-        overflow: hidden;
-    }
-
-    /* Línea decorativa superior en la tarjeta */
-    .id-card::before {
-        content: "";
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 6px;
-        background: linear-gradient(90deg, var(--accent-color), var(--support-color));
-    }
+    .avatar-container { position: relative; width: 120px; height: 120px; margin: 0 auto 20px auto; }
+    .avatar { font-size: 5rem; background-color: #050505; border: 3px solid var(--accent-color); border-radius: 50%; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255, 51, 51, 0.2); }
     
-    .avatar-container {
-        position: relative;
-        width: 120px;
-        height: 120px;
-        margin: 0 auto 20px auto;
-    }
-
-    .avatar { 
-        font-size: 5rem; 
-        background-color: #050505; 
-        border: 3px solid var(--accent-color); 
-        border-radius: 50%; 
-        width: 100%; 
-        height: 100%; 
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        box-shadow: 0 0 20px rgba(255, 51, 51, 0.2); 
-    }
-
-    /* Un pequeño punto verde de "En línea" */
-    .status-dot {
-        position: absolute;
-        bottom: 5px;
-        right: 5px;
-        width: 22px;
-        height: 22px;
-        background-color: #00ff41;
-        border: 4px solid var(--card-bg);
-        border-radius: 50%;
-    }
-
+    /* NUEVO: Estilo para cuando hay imagen real */
+    .avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid var(--accent-color); box-shadow: 0 0 20px rgba(255, 51, 51, 0.2); }
+    
+    .status-dot { position: absolute; bottom: 5px; right: 5px; width: 22px; height: 22px; background-color: #00ff41; border: 4px solid var(--card-bg); border-radius: 50%; }
+    
     .username { font-size: 1.8rem; font-weight: 800; color: var(--text-color); margin-bottom: 2px; line-height: 1.2; }
-    .user-id { font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--support-color); margin-bottom: 15px; font-weight: bold; }
-    .join-date { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+    .user-id { font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--support-color); margin-bottom: 5px; font-weight: bold; }
+    .join-date { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 15px;}
     
-    /* PANEL DE ESTADÍSTICAS */
-    .stats-header {
-        color: var(--text-color);
-        font-size: 1.6rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        margin-bottom: 25px;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    /* Línea que acompaña al título del panel */
-    .stats-header::after {
-        content: "";
-        flex-grow: 1;
-        height: 2px;
-        background: var(--secondary-accent);
-    }
-
+    .stats-header { color: var(--text-color); font-size: 1.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; }
+    .stats-header::after { content: ""; flex-grow: 1; height: 2px; background: var(--secondary-accent); }
+    
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-    
-    .stat-box { 
-        background-color: var(--card-bg); 
-        border: 2px solid var(--secondary-accent); 
-        border-radius: 12px; 
-        padding: 25px 20px; 
-        display: flex; 
-        align-items: center; 
-        gap: 20px; 
-        transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-    
-    /* Efectos hover para cada estadística */
+    .stat-box { background-color: var(--card-bg); border: 2px solid var(--secondary-accent); border-radius: 12px; padding: 25px 20px; display: flex; align-items: center; gap: 20px; transition: transform 0.3s ease, border-color 0.3s ease; }
     .stat-box:hover { transform: translateY(-5px); }
     .stat-box.racha:hover { border-color: var(--accent-color); box-shadow: 0 5px 15px rgba(255, 51, 51, 0.1); }
     .stat-box.xp:hover { border-color: var(--support-border); box-shadow: 0 5px 15px var(--support-bg); }
     .stat-box.liga:hover { border-color: #ffaa00; box-shadow: 0 5px 15px rgba(255, 170, 0, 0.1); }
+    .stat-box.vidas:hover { border-color: #00ff41; box-shadow: 0 5px 15px rgba(0, 255, 65, 0.1); } /* NUEVO CAJÓN */
 
     .stat-icon { font-size: 2.5rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .stat-value { font-size: 1.8rem; font-weight: 900; color: var(--text-color); margin: 0; line-height: 1; }
     .stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; font-weight: bold; margin-top: 5px; letter-spacing: 1px; }
     
-    /* BOTÓN DE LOGOUT MEJORADO */
-    .btn-logout { 
-        background-color: transparent; 
-        border: 2px solid var(--secondary-accent); 
-        color: var(--text-color); 
-        width: 100%; 
-        margin-top: 30px; 
-        padding: 12px;
-        font-weight: 700;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        cursor: pointer;
+    .btn-logout { background-color: transparent; border: 2px solid var(--secondary-accent); color: var(--text-color); width: 100%; margin-top: 30px; padding: 12px; font-weight: 700; border-radius: 8px; transition: all 0.3s ease; cursor: pointer; }
+    .btn-logout:hover { background-color: rgba(255, 51, 51, 0.1); border-color: var(--accent-color); color: var(--accent-color); }
+
+    /* =========================================
+       SECCIÓN DE EDICIÓN DE PERFIL
+       ========================================= */
+    .edit-section {
+        margin-top: 40px;
+        background-color: var(--card-bg);
+        border: 1px solid var(--secondary-accent);
+        border-radius: 12px;
+        padding: 30px;
     }
-    .btn-logout:hover { 
-        background-color: rgba(255, 51, 51, 0.1); 
+    
+    .edit-form p { margin-bottom: 15px; }
+    .edit-form label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+    .edit-form input[type="text"], .edit-form input[type="url"], .edit-form textarea {
+        width: 100%; background-color: #050505; border: 1px solid #333; color: white; padding: 10px; border-radius: 6px; font-family: inherit;
+    }
+    .edit-form input[type="text"]:focus, .edit-form input[type="url"]:focus, .edit-form textarea:focus {
+        border-color: var(--accent-color); outline: none;
+    }
+    .edit-form input[type="file"] { color: #aaa; font-size: 0.9rem; }
+
+    /* =========================================
+       ESTILOS PARA EL INPUT DE AVATAR (ClearableFileInput)
+       ========================================= */
+    /* Da espacio a los textos generados por Django */
+    .edit-form p { line-height: 1.8; }
+
+    /* Estiliza el enlace azul feo para que sea Neón/Rojo */
+    .edit-form a {
+        color: var(--accent-color);
+        text-decoration: none;
+        font-weight: bold;
+        word-break: break-all;
+        background-color: rgba(255, 51, 51, 0.05);
+        padding: 2px 8px;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 51, 51, 0.2);
+    }
+    .edit-form a:hover { box-shadow: 0 0 10px rgba(255, 51, 51, 0.3); }
+
+    /* Alinea el checkbox al centro */
+    .edit-form input[type="checkbox"] {
+        accent-color: var(--accent-color);
+        transform: scale(1.3);
+        margin-left: 15px;
+        margin-right: 8px;
+        cursor: pointer;
+        vertical-align: middle; /* Alineación vertical */
+    }
+
+    /* ¡EL FIX CLAVE! Fuerza a que el texto "BORRAR" se quede al lado del checkbox */
+    .edit-form input[type="checkbox"] + label {
+        display: inline-block !important; /* Evita que salte a la siguiente línea */
+        vertical-align: middle;
+        margin: 0;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    /* EL SECRETO: Modificar el botón gris nativo de Windows/Mac */
+    .edit-form input[type="file"]::file-selector-button {
+        background-color: #0a0a0a;
+        color: var(--text-color);
+        border: 2px solid var(--secondary-accent);
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 800;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        margin-right: 15px;
+        margin-top: 10px;
+    }
+
+    .edit-form input[type="file"]::file-selector-button:hover {
         border-color: var(--accent-color);
+        background-color: rgba(255, 51, 51, 0.1);
         color: var(--accent-color);
     }
 </style>
 
 <div class="perfil-container">
+    
     <aside class="id-card">
         <div class="avatar-container">
-            <div class="avatar">🦉</div>
+            {% if es_estudiante and estudiante.avatar %}
+                <img src="{{ estudiante.avatar.url }}" alt="Avatar" class="avatar-img">
+            {% else %}
+                <div class="avatar">🦉</div>
+            {% endif %}
             <div class="status-dot"></div>
         </div>
-        <h2 class="username">{{ user.username|default:"Operador Anónimo" }}</h2>
+        
+        <h2 class="username">{{ user.username|default:"Operador" }}</h2>
         <p class="user-id">#USR-{{ user.id|default:"0000"|stringformat:"04d" }}</p>
-        <p class="join-date">MIEMBRO DESDE 2024</p>
+        
+        {% if es_estudiante %}
+            <p class="join-date">{{ estudiante.escuela|default:"Escuela No Definida" }}</p>
+        {% else %}
+            <p class="join-date">{{ reclutador.empresa|default:"Contratista Independiente" }}</p>
+            <p style="color: var(--accent-color); font-weight: bold; font-size: 0.8rem; border: 1px solid var(--accent-color); padding: 5px; border-radius: 5px;">MODO RECLUTADOR</p>
+        {% endif %}
         
         <form action="{% url 'logout' %}" method="POST" style="margin-top: 20px;">
             {% csrf_token %}
             <button type="submit" class="btn-logout" style="letter-spacing: 1px;">DESCONECTAR</button>
         </form>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="{% url 'red_amigos' %}" class="btn-logout" style="text-decoration: none; display: inline-block; background-color: transparent; border: 1px solid var(--accent-color); color: white;">
+                🌐 ABRIR TERMINAL DE CONEXIONES
+            </a>
+        </div>
     </aside>
 
     <main>
-        <h2 class="stats-header">Métricas de Rendimiento</h2>
         
-        <div class="stats-grid">
-            <div class="stat-box racha">
-                <div class="stat-icon">🔥</div>
-                <div>
-                    <p class="stat-value" style="color: var(--accent-color);">{{ user.estudiante.racha_dias|default:"0" }}</p>
-                    <p class="stat-label">Días de Racha</p>
+        {% if es_estudiante %}
+            <h2 class="stats-header">Métricas de Rendimiento</h2>
+            <div class="stats-grid">
+                <div class="stat-box racha">
+                    <div class="stat-icon">🔥</div>
+                    <div>
+                        <p class="stat-value" style="color: var(--accent-color);">{{ estudiante.racha_dias }}</p>
+                        <p class="stat-label">Días de Racha</p>
+                    </div>
+                </div>
+                
+                <div class="stat-box xp">
+                    <div class="stat-icon">💎</div>
+                    <div>
+                        <p class="stat-value" style="color: var(--support-color);">{{ estudiante.xp_total }}</p>
+                        <p class="stat-label">Total de XP</p>
+                    </div>
+                </div>
+                
+                <div class="stat-box vidas">
+                    <div class="stat-icon">❤️</div>
+                    <div>
+                        <p class="stat-value" style="color: #00ff41;">{{ estudiante.vidas }} / 5</p>
+                        <p class="stat-label">Energía</p>
+                    </div>
+                </div>
+
+                <div class="stat-box liga">
+                    <div class="stat-icon">🛡️</div>
+                    <div>
+                        <p class="stat-value" style="color: #ffaa00;">Bronce</p>
+                        <p class="stat-label">Liga Actual</p>
+                    </div>
                 </div>
             </div>
-            
-            <div class="stat-box xp">
-                <div class="stat-icon">💎</div>
-                <div>
-                    <p class="stat-value" style="color: var(--support-color);">{{ user.estudiante.xp_total|default:"0" }}</p>
-                    <p class="stat-label">Total de XP</p>
-                </div>
+
+            <div class="edit-section">
+                <h2 class="stats-header" style="font-size: 1.2rem; margin-bottom: 15px;">Actualizar Expediente</h2>
+                
+                <form method="POST" enctype="multipart/form-data" class="edit-form">
+                    {% csrf_token %}
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            {{ form_estudiante.as_p }}
+                        </div>
+                        <div>
+                            {{ form_perfil.as_p }}
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="margin-top: 15px;">GUARDAR CAMBIOS</button>
+                </form>
             </div>
-            
-            <div class="stat-box liga">
-                <div class="stat-icon">🛡️</div>
-                <div>
-                    <p class="stat-value" style="color: #ffaa00;">Bronce</p>
-                    <p class="stat-label">Liga Actual</p>
-                </div>
+
+        {% else %}
+            <h2 class="stats-header">Panel de Contratista</h2>
+            <div class="edit-section" style="text-align: center; padding: 50px;">
+                <h3 style="color: var(--text-color); margin-bottom: 15px;">Módulo de Reclutamiento En Construcción</h3>
+                <p style="color: #888;">Próximamente podrás publicar ofertas de trabajo y buscar operadores calificados desde este panel.</p>
             </div>
-        </div>
+        {% endif %}
+
     </main>
 </div>
 {% endblock %}
