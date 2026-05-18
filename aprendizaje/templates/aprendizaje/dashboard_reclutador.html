@@ -1,0 +1,34 @@
+{% extends 'aprendizaje/base.html' %} {% block content %}
+<div class="container" style="color: #fff; padding: 20px;">
+    <h2>🏢 Panel de Empresa: {{ reclutador.empresa }}</h2>
+    <hr style="border-color: #ffaa00;">
+
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'crear_oferta' %}" style="background: #ff4d4d; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            + Publicar Nueva Oferta
+        </a>
+    </div>
+
+    <h3>Tus Ofertas Activas</h3>
+    <div style="display: grid; gap: 15px;">
+        {% for oferta in ofertas %}
+            <div style="background: #111; border: 1px solid #333; padding: 15px; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <h4 style="margin: 0; color: #00ffff;">{{ oferta.titulo }}</h4>
+                    {% if oferta.activa %}
+                        <span style="color: #00ff41;">🟢 Activa</span>
+                    {% else %}
+                        <span style="color: #ff4d4d;">🔴 Inactiva</span>
+                    {% endif %}
+                </div>
+                <p style="color: #bbb; font-size: 0.9em; margin-top: 10px;">
+                    <strong>Sueldo:</strong> {{ oferta.rango_salarial|default:"No especificado" }} <br>
+                    <strong>Publicada:</strong> {{ oferta.fecha_publicacion }}
+                </p>
+                </div>
+        {% empty %}
+            <p style="color: #777;">No has publicado ninguna oferta laboral todavía.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

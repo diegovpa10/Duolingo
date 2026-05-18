@@ -14,4 +14,6 @@ urlpatterns = [
     path('ligas/', views.ligas, name='ligas'),
     path('desafios/', views.desafios, name='desafios'),
     path('red/', views.red_amigos, name='red_amigos'),
+    path('empresa/dashboard/', views.dashboard_reclutador, name='dashboard_reclutador'),
+    path('empresa/nueva-oferta/', views.crear_oferta, name='crear_oferta'),
 ]

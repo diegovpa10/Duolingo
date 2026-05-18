@@ -45,6 +45,8 @@ class PerfilProfesional(models.Model):
 class OfertaLaboral(models.Model):
     reclutador = models.ForeignKey(Reclutador, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)
+    descripcion = models.TextField(null=True, blank=True)
+    requisitos = models.TextField(null=True, blank=True)
     rango_salarial = models.CharField(max_length=100, blank=True, null=True)
     fecha_publicacion = models.DateField(auto_now_add=True)
     activa = models.BooleanField(default=True)

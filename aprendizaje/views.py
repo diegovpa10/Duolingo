@@ -14,11 +14,12 @@ from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Curso, Leccion, Ejercicio, Estudiante, Reclutador, PerfilProfesional, Amistad, RetoCodigo, RetoInteractivo
+from .models import Curso, Leccion, Ejercicio, Estudiante, Reclutador, PerfilProfesional, Amistad, RetoCodigo, RetoInteractivo, OfertaLaboral
 from .forms import RegistroRedOwlForm, EditarEstudianteForm, EditarPerfilProfesionalForm
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.forms import AuthenticationForm
+from .forms import OfertaLaboralForm
 
 @login_required(login_url='login')
 def lista_cursos(request):
@@ -35,14 +36,6 @@ def detalle_curso(request, curso_id):
         'curso': curso, 
         'lecciones': lecciones
     })
-
-import json
-import os
-import subprocess
-import tempfile
-from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
-from .models import Leccion, Ejercicio # Asegúrate de que tus modelos estén bien importados aquí
 
 def detalle_leccion(request, leccion_id):
     leccion = get_object_or_404(Leccion, id=leccion_id)
@@ -381,6 +374,40 @@ def perfil(request):
         }
         
     return render(request, 'aprendizaje/perfil.html', context)
+
+@login_required
+def dashboard_reclutador(request):
+    # Verificamos que el usuario logueado sea realmente un reclutador
+    if not hasattr(request.user, 'reclutador'):
+        # Si es estudiante o admin, lo mandamos al inicio
+        return redirect('lista_cursos') 
+    
+    reclutador = request.user.reclutador
+    # Traemos las ofertas creadas por este reclutador ordenadas por la más reciente
+    ofertas = OfertaLaboral.objects.filter(reclutador=reclutador).order_by('-fecha_publicacion')
+    
+    return render(request, 'aprendizaje/dashboard_reclutador.html', {
+        'reclutador': reclutador,
+        'ofertas': ofertas
+    })
+
+@login_required
+def crear_oferta(request):
+    if not hasattr(request.user, 'reclutador'):
+        return redirect('dashboard_reclutador')
+        
+    if request.method == 'POST':
+        form = OfertaLaboralForm(request.POST)
+        if form.is_valid():
+            nueva_oferta = form.save(commit=False)
+            # Le asignamos la oferta al reclutador que la está creando
+            nueva_oferta.reclutador = request.user.reclutador
+            nueva_oferta.save()
+            return redirect('dashboard_reclutador')
+    else:
+        form = OfertaLaboralForm()
+        
+    return render(request, 'aprendizaje/crear_oferta.html', {'form': form})
 
 # =========================================================
 # VISTAS: AMISTAD, LIGAS, DESAFÍOS, LOGIN Y LOGOUT

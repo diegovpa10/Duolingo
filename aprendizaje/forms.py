@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Estudiante, PerfilProfesional
+# Añadimos OfertaLaboral a la importación:
+from .models import Estudiante, PerfilProfesional, OfertaLaboral
 
 class RegistroRedOwlForm(UserCreationForm):
     TIPO_CHOICES = (
@@ -50,4 +51,16 @@ class EditarPerfilProfesionalForm(forms.ModelForm):
             'url_github': forms.URLInput(attrs={'class': 'form-input', 'placeholder': 'https://github.com/...'}),
             'url_linkedin': forms.URLInput(attrs={'class': 'form-input', 'placeholder': 'https://linkedin.com/in/...'}),
             'disponible': forms.CheckboxInput(attrs={'class': 'form-checkbox'}),
+        }
+
+# --- NUEVO FORMULARIO PARA OFERTAS LABORALES ---
+class OfertaLaboralForm(forms.ModelForm):
+    class Meta:
+        model = OfertaLaboral
+        fields = ['titulo', 'descripcion', 'requisitos', 'rango_salarial']
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Ej: Desarrollador Backend Junior'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 4, 'placeholder': 'Describe las responsabilidades de la misión...'}),
+            'requisitos': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 3, 'placeholder': 'Ej: Python, Django, SQL...'}),
+            'rango_salarial': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Ej: $500 - $1000 USD'}),
         }
