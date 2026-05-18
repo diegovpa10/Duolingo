@@ -117,11 +117,21 @@ class RetoCodigo(models.Model):
     casos_prueba = models.JSONField()
     tiempo_limite = models.FloatField()
 
-class QuizIngles(models.Model):
+class RetoInteractivo(models.Model):
+    TIPOS_RETO = [
+        ('OM', 'Opción Múltiple'),
+        ('RH', 'Rellenar Huecos (Tecleo)'),
+        ('OT', 'Ordenar Texto (Drag & Drop)'),
+        ('EP', 'Enlazar Palabras (Match)'),
+    ]
     ejercicio = models.OneToOneField(Ejercicio, on_delete=models.CASCADE, primary_key=True)
-    url_audio = models.URLField(max_length=500, blank=True, null=True)
-    opciones = models.JSONField()
-    respuesta_correcta = models.PositiveIntegerField()
+    tipo_reto = models.CharField(max_length=2, choices=TIPOS_RETO, default='OM')
+    
+    # Aquí guardaremos toda la magia en formato JSON dependiendo del tipo_reto
+    configuracion = models.JSONField(help_text="Estructura del reto (opciones, respuestas, pares, etc.)")
+
+    def __str__(self):
+        return f"Reto {self.get_tipo_reto_display()} - Ejercicio {self.ejercicio.id}"
 
 class ProgresoCurso(models.Model):
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE)

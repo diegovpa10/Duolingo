@@ -14,7 +14,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Curso, Leccion, Ejercicio, Estudiante, Reclutador, PerfilProfesional, Amistad
+from .models import Curso, Leccion, Ejercicio, Estudiante, Reclutador, PerfilProfesional, Amistad, RetoCodigo, RetoInteractivo
 from .forms import RegistroRedOwlForm, EditarEstudianteForm, EditarPerfilProfesionalForm
 from django.utils import timezone
 from datetime import timedelta
@@ -36,6 +36,14 @@ def detalle_curso(request, curso_id):
         'lecciones': lecciones
     })
 
+import json
+import os
+import subprocess
+import tempfile
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
+from .models import Leccion, Ejercicio # Asegúrate de que tus modelos estén bien importados aquí
+
 def detalle_leccion(request, leccion_id):
     leccion = get_object_or_404(Leccion, id=leccion_id)
     ejercicios = Ejercicio.objects.filter(leccion=leccion)
@@ -49,10 +57,7 @@ def detalle_leccion(request, leccion_id):
     # PROCESAMIENTO DEL FORMULARIO (POST)
     # =========================================================================
     if request.method == 'POST':
-        codigo_recibido = request.POST.get('codigo_alumno', '')
-        codigo_previo = codigo_recibido # Guardamos lo que escribió para que no se le borre
-        
-        # 🛡️ [NUEVO] ESCUDO DE SEGURIDAD BACKEND: Evita ejecuciones si no hay energía
+        # 🛡️ ESCUDO DE SEGURIDAD BACKEND: Evita ejecuciones si no hay energía
         if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
             if request.user.estudiante.energia <= 0:
                 context = {
@@ -60,168 +65,243 @@ def detalle_leccion(request, leccion_id):
                     'ejercicios': ejercicios,
                     'mensaje': "❌ Operación abortada por el servidor. Tu terminal no tiene suficiente energía (⚡ 0/5). Espera a la recarga automática.",
                     'es_correcto': False,
-                    'codigo_previo': codigo_previo
+                    'codigo_previo': request.POST.get('codigo_alumno', '')
                 }
                 return render(request, 'aprendizaje/detalle_leccion.html', context)
 
-        # 1. Detectamos el lenguaje basado en el nombre del curso
-        nombre_curso = leccion.curso.nombre.lower()
-        if 'javascript' in nombre_curso or 'js' in nombre_curso:
-            lenguaje = 'javascript'
-        elif 'java' in nombre_curso:
-            lenguaje = 'java'
+        # Identificamos QUÉ ejercicio están intentando resolver
+        ejercicio_id = request.POST.get('ejercicio_id')
+        if ejercicio_id:
+            ejercicio_actual = ejercicios.filter(id=ejercicio_id).first()
         else:
-            lenguaje = 'python'
-        
-        # 2. Extraemos el resultado esperado del JSON
-        ejercicio_actual = ejercicios.first()
-        expected_output = ""
-        
-        if ejercicio_actual and hasattr(ejercicio_actual, 'retocodigo'):
-            casos_prueba = ejercicio_actual.retocodigo.casos_prueba
-            if isinstance(casos_prueba, str):
+            ejercicio_actual = ejercicios.first()
+
+        # ---------------------------------------------------------
+        # 🧠 RAMA A: PROCESAR RETO INTERACTIVO (Multi-idioma / Multi-formato)
+        # ---------------------------------------------------------
+        if ejercicio_actual and ejercicio_actual.tipo_ejercicio == 'Q':
+            reto = getattr(ejercicio_actual, 'retointeractivo', None)
+            tipo_reto = request.POST.get('tipo_reto')
+            respuesta_alumno = request.POST.get('respuesta_alumno', '').strip()
+            
+            if reto:
+                config = reto.configuracion
                 try:
-                    casos_prueba = json.loads(casos_prueba)
-                except json.JSONDecodeError:
-                    casos_prueba = {}
-            # Sacamos el texto esperado del test_1
-            expected_output = casos_prueba.get('test_1', {}).get('expected_output', '').strip()
-
-        salida_texto = ""
-        error_texto = ""
-
-        try:
-            # =========================================================
-            # MOTOR DE EJECUCIÓN SEGURO
-            # =========================================================
-            if lenguaje == 'java':
-                with tempfile.TemporaryDirectory() as temp_dir:
-                    file_path = os.path.join(temp_dir, 'Main.java')
-                    with open(file_path, 'w', encoding='utf-8') as f:
-                        f.write(codigo_recibido)
-                    
-                    compilacion = subprocess.run(
-                        ['javac', 'Main.java'],
-                        cwd=temp_dir, capture_output=True, text=True, timeout=5
-                    )
-                    
-                    if compilacion.returncode != 0:
-                        error_texto = f"Error de sintaxis en Java:\n{compilacion.stderr.strip()}"
-                    else:
-                        ejecucion = subprocess.run(
-                            ['java', 'Main'],
-                            cwd=temp_dir, capture_output=True, text=True, timeout=3
-                        )
-                        salida_texto = ejecucion.stdout.strip()
-                        error_texto = ejecucion.stderr.strip()
-            elif lenguaje == 'javascript':
-                resultado = subprocess.run(
-                    ['node', '-e', codigo_recibido],
-                    capture_output=True, text=True, timeout=3
-                )
-                salida_texto = resultado.stdout.strip()
-                error_texto = resultado.stderr.strip()
-            else:
-                resultado = subprocess.run(
-                    ['python', '-c', codigo_recibido],
-                    capture_output=True, text=True, timeout=3
-                )
-                salida_texto = resultado.stdout.strip()
-                error_texto = resultado.stderr.strip()
-
-            # =========================================================
-            # VALIDACIÓN DE RESULTADOS
-            # =========================================================
-            if error_texto and not salida_texto:
-                mensaje = f"Ups, encontramos un error:\n{error_texto}"
-                es_correcto = False
-            else:
-                if expected_output:
-                    if salida_texto == expected_output:
-                        mensaje = f"¡Perfecto! Tu código imprimió exactamente: {salida_texto}"
-                        es_correcto = True
-                    else:
-                        mensaje = f"Salida incorrecta. Se esperaba '{expected_output}', pero tu código imprimió: '{salida_texto}'"
-                        es_correcto = False
-                else:
-                    mensaje = f"¡Tu código corrió sin errores! Resultado: {salida_texto}"
-                    es_correcto = True
-
-            # =========================================================
-            # SISTEMA DE ENERGÍA (⚡) Y RACHAS
-            # =========================================================
-            if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
-                estudiante = request.user.estudiante
-                
-                # SI ACERTÓ:
-                if es_correcto:
-                    estudiante.racha_ejercicios += 1
-                    
-                    # Premios por racha (Topamos la energía máxima a 5)
-                    if estudiante.racha_ejercicios == 3:
-                        estudiante.energia = min(5, estudiante.energia + 1)
-                        mensaje += "\n\n⚡ ¡Racha de 3 aciertos! Has recuperado 1 de energía."
-                    elif estudiante.racha_ejercicios == 5:
-                        estudiante.energia = min(5, estudiante.energia + 2)
-                        mensaje += "\n\n⚡ ¡Racha de 5 aciertos! Has recuperado 2 de energía."
-                    elif estudiante.racha_ejercicios == 7:
-                        estudiante.energia = min(5, estudiante.energia + 3)
-                        mensaje += "\n\n⚡ ¡Imparable! (7 aciertos) Has recuperado 3 de energía."
-                        
-                # SI FALLÓ:
-                else:
-                    estudiante.racha_ejercicios = 0 
-                    
-                    if estudiante.energia > 0:
-                        # Si su energía estaba al máximo (5) y va a empezar a bajar,
-                        # marcamos este momento exacto para que inicie el contador de recarga de 20 mins.
-                        if estudiante.energia == 5:
-                            estudiante.fecha_ultima_recarga = timezone.now()
-                            
-                        estudiante.energia -= 1
-                        mensaje += f"\n\n⚠️ ¡Código inestable! Pierdes 1 de energía. Nivel actual: {estudiante.energia}/5 ⚡."
-                    else:
-                        mensaje = "❌ ¡ENERGÍA AGOTADA! Sistema bloqueado. No puedes ejecutar código hasta recargar."
-                
-                estudiante.save()
-
-            # =========================================================
-            # SISTEMA DE EXPERIENCIA Y RACHAS 🦉⭐
-            # =========================================================
-            if es_correcto:
-                if not leccion.completada:
-                    if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
-                        estudiante = request.user.estudiante
-                        puntos_a_ganar = ejercicio_actual.xp_recompensa if ejercicio_actual else 15
-                        estudiante.xp_total += puntos_a_ganar 
-                        
-                        hoy = timezone.now().date()
-                        ayer = hoy - timedelta(days=1)
-                        
-                        if estudiante.fecha_ultima_leccion == hoy:
-                            pass 
-                        elif estudiante.fecha_ultima_leccion == ayer:
-                            estudiante.racha_dias += 1
+                    # 1. Opción Múltiple (OM)
+                    if tipo_reto == 'OM':
+                        if respuesta_alumno and int(respuesta_alumno) == int(config.get('indice_correcto', -1)):
+                            mensaje = "¡Excelente! Respuesta correcta. 🔮"
+                            es_correcto = True
                         else:
-                            estudiante.racha_dias = 1
-                            
-                        estudiante.fecha_ultima_leccion = hoy
-                        estudiante.save()
-                        mensaje += f" ¡Ganaste {puntos_a_ganar} XP!"
-                            
-                    leccion.completada = True
-                    leccion.save()
+                            mensaje = "❌ Respuesta incorrecta. Vuelve a intentarlo."
+                            es_correcto = False
 
-        except subprocess.TimeoutExpired:
-            mensaje = "Tu código tardó demasiado. ¿Tienes un ciclo infinito?"
-            es_correcto = False
-        except Exception as e:
-            mensaje = f"Error del servidor: {str(e)}"
-            es_correcto = False
+                    # 2. Rellenar Huecos (RH)
+                    elif tipo_reto == 'RH':
+                        respuesta_esperada = config.get('respuesta_correcta', '').strip()
+                        if respuesta_alumno.lower() == respuesta_esperada.lower():
+                            mensaje = "¡Excelente! Has completado el espacio correctamente. 🔮"
+                            es_correcto = True
+                        else:
+                            mensaje = "❌ Respuesta incorrecta. El texto no coincide."
+                            es_correcto = False
+
+                    # 3. Ordenar Texto (OT)
+                    elif tipo_reto == 'OT':
+                        try:
+                            lista_alumno = json.loads(respuesta_alumno) if respuesta_alumno else []
+                        except json.JSONDecodeError:
+                            lista_alumno = []
+                        lista_esperada = config.get('orden_correcto', [])
+                        
+                        if lista_alumno == lista_esperada:
+                            mensaje = "¡Perfecto! El orden es totalmente correcto. 🔮"
+                            es_correcto = True
+                        else:
+                            if len(lista_alumno) < len(lista_esperada):
+                                mensaje = "⚠️ Parece que olvidaste arrastrar algunos bloques. ¡Inténtalo de nuevo!"
+                            else:
+                                mensaje = "❌ El orden no es el correcto. Revisa la lógica paso a paso."
+                            es_correcto = False
+
+                    # 4. Enlazar Palabras (EP)
+                    elif tipo_reto == 'EP':
+                        try:
+                            # El frontend manda un string JSON del dict construido por el alumno
+                            dict_alumno = json.loads(respuesta_alumno) if respuesta_alumno else {}
+                        except json.JSONDecodeError:
+                            dict_alumno = {}
+                            
+                        dict_esperado = config.get('parejas', {})
+                        
+                        # Comparamos si ambos diccionarios mapean exactamente lo mismo
+                        if dict_alumno == dict_esperado:
+                            mensaje = "¡Espléndido! Has enlazado todos los conceptos con su definición correcta. 🔮"
+                            es_correcto = True
+                        else:
+                            if len(dict_alumno) < len(dict_esperado):
+                                mensaje = "⚠️ Faltan conceptos por enlazar en la matriz de juego."
+                            else:
+                                mensaje = "❌ Algunos enlaces no son correctos. Haz clic en los bloques morados para romper el enlace e intentar de nuevo."
+                            es_correcto = False
+
+                except Exception as e:
+                    mensaje = f"⚠️ Error al procesar los datos del reto: {str(e)}"
+                    es_correcto = False
+            else:
+                mensaje = "⚠️ El reto interactivo no está configurado correctamente en la base de datos."
+                es_correcto = False
+
+        # ---------------------------------------------------------
+        # 💻 RAMA B: PROCESAR RETO DE CÓDIGO (Tu lógica intacta)
+        # ---------------------------------------------------------
+        else:
+            codigo_recibido = request.POST.get('codigo_alumno', '')
+            codigo_previo = codigo_recibido 
+            
+            # 1. Detectamos el lenguaje basado en el nombre del curso
+            nombre_curso = leccion.curso.nombre.lower()
+            if 'javascript' in nombre_curso or 'js' in nombre_curso:
+                lenguaje = 'javascript'
+            elif 'java' in nombre_curso:
+                lenguaje = 'java'
+            else:
+                lenguaje = 'python'
+            
+            # 2. Extraemos el resultado esperado del JSON
+            expected_output = ""
+            if ejercicio_actual and hasattr(ejercicio_actual, 'retocodigo'):
+                casos_prueba = ejercicio_actual.retocodigo.casos_prueba
+                if isinstance(casos_prueba, str):
+                    try:
+                        casos_prueba = json.loads(casos_prueba)
+                    except json.JSONDecodeError:
+                        casos_prueba = {}
+                expected_output = casos_prueba.get('test_1', {}).get('expected_output', '').strip()
+
+            salida_texto = ""
+            error_texto = ""
+
+            try:
+                # MOTOR DE EJECUCIÓN SEGURO
+                if lenguaje == 'java':
+                    with tempfile.TemporaryDirectory() as temp_dir:
+                        file_path = os.path.join(temp_dir, 'Main.java')
+                        with open(file_path, 'w', encoding='utf-8') as f:
+                            f.write(codigo_recibido)
+                        
+                        compilacion = subprocess.run(['javac', 'Main.java'], cwd=temp_dir, capture_output=True, text=True, timeout=5)
+                        if compilacion.returncode != 0:
+                            error_texto = f"Error de sintaxis en Java:\n{compilacion.stderr.strip()}"
+                        else:
+                            ejecucion = subprocess.run(['java', 'Main'], cwd=temp_dir, capture_output=True, text=True, timeout=3)
+                            salida_texto = ejecucion.stdout.strip()
+                            error_texto = ejecucion.stderr.strip()
+                elif lenguaje == 'javascript':
+                    resultado = subprocess.run(['node', '-e', codigo_recibido], capture_output=True, text=True, timeout=3)
+                    salida_texto = resultado.stdout.strip()
+                    error_texto = resultado.stderr.strip()
+                else:
+                    resultado = subprocess.run(['python', '-c', codigo_recibido], capture_output=True, text=True, timeout=3)
+                    salida_texto = resultado.stdout.strip()
+                    error_texto = resultado.stderr.strip()
+
+                # VALIDACIÓN DE RESULTADOS DEL CÓDIGO
+                if error_texto and not salida_texto:
+                    mensaje = f"Ups, encontramos un error:\n{error_texto}"
+                    es_correcto = False
+                else:
+                    if expected_output:
+                        if salida_texto == expected_output:
+                            mensaje = f"¡Perfecto! Tu código imprimió exactamente: {salida_texto}"
+                            es_correcto = True
+                        else:
+                            mensaje = f"Salida incorrecta. Se esperaba '{expected_output}', pero tu código imprimió: '{salida_texto}'"
+                            es_correcto = False
+                    else:
+                        mensaje = f"¡Tu código corrió sin errores! Resultado: {salida_texto}"
+                        es_correcto = True
+
+            except subprocess.TimeoutExpired:
+                mensaje = "Tu código tardó demasiado. ¿Tienes un ciclo infinito?"
+                es_correcto = False
+            except Exception as e:
+                mensaje = f"Error del servidor: {str(e)}"
+                es_correcto = False
+
+        # =========================================================
+        # SISTEMA DE ENERGÍA (⚡) Y RACHAS (Igual para Ambos Casos)
+        # =========================================================
+        if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
+            estudiante = request.user.estudiante
+            
+            if es_correcto:
+                estudiante.xp_total += getattr(ejercicio_actual, 'xp_recompensa', 10) # Usa 10 como fallback si no existe el campo
+                estudiante.racha_ejercicios += 1
+                if estudiante.racha_ejercicios == 3:
+                    estudiante.energia = min(5, estudiante.energia + 1)
+                    mensaje += "\n\n⚡ ¡Racha de 3 aciertos! Has recuperado 1 de energía."
+                elif estudiante.racha_ejercicios == 5:
+                    estudiante.energia = min(5, estudiante.energia + 2)
+                    mensaje += "\n\n⚡ ¡Racha de 5 aciertos! Has recuperado 2 de energía."
+                elif estudiante.racha_ejercicios == 7:
+                    estudiante.energia = min(5, estudiante.energia + 3)
+                    mensaje += "\n\n⚡ ¡Imparable! (7 aciertos) Has recuperado 3 de energía."
+            else:
+                estudiante.racha_ejercicios = 0 
+                if estudiante.energia > 0:
+                    if estudiante.energia == 5:
+                        estudiante.fecha_ultima_recarga = timezone.now()
+                    estudiante.energia -= 1
+                    mensaje += f"\n\n⚠️ ¡Fallaste! Pierdes 1 de energía. Nivel actual: {estudiante.energia}/5 ⚡."
+                else:
+                    mensaje = "❌ ¡ENERGÍA AGOTADA! Sistema bloqueado. Espera a recargar."
+            
+            estudiante.save()
+
+        # =========================================================
+        # SISTEMA DE EXPERIENCIA Y RACHAS 🦉⭐ (Igual para Ambos Casos)
+        # =========================================================
+        if es_correcto:
+            if not leccion.completada:
+                if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
+                    estudiante = request.user.estudiante
+                    puntos_a_ganar = ejercicio_actual.xp_recompensa if ejercicio_actual else 15
+                    estudiante.xp_total += puntos_a_ganar 
+                    
+                    hoy = timezone.now().date()
+                    ayer = hoy - timedelta(days=1)
+                    
+                    if estudiante.fecha_ultima_leccion == hoy:
+                        pass 
+                    elif estudiante.fecha_ultima_leccion == ayer:
+                        estudiante.racha_dias += 1
+                    else:
+                        estudiante.racha_dias = 1
+                        
+                    estudiante.fecha_ultima_leccion = hoy
+                    estudiante.save()
+                    mensaje += f" ¡Ganaste {puntos_a_ganar} XP!"
+                        
+                leccion.completada = True
+                leccion.save()
+
+    # =========================================================================
+    # PREPARACIÓN PARA EL TEMPLATE (GET y POST)
+    # =========================================================================
+    # Empaquetamos los ejercicios con sus datos extendidos (Reto o Quiz)
+    ejercicios_con_datos = []
+    for ej in ejercicios:
+        datos = {'ejercicio': ej}
+        if ej.tipo_ejercicio == 'C' and hasattr(ej, 'retocodigo'):
+            datos['reto'] = ej.retocodigo
+        elif ej.tipo_ejercicio == 'Q' and hasattr(ej, 'quizingles'):
+            datos['quiz'] = ej.quizingles
+        ejercicios_con_datos.append(datos)
 
     return render(request, 'aprendizaje/detalle_leccion.html', {
         'leccion': leccion,
-        'ejercicios': ejercicios,
+        'ejercicios': ejercicios, # Pasamos la lista armada
         'mensaje': mensaje,
         'es_correcto': es_correcto,
         'codigo_previo': codigo_previo
