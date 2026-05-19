@@ -1,5 +1,6 @@
 from django.utils import timezone
 from datetime import timedelta
+from .models import Notificacion
 
 def regeneracion_energia(request):
     """Procesador de contexto para recargar energía en cualquier página de la app"""
@@ -32,4 +33,14 @@ def regeneracion_energia(request):
             estudiante.save()
             
     # No necesitamos retornar variables globales, solo queremos ejecutar la lógica de fondo
+    return {}
+
+def notificaciones_globales(request):
+    if request.user.is_authenticated:
+        # Traemos solo las que no ha leído
+        no_leidas = Notificacion.objects.filter(usuario=request.user, leida=False).order_by('-fecha_creacion')
+        return {
+            'mis_notificaciones': no_leidas,
+            'total_notificaciones': no_leidas.count()
+        }
     return {}

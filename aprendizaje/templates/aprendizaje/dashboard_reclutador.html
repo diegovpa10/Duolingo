@@ -1,6 +1,6 @@
 {% extends 'aprendizaje/base.html' %} {% block content %}
 <div class="container" style="color: #fff; padding: 20px;">
-    <h2>🏢 Panel de Empresa: {{ reclutador.empresa }}</h2>
+    <h2>🏢 Panel de Empresa: {{ user.reclutador.empresa }}</h2>
     <hr style="border-color: #ffaa00;">
 
     <div style="margin-bottom: 20px;">
@@ -13,19 +13,33 @@
     <div style="display: grid; gap: 15px;">
         {% for oferta in ofertas %}
             <div style="background: #111; border: 1px solid #333; padding: 15px; border-radius: 8px;">
-                <div style="display: flex; justify-content: space-between;">
-                    <h4 style="margin: 0; color: #00ffff;">{{ oferta.titulo }}</h4>
-                    {% if oferta.activa %}
-                        <span style="color: #00ff41;">🟢 Activa</span>
-                    {% else %}
-                        <span style="color: #ff4d4d;">🔴 Inactiva</span>
-                    {% endif %}
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    
+                    <div>
+                        <h4 style="margin: 0; color: #00ffff;">{{ oferta.titulo }}</h4>
+                        <p style="color: #bbb; font-size: 0.9em; margin-top: 10px; margin-bottom: 10px;">
+                            <strong>Sueldo:</strong> {{ oferta.rango_salarial|default:"No especificado" }} <br>
+                            <strong>Publicada:</strong> {{ oferta.fecha_publicacion }}
+                        </p>
+                        {% if oferta.activa %}
+                            <span style="background: rgba(0, 255, 65, 0.1); color: #00ff41; padding: 3px 8px; border: 1px solid #00ff41; border-radius: 4px; font-size: 0.85em;">🟢 Activa</span>
+                        {% else %}
+                            <span style="background: rgba(255, 77, 77, 0.1); color: #ff4d4d; padding: 3px 8px; border: 1px solid #ff4d4d; border-radius: 4px; font-size: 0.85em;">🔴 Inactiva</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div style="text-align: right; display: flex; flex-direction: column; gap: 10px;">
+                        <span style="background: #222; padding: 8px 12px; border-radius: 4px; border: 1px solid #444; color: #ffaa00; font-weight: bold; font-size: 0.9rem;">
+                            👥 {{ oferta.postulacion_set.count }} Aspirantes
+                        </span>
+                        
+                        <a href="{% url 'ver_postulantes' oferta.id %}" style="background: #00ffff; color: #000; font-weight: bold; padding: 8px 12px; text-decoration: none; border-radius: 4px; text-align: center; font-size: 0.9rem;">
+                            Ver Candidatos
+                        </a>
+                    </div>
+
                 </div>
-                <p style="color: #bbb; font-size: 0.9em; margin-top: 10px;">
-                    <strong>Sueldo:</strong> {{ oferta.rango_salarial|default:"No especificado" }} <br>
-                    <strong>Publicada:</strong> {{ oferta.fecha_publicacion }}
-                </p>
-                </div>
+            </div>
         {% empty %}
             <p style="color: #777;">No has publicado ninguna oferta laboral todavía.</p>
         {% endfor %}

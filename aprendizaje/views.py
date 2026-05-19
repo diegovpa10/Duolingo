@@ -14,7 +14,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Curso, Leccion, Ejercicio, Estudiante, Reclutador, PerfilProfesional, Amistad, RetoCodigo, RetoInteractivo, OfertaLaboral
+from .models import Curso, Leccion, Ejercicio, Estudiante, Reclutador, PerfilProfesional, Amistad, RetoCodigo, RetoInteractivo, OfertaLaboral, RankingSemanal, LigaSemanal, Postulacion, PerfilProfesional, Notificacion
 from .forms import RegistroRedOwlForm, EditarEstudianteForm, EditarPerfilProfesionalForm
 from django.utils import timezone
 from datetime import timedelta
@@ -23,6 +23,8 @@ from .forms import OfertaLaboralForm
 
 @login_required(login_url='login')
 def lista_cursos(request):
+    if hasattr(request.user, 'reclutador'):
+        return redirect('dashboard_reclutador')
     # Obtenemos todos los cursos
     cursos = Curso.objects.all() 
     return render(request, 'aprendizaje/lista_cursos.html', {'cursos': cursos})
@@ -229,8 +231,17 @@ def detalle_leccion(request, leccion_id):
             estudiante = request.user.estudiante
             
             if es_correcto:
-                estudiante.xp_total += getattr(ejercicio_actual, 'xp_recompensa', 10) # Usa 10 como fallback si no existe el campo
+                puntos_ejercicio = getattr(ejercicio_actual, 'xp_recompensa', 10) # Usa 10 como fallback si no existe el campo
+                estudiante.xp_total += puntos_ejercicio
                 estudiante.racha_ejercicios += 1
+                
+                # 🛡️ CABLE 1: ¡Sumamos los puntos del ejercicio a la liga semanal!
+                ranking_actual = RankingSemanal.objects.filter(estudiante=estudiante).order_by('-semana_inicio').first()
+                if ranking_actual:
+                    ranking_actual.xp_ganada_esta_semana += puntos_ejercicio
+                    ranking_actual.save()
+                
+                # Lógica de rachas de energía
                 if estudiante.racha_ejercicios == 3:
                     estudiante.energia = min(5, estudiante.energia + 1)
                     mensaje += "\n\n⚡ ¡Racha de 3 aciertos! Has recuperado 1 de energía."
@@ -252,32 +263,39 @@ def detalle_leccion(request, leccion_id):
             
             estudiante.save()
 
-        # =========================================================
-        # SISTEMA DE EXPERIENCIA Y RACHAS 🦉⭐ (Igual para Ambos Casos)
-        # =========================================================
-        if es_correcto:
-            if not leccion.completada:
-                if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
-                    estudiante = request.user.estudiante
-                    puntos_a_ganar = ejercicio_actual.xp_recompensa if ejercicio_actual else 15
-                    estudiante.xp_total += puntos_a_ganar 
+    # =========================================================
+    # SISTEMA DE EXPERIENCIA Y RACHAS 🦉⭐ (Bono por Lección Completada)
+    # =========================================================
+    if es_correcto:
+        if not leccion.completada:
+            if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
+                estudiante = request.user.estudiante
+                puntos_a_ganar = ejercicio_actual.xp_recompensa if ejercicio_actual else 15
+                estudiante.xp_total += puntos_a_ganar 
+                
+                hoy = timezone.now().date()
+                ayer = hoy - timedelta(days=1)
+                
+                if estudiante.fecha_ultima_leccion == hoy:
+                    pass 
+                elif estudiante.fecha_ultima_leccion == ayer:
+                    estudiante.racha_dias += 1
+                else:
+                    estudiante.racha_dias = 1
                     
-                    hoy = timezone.now().date()
-                    ayer = hoy - timedelta(days=1)
+                estudiante.fecha_ultima_leccion = hoy
+                estudiante.save()
+                
+                # 🛡️ CABLE 2: ¡Sumamos el bono de fin de lección a la liga semanal!
+                ranking_actual = RankingSemanal.objects.filter(estudiante=estudiante).order_by('-semana_inicio').first()
+                if ranking_actual:
+                    ranking_actual.xp_ganada_esta_semana += puntos_a_ganar
+                    ranking_actual.save()
+                
+                mensaje += f" ¡Ganaste {puntos_a_ganar} XP!"
                     
-                    if estudiante.fecha_ultima_leccion == hoy:
-                        pass 
-                    elif estudiante.fecha_ultima_leccion == ayer:
-                        estudiante.racha_dias += 1
-                    else:
-                        estudiante.racha_dias = 1
-                        
-                    estudiante.fecha_ultima_leccion = hoy
-                    estudiante.save()
-                    mensaje += f" ¡Ganaste {puntos_a_ganar} XP!"
-                        
-                leccion.completada = True
-                leccion.save()
+            leccion.completada = True
+            leccion.save()
 
     # =========================================================================
     # PREPARACIÓN PARA EL TEMPLATE (GET y POST)
@@ -453,7 +471,42 @@ def red_amigos(request):
 
 @login_required(login_url='login')
 def ligas(request):
-    return render(request, 'aprendizaje/ligas.html')
+    contexto = {}
+
+    # Siempre calculamos el Top Global histórico (sirve para estudiantes y reclutadores)
+    top_global = Estudiante.objects.all().order_by('-xp_total')[:50]
+    contexto['top_global'] = top_global
+
+    # LÓGICA PARA ESTUDIANTES
+    if hasattr(request.user, 'estudiante'):
+        contexto['tipo_usuario'] = 'estudiante'
+        estudiante_actual = request.user.estudiante
+        
+        # Buscamos su ranking semanal
+        ranking_usuario = RankingSemanal.objects.filter(estudiante=estudiante_actual).order_by('-semana_inicio').first()
+        
+        if ranking_usuario:
+            competidores = RankingSemanal.objects.filter(
+                liga=ranking_usuario.liga,
+                semana_inicio=ranking_usuario.semana_inicio
+            ).order_by('-xp_ganada_esta_semana')
+            
+            contexto['nombre_liga'] = ranking_usuario.liga.division
+            contexto['competidores'] = competidores
+        else:
+            contexto['nombre_liga'] = "Liga Bronce"
+            contexto['competidores'] = []
+
+    # LÓGICA PARA RECLUTADORES
+    elif hasattr(request.user, 'reclutador'):
+        contexto['tipo_usuario'] = 'reclutador'
+        contexto['nombre_liga'] = "Ranking de Talentos"
+    
+    else:
+        contexto['tipo_usuario'] = 'reclutador'
+        contexto['nombre_liga'] = "Ranking Global"
+
+    return render(request, 'aprendizaje/ligas.html', contexto)
 
 @login_required(login_url='login')
 def desafios(request):
@@ -470,3 +523,209 @@ def login_usuario(request):
         form = AuthenticationForm()
         
     return render(request, 'aprendizaje/login.html', {'form': form})
+
+@login_required
+def redireccion_inicio(request):
+    # Si tiene el perfil de reclutador, lo mandamos a su panel
+    if hasattr(request.user, 'reclutador'):
+        return redirect('dashboard_reclutador')
+    # Si es estudiante o administrador, lo mandamos a los cursos
+    else:
+        return redirect('lista_cursos') # Cambia 'lista_cursos' por el nombre de tu vista principal de cursos
+    
+@login_required
+def bolsa_trabajo(request):
+    # Verificamos que sea un estudiante
+    if not hasattr(request.user, 'estudiante'):
+        return redirect('dashboard_reclutador')
+    
+    estudiante = request.user.estudiante
+    # Traemos las ofertas activas
+    ofertas_activas = OfertaLaboral.objects.filter(activa=True).order_by('-fecha_publicacion')
+    
+    perfil = getattr(estudiante, 'perfilprofesional', None)
+    
+    # Preparamos las habilidades del estudiante en minúsculas para compararlas más fácil
+    habilidades_estudiante = []
+    if perfil and perfil.habilidades:
+        # Convertimos la lista JSON a minúsculas
+        habilidades_estudiante = [hab.lower().strip() for hab in perfil.habilidades]
+
+    ofertas_procesadas = []
+
+    for oferta in ofertas_activas:
+        # 1. TRUCO NUEVO: Traemos el objeto completo de la postulación si existe (En vez de un .exists() booleano)
+        postulacion_actual = Postulacion.objects.filter(estudiante=estudiante, oferta=oferta).first()
+
+        # 2. Motor de Validación Inteligente
+        cumple_requisitos = False
+        
+        if perfil and habilidades_estudiante and oferta.requisitos:
+            # Convertimos el texto del reclutador a minúsculas
+            requisitos_texto = oferta.requisitos.lower()
+            
+            # Buscamos si AL MENOS UNA de las habilidades del estudiante se menciona en los requisitos
+            for hab in habilidades_estudiante:
+                if hab in requisitos_texto:
+                    cumple_requisitos = True
+                    break # Con una que coincida, desbloqueamos la misión
+        
+        # 3. Empaquetamos la oferta con el nuevo dato objeto
+        ofertas_procesadas.append({
+            'oferta': oferta,
+            'postulacion_actual': postulacion_actual,  # <--- Enviamos el objeto completo al HTML
+            'puede_postularse': cumple_requisitos
+        })
+
+    return render(request, 'aprendizaje/bolsa_trabajo.html', {
+        'ofertas_procesadas': ofertas_procesadas,
+        'perfil': perfil
+    })
+
+def iniciar_semana_prueba(request):
+    # Solo permitimos que el superusuario haga esto
+    if not request.user.is_superuser:
+        return redirect('ligas')
+
+    hoy = timezone.now().date()
+    fecha_cierre = hoy + timedelta(days=7) # Cierra en 7 días
+
+    # 1. Creamos la "Liga Bronce" de esta semana (o la obtenemos si ya existe)
+    liga, creada = LigaSemanal.objects.get_or_create(
+        division="Liga Bronce",
+        defaults={'fecha_cierre': fecha_cierre}
+    )
+
+    # 2. Inscribimos a TODOS los estudiantes en esta liga
+    estudiantes = Estudiante.objects.all()
+    for estudiante in estudiantes:
+        
+        # Usamos update_or_create para poder "resetear" la semana 
+        # cada vez que visitemos la URL en modo desarrollador
+        RankingSemanal.objects.update_or_create(
+            estudiante=estudiante,
+            semana_inicio=hoy,
+            defaults={
+                'liga': liga,
+                'xp_ganada_esta_semana': 10, # 🎁 ¡Bono de bienvenida de 10 puntos para todos!
+                'puesto_actual': 0
+            }
+        )
+
+    # Al terminar, te regresamos a la pantalla de ligas para ver el resultado
+    return redirect('ligas')
+
+def ver_perfil_publico(request, estudiante_id):
+    # 1. Buscamos al estudiante por su ID
+    estudiante_visto = get_object_or_404(Estudiante, pk=estudiante_id)
+    
+    # 2. Buscamos su perfil profesional (si es que ya llenó el formulario que me mostraste)
+    # Usamos getattr por si el estudiante aún no ha guardado su perfil, para que no truene la página
+    perfil_profesional = getattr(estudiante_visto, 'perfilprofesional', None)
+    
+    # 3. Buscamos su liga actual para presumirla en el currículum
+    ranking_actual = RankingSemanal.objects.filter(estudiante=estudiante_visto).order_by('-semana_inicio').first()
+    liga_actual = ranking_actual.liga.division if ranking_actual else "Sin clasificar"
+    
+    contexto = {
+        'candidato': estudiante_visto,
+        'perfil_profesional': perfil_profesional,
+        'liga_actual': liga_actual,
+    }
+    
+    # Renderizamos una nueva plantilla HTML de solo lectura
+    return render(request, 'aprendizaje/perfil_publico.html', contexto)
+
+@login_required
+def postular_oferta(request, oferta_id):
+    if request.method == 'POST':
+        estudiante = request.user.estudiante
+        oferta = get_object_or_404(OfertaLaboral, id=oferta_id)
+        
+        # Buscamos si ya existía (no importa el estado) o la creamos si no existía
+        postulacion, created = Postulacion.objects.get_or_create(
+            estudiante=estudiante,
+            oferta=oferta
+        )
+        
+        # Si ya existía y estaba 'Rechazada', la reiniciamos a 'Enviada'
+        # Si era nueva, por defecto pasa a 'Enviada'
+        postulacion.estado = 'Enviada'
+        postulacion.save()
+        
+    return redirect('bolsa_trabajo')
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import OfertaLaboral, Postulacion
+
+@login_required
+def dashboard_reclutador(request):
+    # Verificamos que el usuario tenga el perfil de reclutador
+    if not hasattr(request.user, 'reclutador'):
+        return redirect('bolsa_trabajo') # Si es estudiante, lo mandamos a la bolsa
+        
+    reclutador = request.user.reclutador
+    
+    # Traemos las ofertas creadas por este reclutador específico
+    # Usamos prefetch_related o un contador para saber cuántas postulaciones tiene cada una
+    ofertas = OfertaLaboral.objects.filter(reclutador=reclutador).order_by('-fecha_publicacion')
+    
+    # Añadimos el conteo de postulaciones de forma dinámica para mostrarlo en el HTML
+    for oferta in ofertas:
+        oferta.total_postulantes = oferta.postulacion_set.count()
+
+    return render(request, 'aprendizaje/dashboard_reclutador.html', {
+        'ofertas': ofertas
+    })
+
+@login_required
+def ver_postulantes(request, oferta_id):
+    if not hasattr(request.user, 'reclutador'):
+        return redirect('bolsa_trabajo')
+        
+    reclutador = request.user.reclutador
+    # Aseguramos que la oferta exista y pertenezca a este reclutador para evitar que husmee otras ofertas
+    oferta = get_object_or_404(OfertaLaboral, id=oferta_id, reclutador=reclutador)
+    
+    # Traemos todas las postulaciones de esta oferta
+    postulaciones = Postulacion.objects.filter(oferta=oferta).select_related('estudiante__usuario', 'estudiante__perfilprofesional')
+
+    # PROCESAR CAMBIO DE ESTADO (Si el reclutador presiona "Aceptar" o "Rechazar")
+    if request.method == 'POST':
+        postulacion_id = request.POST.get('postulacion_id')
+        nuevo_estado = request.POST.get('nuevo_estado')
+        
+        if postulacion_id and nuevo_estado in ['En Revisión', 'Aceptada', 'Rechazada']:
+            postulacion = get_object_or_404(Postulacion, id=postulacion_id, oferta=oferta)
+            postulacion.estado = nuevo_estado
+            postulacion.save()
+            
+            # --- NUEVO: ¡Disparamos la notificación al estudiante! ---
+            if nuevo_estado == 'Aceptada':
+                mensaje = f"🎉 ¡Felicidades! Fuiste ACEPTADO en la misión: {oferta.titulo}."
+            elif nuevo_estado == 'Rechazada':
+                mensaje = f"❌ Tu postulación para '{oferta.titulo}' no avanzó. ¡Mejora tus habilidades y vuelve a intentarlo!"
+            else:
+                mensaje = f"👀 Tu postulación para '{oferta.titulo}' está siendo revisada."
+                
+            Notificacion.objects.create(usuario=postulacion.estudiante.usuario, mensaje=mensaje)
+            # ---------------------------------------------------------
+
+            return redirect('ver_postulantes', oferta_id=oferta.id)
+
+    return render(request, 'aprendizaje/ver_postulantes.html', {
+        'oferta': oferta,
+        'postulaciones': postulaciones
+    })
+
+from django.http import JsonResponse
+from .models import Notificacion
+
+@login_required
+def marcar_notificaciones_leidas(request):
+    if request.method == 'POST':
+        # Buscamos las notificaciones del usuario que estén sin leer y las actualizamos
+        Notificacion.objects.filter(usuario=request.user, leida=False).update(leida=True)
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'status': 'error'}, status=400)

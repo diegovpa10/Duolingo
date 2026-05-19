@@ -36,7 +36,6 @@ class PerfilProfesional(models.Model):
     url_github = models.URLField(max_length=500, blank=True, null=True)
     url_linkedin = models.URLField(max_length=500, blank=True, null=True)
     disponible = models.BooleanField(default=False)
-    # Django tiene un campo especial para JSON, ¡es perfecto para tu diseño!
     habilidades = models.JSONField(blank=True, null=True) 
 
     def __str__(self):
@@ -200,3 +199,14 @@ class Amistad(models.Model):
 
     def __str__(self):
         return f"{self.usuario.username} es amigo de {self.amigo.username}"
+    
+# Asegúrate de tener importado User arriba si no lo tienes: from django.contrib.auth.models import User
+
+class Notificacion(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notificaciones')
+    mensaje = models.CharField(max_length=255)
+    leida = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notificación para {self.usuario.username}: {self.mensaje}"

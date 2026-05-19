@@ -16,4 +16,12 @@ urlpatterns = [
     path('red/', views.red_amigos, name='red_amigos'),
     path('empresa/dashboard/', views.dashboard_reclutador, name='dashboard_reclutador'),
     path('empresa/nueva-oferta/', views.crear_oferta, name='crear_oferta'),
+    path('redireccion/', views.redireccion_inicio, name='redireccion_inicio'),
+    path('misiones-laborales/', views.bolsa_trabajo, name='bolsa_trabajo'),
+    path('dev/iniciar-semana/', views.iniciar_semana_prueba, name='iniciar_semana'),
+    path('candidato/<int:estudiante_id>/', views.ver_perfil_publico, name='ver_perfil_publico'),
+    path('postular/<int:oferta_id>/', views.postular_oferta, name='postular_oferta'),
+    path('reclutador/dashboard/', views.dashboard_reclutador, name='dashboard_reclutador'),
+    path('reclutador/oferta/<int:oferta_id>/postulantes/', views.ver_postulantes, name='ver_postulantes'),
+    path('notificaciones/marcar-leidas/', views.marcar_notificaciones_leidas, name='marcar_notificaciones_leidas'),
 ]

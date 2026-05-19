@@ -351,10 +351,6 @@ body {
     font-weight: bold;
 }
 
-@keyframes aparecer {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
 /* Pequeña animación para hacer que el rayo pulse sutilmente */
 @keyframes pulse-energia {
     0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 204, 0, 0.5)); }
@@ -374,20 +370,42 @@ form input[type="checkbox"] {
     cursor: pointer;
 }
 
+/* Estilos base para cada alerta */
+.notif-item {
+        background: #161616;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 6px;
+}
+    
+    /* Colores dinámicos del borde izquierdo */
+.notif-success { border-left: 3px solid #00ff41; } /* Verde para Aceptada */
+.notif-error { border-left: 3px solid #ff4d4d; }   /* Rojo para Rechazada */
+.notif-info { border-left: 3px solid #00ffff; }    /* Cyan para En Revisión */
+
 </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <a href="/" class="logo">🦉REDOWL <span>ACADEMY</span></a>
+    {% if user.is_authenticated and user.reclutador %}
+        <a href="{% url 'dashboard_reclutador' %}" class="logo">🦉REDOWL <span>ACADEMY</span></a>
+    {% else %}
+        <a href="/" class="logo">🦉REDOWL <span>ACADEMY</span></a>
+    {% endif %}
 
     <div class="d-flex align-items-center" style="gap: 20px;">
         {% if user.is_authenticated %}
             <span style="font-size: 0.8rem; color: #888; font-weight: bold;">
-                {{ user.username }} | <b style="color: var(--accent-color);">{{ user.estudiante.xp_total|default:"0" }} XP</b>
+                {{ user.username }} 
+                {% if user.estudiante %}
+                    | <b style="color: var(--accent-color);">{{ user.estudiante.xp_total|default:"0" }} XP</b>
+                {% elif user.reclutador %}
+                    | <b style="color: #00e5ff;">Reclutador</b>
+                {% endif %}
             </span>
             
-            {% if user.is_authenticated and user.estudiante %}
+            {% if user.estudiante %}
                 <div class="energia-nav-container" title="Tu energía actual. ¡No dejes que llegue a 0!">
                     <span class="energia-icon">⚡</span>
                     
@@ -399,6 +417,35 @@ form input[type="checkbox"] {
                 </div>
             {% endif %}
 
+            <div style="position: relative; display: inline-block;" id="notif-wrapper">
+                <button onclick="toggleNotificaciones(event)" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #fff; padding: 5px; position: relative; display: flex; align-items: center;">
+                    🔔
+                    {% if total_notificaciones > 0 %}
+                        <span id="notif-contador" style="position: absolute; top: -2px; right: -2px; background: #ff4d4d; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 0.65rem; font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px #ff4d4d;">
+                            {{ total_notificaciones }}
+                        </span>
+                    {% endif %}
+                </button>
+                
+                <div id="notif-dropdown" style="display: none; position: absolute; right: 0; top: 40px; background: #111; border: 1px solid #333; width: 280px; border-radius: 8px; padding: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.8); z-index: 1000;">
+                    <h4 style="margin: 0 0 10px 0; color: #ffaa00; font-size: 0.85rem; border-bottom: 1px solid #222; padding-bottom: 8px; font-family: monospace; letter-spacing: 1px;">🚨 ALERTAS DEL SISTEMA</h4>
+                    
+                    <div style="max-height: 240px; overflow-y: auto;">
+                        {% for notificacion in mis_notificaciones %}
+                            <div class="notif-item 
+                                {% if '🎉' in notificacion.mensaje %} notif-success 
+                                {% elif '❌' in notificacion.mensaje %} notif-error 
+                                {% else %} notif-info {% endif %}">
+                                
+                                <p style="margin: 0; font-size: 0.8rem; color: #ddd; line-height: 1.4;">{{ notificacion.mensaje }}</p>
+                                <small style="color: #555; font-size: 0.65rem; display: block; margin-top: 4px;">📡 Transmisión entrante</small>
+                            </div>
+                        {% empty %}
+                            <p style="color: #555; font-size: 0.8rem; text-align: center; margin: 15px 0; font-style: italic;">Sin transmisiones pendientes.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
             <form action="{% url 'logout' %}" method="post" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline" style="padding: 8px 15px; font-size: 10px;">SALIR</button>
@@ -412,22 +459,87 @@ form input[type="checkbox"] {
     </div>
 </nav>
 
+<script>
+    function toggleNotificaciones(event) {
+        event.stopPropagation();
+        const dropdown = document.getElementById('notif-dropdown');
+        const contador = document.getElementById('notif-contador');
+        
+        // Verificamos si se va a abrir el panel
+        const seVaAOpen = (dropdown.style.display === 'none' || dropdown.style.display === '');
+        
+        if (seVaAOpen) {
+            dropdown.style.display = 'block';
+            
+            // Si hay un contador visible en pantalla, procedemos a borrarlo en la base de datos
+            if (contador) {
+                // Obtenemos el token CSRF que Django genera por seguridad en los formularios
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+
+                fetch("{% url 'marcar_notificaciones_leidas' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'ok') {
+                        // Desaparecemos el círculo rojo de la interfaz con estilo
+                        contador.style.transition = 'opacity 0.3s ease';
+                        contador.style.opacity = '0';
+                        setTimeout(() => contador.remove(), 300);
+                    }
+                })
+                .catch(error => console.error('Error al actualizar alertas:', error));
+            }
+        } else {
+            dropdown.style.display = 'none';
+        }
+    }
+
+    // Cierra el panel de notificaciones automáticamente si el usuario hace clic en el vacío de la pantalla
+    document.addEventListener('click', function(event) {
+        const wrapper = document.getElementById('notif-wrapper');
+        const dropdown = document.getElementById('notif-dropdown');
+        if (wrapper && !wrapper.contains(event.target)) {
+            if (dropdown) dropdown.style.display = 'none';
+        }
+    });
+</script>
+
 <div class="app-container {% if user.is_authenticated %}con-menu{% endif %}">
     
     {% if user.is_authenticated %}
     <aside class="sidebar-menu">
-        <a href="{% url 'lista_cursos' %}" class="menu-btn {% if request.path == '/' or '/curso/' in request.path %}active{% endif %}">
-            <span class="menu-icon">🏠</span> Aprender
-        </a>
+        
+        {% if user.estudiante %}
+            <a href="{% url 'lista_cursos' %}" class="menu-btn {% if request.path == '/' or '/curso/' in request.path %}active{% endif %}">
+                <span class="menu-icon">🏠</span> Aprender
+            </a>
+            <a href="{% url 'bolsa_trabajo' %}" class="menu-btn {% if request.path == '/misiones-laborales/' %}active{% endif %}">
+                <span class="menu-icon">💼</span> Misiones
+            </a>
+            <a href="{% url 'desafios' %}" class="menu-btn {% if request.path == '/desafios/' %}active{% endif %}">
+                <span class="menu-icon">🎁</span> Desafíos
+            </a>
+        {% elif user.reclutador %}
+            <a href="{% url 'dashboard_reclutador' %}" class="menu-btn {% if request.path == '/empresa/dashboard/' %}active{% endif %}">
+                <span class="menu-icon">📊</span> Mi Panel
+            </a>
+            <a href="{% url 'crear_oferta' %}" class="menu-btn {% if request.path == '/empresa/nueva-oferta/' %}active{% endif %}">
+                <span class="menu-icon">➕</span> Publicar Oferta
+            </a>
+        {% endif %}
+
         <a href="{% url 'ligas' %}" class="menu-btn {% if request.path == '/ligas/' %}active{% endif %}">
             <span class="menu-icon">🛡️</span> Ligas
-        </a>
-        <a href="{% url 'desafios' %}" class="menu-btn {% if request.path == '/desafios/' %}active{% endif %}">
-            <span class="menu-icon">🎁</span> Desafíos
         </a>
         <a href="{% url 'perfil' %}" class="menu-btn {% if request.path == '/perfil/' %}active{% endif %}">
             <span class="menu-icon">👤</span> Perfil
         </a>
+        
     </aside>
     {% endif %}
 
@@ -448,20 +560,30 @@ form input[type="checkbox"] {
 
 {% if user.is_authenticated %}
     <nav class="mobile-bottom-nav">
-        <a href="{% url 'lista_cursos' %}" class="mobile-nav-btn {% if request.path == '/' or '/curso/' in request.path %}active{% endif %}">
-            <span class="menu-icon">🏠</span> Aprender
-        </a>
+        {% if user.estudiante %}
+            <a href="{% url 'lista_cursos' %}" class="mobile-nav-btn {% if request.path == '/' or '/curso/' in request.path %}active{% endif %}">
+                <span class="menu-icon">🏠</span> Aprender
+            </a>
+            <a href="{% url 'bolsa_trabajo' %}" class="mobile-nav-btn {% if request.path == '/misiones-laborales/' %}active{% endif %}">
+                <span class="menu-icon">💼</span> Misiones
+            </a>
+        {% elif user.reclutador %}
+            <a href="{% url 'dashboard_reclutador' %}" class="mobile-nav-btn {% if request.path == '/empresa/dashboard/' %}active{% endif %}">
+                <span class="menu-icon">📊</span> Panel
+            </a>
+            <a href="{% url 'crear_oferta' %}" class="mobile-nav-btn {% if request.path == '/empresa/nueva-oferta/' %}active{% endif %}">
+                <span class="menu-icon">➕</span> Oferta
+            </a>
+        {% endif %}
+
         <a href="{% url 'ligas' %}" class="mobile-nav-btn {% if request.path == '/ligas/' %}active{% endif %}">
             <span class="menu-icon">🛡️</span> Ligas
-        </a>
-        <a href="{% url 'desafios' %}" class="mobile-nav-btn {% if request.path == '/desafios/' %}active{% endif %}">
-            <span class="menu-icon">🎁</span> Desafíos
         </a>
         <a href="{% url 'perfil' %}" class="mobile-nav-btn {% if request.path == '/perfil/' %}active{% endif %}">
             <span class="menu-icon">👤</span> Perfil
         </a>
     </nav>
-    {% endif %}
+{% endif %}
 
 <script>
     function toggleTheme() {

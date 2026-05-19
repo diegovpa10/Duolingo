@@ -43,15 +43,41 @@ class EditarEstudianteForm(forms.ModelForm):
         }
 
 class EditarPerfilProfesionalForm(forms.ModelForm):
+    # 1. Forzamos a que el campo en pantalla sea un input de texto normal
+    habilidades = forms.CharField(
+        required=False,
+        label="Tus Habilidades (separadas por comas)",
+        widget=forms.TextInput(attrs={
+            'class': 'form-input', 
+            'placeholder': 'Ej: Python, Django, SQL, Inglés B2'
+        })
+    )
+
     class Meta:
         model = PerfilProfesional
-        fields = ['biografia', 'url_github', 'url_linkedin', 'disponible']
+        # 2. Asegúrate de agregar 'habilidades' aquí a los fields
+        fields = ['biografia', 'url_github', 'url_linkedin', 'disponible', 'habilidades']
         widgets = {
             'biografia': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 4}),
             'url_github': forms.URLInput(attrs={'class': 'form-input', 'placeholder': 'https://github.com/...'}),
             'url_linkedin': forms.URLInput(attrs={'class': 'form-input', 'placeholder': 'https://linkedin.com/in/...'}),
             'disponible': forms.CheckboxInput(attrs={'class': 'form-checkbox'}),
         }
+
+    # 3. AL CARGAR: Si el estudiante ya tiene habilidades (lista), las convertimos a texto
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk and self.instance.habilidades:
+            # Transforma ["Python", "SQL"] en "Python, SQL"
+            self.initial['habilidades'] = ", ".join(self.instance.habilidades)
+
+    # 4. AL GUARDAR: Toma el texto que escribió el estudiante y lo convierte a lista (JSON)
+    def clean_habilidades(self):
+        data = self.cleaned_data.get('habilidades', '')
+        if data:
+            # Corta por las comas, quita espacios extra y crea la lista
+            return [hab.strip() for hab in data.split(',') if hab.strip()]
+        return [] # Si lo deja en blanco, guarda una lista vacía
 
 # --- NUEVO FORMULARIO PARA OFERTAS LABORALES ---
 class OfertaLaboralForm(forms.ModelForm):
