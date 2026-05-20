@@ -517,13 +517,16 @@ form input[type="checkbox"] {
             </span>
             
             {% if user.estudiante %}
+                <div class="racha-nav-container" title="Racha de estudio. ¡Haz un ejercicio nuevo para no perderla!" style="display: flex; align-items: center; gap: 5px; background: rgba(255, 170, 0, 0.1); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255, 170, 0, 0.3);">
+                    <span style="font-size: 1.2rem;">🔥</span>
+                    <span style="color: #ffaa00; font-weight: bold; font-family: monospace; font-size: 1.1rem;">{{ user.estudiante.racha_dias }}</span>
+                </div>
+
                 <div class="energia-nav-container" title="Tu energía actual. ¡No dejes que llegue a 0!">
                     <span class="energia-icon">⚡</span>
-                    
                     <div class="energia-bar-wrapper">
                         <div class="energia-bar" data-progress="{% widthratio user.estudiante.energia 5 100 %}"></div>
                     </div>
-                    
                     <span class="energia-texto">{{ user.estudiante.energia }}/5</span>
                 </div>
             {% endif %}

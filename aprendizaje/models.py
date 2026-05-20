@@ -3,6 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.timezone import now
+from datetime import date, timedelta
 
 # --- 1. SISTEMA DE USUARIOS ---
 
@@ -21,6 +22,42 @@ class Estudiante(models.Model):
 
     def __str__(self):
         return f"Estudiante: {self.usuario.username}"
+    
+    def verificar_y_limpiar_racha(self):
+        """
+        Comprueba si el estudiante dejó pasar más de un día sin completar lecciones.
+        Si es así, la racha se rompe y vuelve a 0.
+        Se debe ejecutar cada vez que el estudiante entra a su panel principal.
+        """
+        hoy = date.today()
+        if self.fecha_ultima_leccion:
+            diferencia = hoy - self.fecha_ultima_leccion
+            # Si ha pasado más de 1 día completo desde su última lección (ej: hoy es miércoles y su última lección fue el lunes)
+            if diferencia.days > 1:
+                self.racha_dias = 0
+                self.save()
+
+    def extender_racha(self):
+        """
+        Suma un día a la racha o la mantiene si ya hizo un ejercicio hoy.
+        Se ejecuta SOLO cuando completa un ejercicio NUEVO.
+        """
+        hoy = date.today()
+        ayer = hoy - timedelta(days=1)
+
+        if self.fecha_ultima_leccion == hoy:
+            # Ya hizo un ejercicio hoy, la racha se mantiene igual (no se suma doble)
+            pass
+        elif self.fecha_ultima_leccion == ayer:
+            # Su última lección fue ayer, ¡mantiene la continuidad! Suma 1 día
+            self.racha_dias += 1
+            self.fecha_ultima_leccion = hoy
+        else:
+            # No tenía racha activa o se había roto. Inicia una racha nueva de 1 día
+            self.racha_dias = 1
+            self.fecha_ultima_leccion = hoy
+        
+        self.save()
 
     # 🛡️ SISTEMA DE LIGAS DINÁMICO
     @property
@@ -63,6 +100,7 @@ class Estudiante(models.Model):
 class Reclutador(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     empresa = models.CharField(max_length=200)
+    contacto = models.CharField(max_length=200, blank=True, null=True, help_text="Correo electrónico o URL de LinkedIn")
 
     def __str__(self):
         return f"Reclutador: {self.empresa} ({self.usuario.username})"

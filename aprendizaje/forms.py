@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 # Añadimos OfertaLaboral a la importación:
-from .models import Estudiante, PerfilProfesional, OfertaLaboral
+from .models import Estudiante, PerfilProfesional, OfertaLaboral, Reclutador
 
 class RegistroRedOwlForm(UserCreationForm):
     TIPO_CHOICES = (
@@ -89,4 +89,23 @@ class OfertaLaboralForm(forms.ModelForm):
             'descripcion': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 4, 'placeholder': 'Describe las responsabilidades de la misión...'}),
             'requisitos': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 3, 'placeholder': 'Ej: Python, Django, SQL...'}),
             'rango_salarial': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Ej: $500 - $1000 USD'}),
+        }
+
+class EditarReclutadorForm(forms.ModelForm):
+    class Meta:
+        model = Reclutador
+        fields = ['empresa', 'contacto']
+        labels = {
+            'empresa': 'Nombre Corporativo / Organización',
+            'contacto': 'Línea de Contacto (Email o URL)'
+        }
+        widgets = {
+            'empresa': forms.TextInput(attrs={
+                'class': 'form-input', 
+                'placeholder': 'Ej. RedOwl Industries, Microsoft...'
+            }),
+            'contacto': forms.TextInput(attrs={
+                'class': 'form-input', 
+                'placeholder': 'Ej. reclutamiento@empresa.com o linkedin.com/in/tu-empresa'
+            }),
         }
