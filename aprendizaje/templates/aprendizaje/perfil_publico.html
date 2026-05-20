@@ -1,0 +1,245 @@
+{% extends 'aprendizaje/base.html' %} {% block content %}
+<style>
+    /* Estilos específicos para el expediente público */
+    .expediente-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+        color: #fff;
+        font-family: 'Inter', sans-serif; /* O la fuente que uses por defecto */
+    }
+
+    .terminal-header {
+        font-family: monospace;
+        color: #a3a3a3;
+        text-align: center;
+        margin-bottom: 2rem;
+        letter-spacing: 2px;
+    }
+
+    .terminal-header span {
+        color: #ff3333; /* Rojo RedOwl */
+    }
+
+    .grid-expediente {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2rem;
+    }
+
+    /* Tarjeta Izquierda: Identidad */
+    .card-identidad {
+        background-color: #121212;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+
+    .avatar-publico {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 3px solid #ff3333;
+        margin-bottom: 1rem;
+        object-fit: cover;
+    }
+
+    .username-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .tag-escuela {
+        color: #888;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    .badge-disponible {
+        display: inline-block;
+        background-color: rgba(0, 255, 0, 0.1);
+        color: #00ff00;
+        border: 1px solid #00ff00;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+
+    .badge-ocupado {
+        display: inline-block;
+        background-color: rgba(255, 51, 51, 0.1);
+        color: #ff3333;
+        border: 1px solid #ff3333;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+
+    /* Lado Derecho: Estadísticas y Bio */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-box {
+        background-color: #121212;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin: 5px 0;
+    }
+
+    .stat-label {
+        color: #888;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Colores específicos para estadísticas */
+    .color-fuego { color: #ff9900; }
+    .color-diamante { color: #00ccff; }
+    .color-liga { color: #ffcc00; }
+
+    .card-profesional {
+        background-color: #121212;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 2rem;
+    }
+
+    .card-profesional h3 {
+        margin-top: 0;
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+        font-size: 1.2rem;
+    }
+
+    .bio-text {
+        color: #ccc;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .links-redes a {
+        display: inline-block;
+        background-color: #222;
+        color: #fff;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        margin-right: 10px;
+        border: 1px solid #444;
+        transition: 0.3s;
+    }
+
+    .links-redes a:hover {
+        background-color: #ff3333;
+        border-color: #ff3333;
+    }
+
+    .btn-volver {
+        display: inline-block;
+        margin-top: 2rem;
+        color: #888;
+        text-decoration: none;
+        font-family: monospace;
+    }
+    .btn-volver:hover { color: #fff; }
+
+</style>
+
+<div class="expediente-container">
+    <div class="terminal-header">
+        >_ ACCEDIENDO A EXPEDIENTE: <span>{{ candidato.usuario.username }}</span>
+    </div>
+
+    <div class="grid-expediente">
+        <div class="card-identidad">
+            <img src="https://ui-avatars.com/api/?name={{ candidato.usuario.username }}&background=222&color=fff&size=120" alt="Avatar" class="avatar-publico">
+            
+            <h2 class="username-title">{{ candidato.usuario.username }}</h2>
+            
+            <div class="tag-escuela">
+                {% if candidato.escuela %}
+                    {{ candidato.escuela }}
+                {% else %}
+                    ESCUELA NO DEFINIDA
+                {% endif %}
+            </div>
+
+            {% if perfil_profesional %}
+                {% if perfil_profesional.disponible %}
+                    <div class="badge-disponible">● DISPONIBLE PARA TRABAJAR</div>
+                {% else %}
+                    <div class="badge-ocupado">● NO DISPONIBLE</div>
+                {% endif %}
+            {% else %}
+                <div class="badge-ocupado">● PERFIL INCOMPLETO</div>
+            {% endif %}
+        </div>
+
+        <div class="lado-derecho">
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value color-fuego">{{ candidato.racha_dias }}</div>
+                    <div class="stat-label">Días de Racha</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value color-diamante">{{ candidato.xp_total }}</div>
+                    <div class="stat-label">Total de XP</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value color-liga">{{ liga_actual }}</div>
+                    <div class="stat-label">Liga Actual</div>
+                </div>
+            </div>
+
+            <div class="card-profesional">
+                <h3>Resumen Profesional</h3>
+                
+                {% if perfil_profesional and perfil_profesional.biografia %}
+                    <p class="bio-text">{{ perfil_profesional.biografia }}</p>
+                {% else %}
+                    <p class="bio-text" style="font-style: italic; color: #666;">
+                        El candidato aún no ha redactado su biografía profesional.
+                    </p>
+                {% endif %}
+
+                <div class="links-redes">
+                    {% if perfil_profesional.url_github %}
+                        <a href="{{ perfil_profesional.url_github }}" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    {% endif %}
+                    
+                    {% if perfil_profesional.url_linkedin %}
+                        <a href="{{ perfil_profesional.url_linkedin }}" target="_blank">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <a href="javascript:history.back()" class="btn-volver">< Volver a la base de datos</a>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

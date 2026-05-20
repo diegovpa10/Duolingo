@@ -1,0 +1,192 @@
+{% extends 'aprendizaje/base.html' %} {% block content %}
+<style>
+    /* =========================================
+       ESTILOS DE LA TERMINAL DE CONEXIONES
+       ========================================= */
+    .cyber-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        color: var(--text-color, #e0e0e0);
+        font-family: inherit;
+    }
+
+    .cyber-header {
+        border-bottom: 2px solid var(--accent-color, #ff3333);
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 1.5rem;
+    }
+
+    /* Alertas del sistema */
+    .alert-cyber {
+        background-color: rgba(255, 51, 51, 0.1);
+        border-left: 4px solid var(--accent-color, #ff3333);
+        padding: 15px;
+        margin-bottom: 25px;
+        font-family: monospace;
+        font-size: 0.95rem;
+    }
+
+    /* Buscador Neón */
+    .search-box {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 40px;
+    }
+
+    .cyber-input {
+        flex-grow: 1;
+        background-color: #0a0a0a;
+        border: 1px solid #333;
+        color: white;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 1rem;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .cyber-input:focus {
+        border-color: var(--accent-color, #ff3333);
+        outline: none;
+        box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
+    }
+
+    .cyber-btn {
+        background-color: var(--accent-color, #ff3333);
+        color: white;
+        border: none;
+        padding: 0 25px;
+        font-weight: 800;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .cyber-btn:hover {
+        background-color: #cc0000;
+        box-shadow: 0 0 15px rgba(255, 51, 51, 0.6);
+    }
+
+    /* Cuadrícula de Operadores */
+    .friends-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+    }
+
+    .friend-card {
+        background-color: #121212;
+        border: 1px solid #333;
+        padding: 20px;
+        text-align: center;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .friend-card:hover {
+        border-color: var(--accent-color, #ff3333);
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(255, 51, 51, 0.1);
+    }
+
+    .friend-avatar-wrapper {
+        font-size: 3.5rem;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80px;
+    }
+
+    .friend-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #333;
+    }
+
+    .friend-card:hover .friend-img {
+        border-color: var(--accent-color, #ff3333);
+    }
+
+    .friend-name {
+        font-weight: 900;
+        color: var(--accent-color, #ff3333);
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+    }
+
+    .friend-date {
+        font-size: 0.8rem;
+        color: #777;
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 40px 20px;
+        color: #555;
+        font-family: monospace;
+        background-color: #0a0a0a;
+        border: 1px dashed #333;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="cyber-container">
+    <h2 class="cyber-header">Búsqueda de Operadores</h2>
+
+    {% if mensaje %}
+    <div class="alert-cyber">
+        > SYSTEM_LOG: {{ mensaje }}
+    </div>
+    {% endif %}
+
+    <form method="POST" class="search-box">
+        {% csrf_token %}
+        <input type="hidden" name="accion" value="vincular">
+        <input type="text" name="buscar_usuario" class="cyber-input" placeholder="INGRESE USERNAME O ID DEL OPERADOR..." autocomplete="off" required>
+        <button type="submit" class="cyber-btn">Vincular</button>
+    </form>
+
+    <h3 class="cyber-header" style="font-size: 1.2rem;">Red de Contactos</h3>
+    
+    <div class="friends-grid">
+        {% for conexion in conexiones %}
+            <div class="friend-card">
+                <div class="friend-avatar-wrapper">
+                    {% if conexion.amigo.estudiante and conexion.amigo.estudiante.avatar %}
+                        <img src="{{ conexion.amigo.estudiante.avatar.url }}" alt="Avatar de {{ conexion.amigo.username }}" class="friend-img">
+                    {% else %}
+                        🦉
+                    {% endif %}
+                </div>
+                <div class="friend-name">@{{ conexion.amigo.username }}</div>
+                <div class="friend-date">
+                    VINCULADO EL:<br>
+                    {{ conexion.fecha_conexion|date:"d/m/Y" }}
+                    <form method="POST" style="margin-top: 15px;">
+                    {% csrf_token %}
+                    <input type="hidden" name="accion" value="eliminar">
+                    <input type="hidden" name="amigo_id" value="{{ conexion.amigo.id }}">
+                    <button type="submit" class="cyber-btn" style="background-color: transparent; border: 1px solid var(--accent-color); color: var(--text-color); font-size: 0.7rem; padding: 5px 10px;">CORTAR CONEXIÓN</button>
+                </form>
+                </div>
+            </div>
+        {% empty %}
+            <div class="empty-state">
+                > NO HAY CONEXIONES ESTABLECIDAS EN SU RED.<br>
+                > UTILICE EL ESCÁNER SUPERIOR PARA LOCALIZAR OPERADORES.
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends 'aprendizaje/base.html' %}
+
+{% block title %}Ligas - RedOwl Academy{% endblock %}
+
+{% block content %}
+<div class="ligas-wrapper-page" style="--liga-color: {{ color_liga }};">
+
+    <style>
+        .ligas-header { text-align: center; margin-bottom: 2rem; padding-top: 2rem; }
+        .shield-icon { 
+            font-size: 4rem; 
+            filter: drop-shadow(0 0 20px var(--liga-color)); 
+            margin-bottom: 15px; 
+            display: inline-block; 
+            animation: float 3s ease-in-out infinite; 
+        }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        
+        .ligas-title { 
+            color: var(--liga-color); 
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            letter-spacing: -1px; 
+            margin-bottom: 5px; 
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.4); 
+        }
+        .ligas-subtitle { color: #888; font-size: 0.95rem; letter-spacing: 2px; font-family: 'Courier New', monospace; font-weight: bold; }
+        .liga-container { max-width: 650px; margin: 0 auto; padding-bottom: 2rem; }
+        .zone-indicator { text-align: center; color: #00ff41; font-family: 'Courier New', monospace; font-size: 0.8rem; font-weight: bold; letter-spacing: 3px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .zone-indicator::before, .zone-indicator::after { content: ""; height: 1px; width: 50px; background-color: #00ff41; opacity: 0.5; }
+        .liga-rango { display: flex; justify-content: space-between; align-items: center; background-color: var(--card-bg); border: 2px solid var(--secondary-accent); padding: 15px 25px; border-radius: 12px; margin-bottom: 12px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; }
+        .liga-rango:hover { border-color: var(--support-border); transform: scale(1.02); }
+        .rango-top-1 { background: linear-gradient(90deg, rgba(255, 170, 0, 0.15) 0%, var(--card-bg) 50%); border-color: #ffaa00; box-shadow: 0 0 15px rgba(255, 170, 0, 0.1); }
+        .rango-top-1 .user-pos { color: #ffaa00; text-shadow: 0 0 5px rgba(255,170,0,0.5); }
+        .rango-top { background-color: rgba(255, 255, 255, 0.02); }
+        .rango-yo { border: 2px solid var(--accent-color); background-color: rgba(255, 51, 51, 0.05); box-shadow: 0 0 20px rgba(255, 51, 51, 0.15); margin-top: 15px; }
+        .rango-yo::before { content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background-color: var(--accent-color); box-shadow: 0 0 10px var(--accent-color); }
+        .user-info { display: flex; align-items: center; gap: 15px; z-index: 2; position: relative; }
+        .user-pos { font-size: 1.3rem; font-weight: 900; color: #666; width: 35px; text-align: center; font-family: 'Courier New', monospace; }
+        .avatar-icon { font-size: 1.8rem; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); }
+        .user-name { font-weight: 800; font-size: 1.1rem; color: var(--text-color); }
+        .badge-tu { font-size: 0.65rem; background-color: var(--accent-color); color: #fff; padding: 2px 6px; border-radius: 4px; margin-left: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .user-xp { color: var(--support-color); font-weight: 900; font-size: 1rem; letter-spacing: 0.5px; z-index: 2; position: relative; }
+        .btn-ver-perfil { background-color: transparent; color: var(--support-color); border: 1px solid var(--support-color); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; text-decoration: none; transition: all 0.2s ease; }
+        .btn-ver-perfil:hover { background-color: var(--support-bg); box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+        .user-name a { transition: color 0.3s ease; }
+        .user-name a:hover { color: var(--support-color) !important; text-decoration: underline !important; }
+        .btn-ver-perfil-sm { background-color: rgba(0, 229, 255, 0.1); color: var(--support-color); border: 1px solid var(--support-color); padding: 3px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; }
+        .btn-ver-perfil-sm:hover { background-color: var(--support-color); color: #000; box-shadow: 0 0 10px rgba(0, 229, 255, 0.6); }
+        .tabs-nav { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
+        .tab-btn { background: transparent; color: #888; border: 2px solid #333; padding: 10px 20px; border-radius: 30px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .tab-btn:hover { border-color: #666; color: #ddd; }
+        .tab-btn.active { border-color: var(--support-color); color: var(--support-color); box-shadow: 0 0 15px var(--support-bg); }
+    </style>
+
+    <div class="ligas-header">
+        <div class="shield-icon">{{ emoji_liga }}</div>
+        <h1 class="ligas-title">{{ nombre_liga }}</h1>
+        <p class="ligas-subtitle">>_ {% if tipo_usuario == 'reclutador' %}TOP ESTUDIANTES POR RENDIMIENTO{% else %}SISTEMA DE CLASIFICACIÓN{% endif %}</p>
+        
+        {% if tipo_usuario == 'estudiante' and request.user.estudiante.obtener_liga_info.xp_necesaria > 0 %}
+            <p style="font-size: 0.85rem; opacity: 0.6; margin-top: 8px;">
+                Faltan <strong>{{ request.user.estudiante.obtener_liga_info.xp_necesaria }} XP</strong> para clasificar a la siguiente división.
+            </p>
+        {% endif %}
+    </div>
+
+    <div class="liga-container">
+
+        {% if tipo_usuario == 'estudiante' %}
+            <div class="tabs-nav">
+                <button class="tab-btn active" onclick="cambiarPestana('semanal', this)">Clasificación Semanal</button>
+                <button class="tab-btn" onclick="cambiarPestana('global', this)">Top Global Histórico</button>
+            </div>
+
+            <div id="vista-semanal" style="display: block;">
+                <div class="zone-indicator">ZONA DE ASCENSO (ESTA SEMANA)</div>
+                {% for comp in competidores %}
+                    <div class="liga-rango {% if forloop.counter == 1 %}rango-top-1{% elif forloop.counter <= 3 %}rango-top{% endif %} {% if request.user == comp.estudiante.usuario %}rango-yo{% endif %}">
+                        <div class="user-info">
+                            <span class="user-pos">{{ forloop.counter }}</span>
+                            <span class="avatar-icon">{% if forloop.counter == 1 %}👑{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}👾{% endif %}</span>
+                            <div>
+                                <span class="user-name">
+                                    {% if comp.estudiante %}
+                                        <a href="{% url 'ver_perfil_publico' comp.estudiante.pk %}" style="color: inherit; text-decoration: none;">
+                                            {{ comp.estudiante.usuario.username }}
+                                        </a>
+                                    {% else %}
+                                        {{ comp.estudiante.usuario.username|default:"Usuario" }}
+                                    {% endif %}
+                                </span>
+                                {% if request.user == comp.estudiante.usuario %}<span class="badge-tu">Tú</span>{% endif %}
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="user-xp">{{ comp.xp_ganada_esta_semana }} XP</span>
+                            {% if comp.estudiante and request.user != comp.estudiante.usuario %}
+                                <a href="{% url 'ver_perfil_publico' comp.estudiante.pk %}" class="btn-ver-perfil-sm">Ver Perfil</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% empty %}
+                    <div style="text-align: center; color: #888; padding: 2rem;">
+                        <p>Aún no ha comenzado tu competencia semanal. ¡Genera XP para clasificar!</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div id="vista-global" style="display: none;">
+                <div class="zone-indicator" style="color: #ffaa00;">SALÓN DE LA FAMA (XP TOTAL)</div>
+                <style>.zone-indicator[style*="color: #ffaa00;"]::before, .zone-indicator[style*="color: #ffaa00;"]::after { background-color: #ffaa00; }</style>
+                
+                {% for est in top_global %}
+                    <div class="liga-rango {% if forloop.counter == 1 %}rango-top-1{% elif forloop.counter <= 3 %}rango-top{% endif %} {% if request.user == est.usuario %}rango-yo{% endif %}">
+                        <div class="user-info">
+                            <span class="user-pos">{{ forloop.counter }}</span>
+                            <span class="avatar-icon">{% if forloop.counter == 1 %}👑{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}👾{% endif %}</span>
+                            <div>
+                                <span class="user-name">
+                                    {% if est %}
+                                        <a href="{% url 'ver_perfil_publico' est.pk %}" style="color: inherit; text-decoration: none;">
+                                            {{ est.usuario.username }}
+                                        </a>
+                                    {% else %}
+                                        {{ est.usuario.username|default:"Usuario" }}
+                                    {% endif %}
+                                </span>
+                                {% if request.user == est.usuario %}<span class="badge-tu">Tú</span>{% endif %}
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="user-xp">{{ est.xp_total }} XP Total</span>
+                            {% if est and request.user != est.usuario %}
+                                <a href="{% url 'ver_perfil_publico' est.pk %}" class="btn-ver-perfil-sm">Ver Perfil</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% elif tipo_usuario == 'reclutador' %}
+            <div class="zone-indicator">TALENTO GLOBAL DISPONIBLE</div>
+            {% for est in top_global %}
+                <div class="liga-rango {% if forloop.counter == 1 %}rango-top-1{% elif forloop.counter <= 3 %}rango-top{% endif %}">
+                    <div class="user-info">
+                        <span class="user-pos">{{ forloop.counter }}</span>
+                        <span class="avatar-icon">{% if forloop.counter == 1 %}👑{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}👾{% endif %}</span>
+                        <span class="user-name">{{ est.usuario.username }}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span class="user-xp">{{ est.xp_total }} XP Total</span>
+                        {% if est %}
+                            <a href="{% url 'ver_perfil_publico' est.pk %}" class="btn-ver-perfil">Ver Perfil</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+
+    <script>
+        function cambiarPestana(pestana, boton) {
+            document.getElementById('vista-semanal').style.display = 'none';
+            document.getElementById('vista-global').style.display = 'none';
+            
+            let botones = document.getElementsByClassName('tab-btn');
+            for (let i = 0; i < botones.length; i++) {
+                botones[i].classList.remove('active');
+            }
+            
+            document.getElementById('vista-' + pestana).style.display = 'block';
+            boton.classList.add('active');
+        }
+    </script>
+
+</div>
+{% endblock %}

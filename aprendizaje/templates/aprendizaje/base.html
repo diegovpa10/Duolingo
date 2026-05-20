@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}RedOwl Academy{% endblock %}</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    /* 🔴 EL DOMINIO DE ARQUÍMEDES (ROJO) */
+    --bg-color: #0a0a0a;
+    --card-bg: #121212;
+    --text-color: #e0e0e0;
+    --accent-color: #ff3333;
+    --secondary-accent: #222222;
+    --btn-hover: #cc0000;
+
+    /* 🔵 EL DOMINIO DE HEDWIG (AZUL SOPORTE) */
+    --support-color: #00e5ff;
+    --support-bg: rgba(0, 229, 255, 0.1);
+    --support-border: #00acc1;
+
+    /* 🟢 NUEVO: VARIABLES PARA INPUTS (MODO OSCURO) */
+    --input-bg: #111111;
+    --input-text: #ffffff;
+    --input-border: #333333;
+    --input-focus: #00ffff;
+
+    /* 🟢 VARIABLES PARA EL TABLERO DE MISIONES (MODO OSCURO) */
+    --tablero-bg: #111111;
+    --tablero-text: #e0e0e0;
+    --tablero-titulo: #00e5ff;          /* Cyan neón */
+    --tablero-requisitos-bg: #1a1a1a;
+    --tablero-asignado-bg: rgba(0, 255, 65, 0.05);
+    --tablero-asignado-border: #00ff41;  /* Verde neón */
+    --tablero-asignado-text: #00ff41;
+}
+
+[data-theme="light"] {
+    /* 🔴 ARQUÍMEDES DE DÍA */
+    --bg-color: #ffffff;
+    --card-bg: #f5f5f5;
+    --text-color: #1a1a1a;
+    --accent-color: #d32f2f;
+    --secondary-accent: #e0e0e0;
+    --btn-hover: #b71c1c;
+
+    /* 🔵 HEDWIG DE DÍA */
+    --support-color: #007bb5;
+    --support-bg: rgba(0, 123, 181, 0.1);
+    --support-border: #0288d1;
+
+    /* 🟢 NUEVO: VARIABLES PARA INPUTS (MODO CLARO) */
+    --input-bg: #ffffff;
+    --input-text: #1a1a1a;
+    --input-border: #cccccc;
+    --input-focus: #007bb5;
+
+    /* 🟢 VARIABLES PARA EL TABLERO DE MISIONES (MODO CLARO) */
+    --tablero-bg: #f9f9f9;
+    --tablero-text: #222222;
+    --tablero-titulo: #007bb5;          /* Azul profesional */
+    --tablero-requisitos-bg: #e0e0e0;   /* Gris claro sutil */
+    --tablero-asignado-bg: rgba(46, 125, 50, 0.1); /* Verde suave legible */
+    --tablero-asignado-border: #2e7d32; /* Verde bosque */
+    --tablero-asignado-text: #2e7d32;
+}
+
+/* =========================================
+   ESTILOS DINÁMICOS PARA FORMULARIOS
+   ========================================= */
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="number"], 
+textarea, 
+select {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    width: 100%; /* Para asegurar que llenen el espacio de su contenedor */
+}
+
+/* Efecto Focus: Cuando el usuario da clic para escribir */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--input-focus);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Corrección del autocompletado de los navegadores usando variables dinámicas */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--input-text) !important;
+    -webkit-box-shadow: 0 0 0px 1000px var(--input-bg) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Estilo para los placeholders dinámicos */
+::placeholder {
+    color: #888888;
+    opacity: 1;
+}
+
+/* =========================================
+   ESTILOS DINÁMICOS PARA LA BOLSA DE TRABAJO
+   ========================================= */
+.mision-card {
+    background-color: var(--tablero-bg) !important;
+    color: var(--tablero-text) !important;
+    border: 1px solid var(--secondary-accent);
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.mision-card h3 {
+    color: var(--tablero-titulo) !important;
+}
+
+.mision-requisitos {
+    background-color: var(--tablero-requisitos-bg) !important;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.mision-asignada-box {
+    background-color: var(--tablero-asignado-bg) !important;
+    border: 1px solid var(--tablero-asignado-border) !important;
+    color: var(--tablero-asignado-text) !important;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    line-height: 1.6;
+}
+
+/* NAVBAR CON LÍNEA ROJA */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%; /* Ajustado para dar más espacio a los lados */
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--secondary-accent);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -1px;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.logo span {
+    color: var(--accent-color);
+}
+
+/* TARJETAS CON HOVER ROJO */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--secondary-accent);
+    border-radius: 4px;
+    padding: 2rem;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease, border-color 0.3s ease;
+}
+
+.card:hover { border-color: var(--accent-color); }
+
+/* BOTONES ROJOS */
+.btn {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px; /* Redondeado para verse más moderno */
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: var(--btn-hover);
+    box-shadow: 0 4px 0 #990000; transform: translateY(-2px);
+}
+.btn:active { transform: translateY(2px); box-shadow: 0 0 0 #990000; }
+
+.btn-outline {
+    background: none;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+}
+
+.btn-outline:hover {
+    background-color: rgba(255, 51, 51, 0.1);
+    color: var(--accent-color);
+    box-shadow: none;
+    transform: none;
+}
+
+/* EDITOR DE CÓDIGO CON MARCA ROJA */
+.editor-codigo {
+    width: 100%;
+    height: 200px;
+    background-color: #000;
+    color: #00ff41; 
+    font-family: 'Courier New', monospace;
+    padding: 15px;
+    border: 1px solid #222;
+    border-left: 3px solid var(--accent-color);
+    border-radius: 2px;
+    margin-top: 10px;
+    resize: vertical;
+}
+
+/* UTILIDADES */
+.d-flex { display: flex; }
+.justify-content-between { justify-content: space-between; }
+.align-items-center { align-items: center; }
+
+/* MODO DARK/LIGHT SWITCH */
+.theme-toggle {
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+/* =========================================
+   ESTRUCTURA BASE (LIMPIA Y SEPARADA)
+   ========================================= */
+
+.app-container {
+    display: flex;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    min-height: 80vh;
+    width: 100%;
+    /* Por defecto (Login/Registro sin menú) se centra en la pantalla */
+    justify-content: center; 
+}
+
+/* Cuando el usuario SÍ tiene menú, alineamos todo a la izquierda */
+.app-container.con-menu {
+    justify-content: flex-start;
+}
+
+.sidebar-menu {
+    width: 200px;
+    flex-shrink: 0; /* Obliga al menú a no encogerse nunca */
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.content-area {
+    flex-grow: 1; /* El área de contenido toma todo el espacio libre restante */
+    max-width: 100%;
+}
+
+/* =========================================
+   📱 NAVEGACIÓN MÓVIL (APP STYLE)
+   ========================================= */
+.mobile-bottom-nav { display: none; } /* Oculto en PC */
+
+@media (max-width: 768px) {
+    .sidebar-menu { display: none; } /* Oculta el menú lateral en PC */
+    
+    .app-container {
+        margin-bottom: 80px; /* Deja espacio para que el menú no tape el contenido */
+        padding: 0 15px;
+    }
+
+    /* Barra inferior estilo App */
+    .mobile-bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-color);
+        border-top: 1px solid var(--secondary-accent);
+        z-index: 2000;
+        justify-content: space-around;
+        padding: 12px 0;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+    }
+
+    .mobile-nav-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #888;
+        text-decoration: none;
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        gap: 5px;
+        transition: color 0.2s;
+    }
+
+    .mobile-nav-btn .menu-icon { font-size: 1.4rem; filter: grayscale(100%); }
+    
+    .mobile-nav-btn.active { color: var(--accent-color); }
+    .mobile-nav-btn.active .menu-icon { filter: drop-shadow(0 0 5px rgba(255,51,51,0.5)) grayscale(0%); }
+}
+
+.menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 20px;
+    color: var(--text-color);
+    text-decoration: none; /* Esto quita el subrayado feo */
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.menu-btn:hover { 
+    background-color: var(--secondary-accent); 
+}
+
+.menu-btn.active {
+    background-color: rgba(255, 51, 51, 0.1);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.menu-icon { 
+    font-size: 1.5rem; 
+}
+
+/* =========================================
+   🔵 HEDWIG: ASISTENTE DE CÓDIGO
+   ========================================= */
+.hedwig-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    background-color: var(--support-bg);
+    border: 2px solid var(--support-border);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    animation: aparecer 0.3s ease-out; /* Una pequeña animación de entrada */
+}
+
+.hedwig-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 5px var(--support-color)); /* Le da un brillo mágico/tech */
+}
+
+.hedwig-text {
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.hedwig-text span {
+    color: var(--support-color);
+    font-weight: 800;
+}
+
+/* Animación para que Hedwig no aparezca de golpe */
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   SISTEMA DE ENERGÍA (⚡)
+   ========================================= */
+.energia-nav-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #0a0a0a;
+    border: 1px solid rgba(255, 51, 51, 0.3);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-family: monospace;
+}
+
+.energia-icon {
+    color: #ffcc00;
+    font-size: 1.1rem;
+    animation: pulse-energia 2s infinite alternate;
+}
+
+.energia-bar-wrapper {
+    width: 80px;
+    height: 10px;
+    background-color: #1a1a1a;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.energia-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ff3333, #ff6666);
+    box-shadow: 0 0 8px rgba(255, 51, 51, 0.7);
+    transition: width 0.5s ease;
+}
+
+.energia-texto {
+    color: #e0e0e0;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* Pequeña animación para hacer que el rayo pulse sutilmente */
+@keyframes pulse-energia {
+    0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 204, 0, 0.5)); }
+    100% { transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.9)); }
+}
+
+/* Ajuste para enlaces largos en los formularios (como el del Avatar) */
+form a {
+    word-break: break-all;
+    overflow-wrap: break-word;
+    color: var(--accent-color); /* Para que mantenga el color de tu diseño */
+}
+
+/* Para que la caja del checkbox de "Borrar" se alinee mejor */
+form input[type="checkbox"] {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* Estilos base para cada alerta */
+.notif-item {
+        background: #161616;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 6px;
+}
+    
+    /* Colores dinámicos del borde izquierdo */
+.notif-success { border-left: 3px solid #00ff41; } /* Verde para Aceptada */
+.notif-error { border-left: 3px solid #ff4d4d; }   /* Rojo para Rechazada */
+.notif-info { border-left: 3px solid #00ffff; }    /* Cyan para En Revisión */
+
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    {% if user.is_authenticated and user.reclutador %}
+        <a href="{% url 'dashboard_reclutador' %}" class="logo">🦉REDOWL <span>ACADEMY</span></a>
+    {% else %}
+        <a href="/" class="logo">🦉REDOWL <span>ACADEMY</span></a>
+    {% endif %}
+
+    <div class="d-flex align-items-center" style="gap: 20px;">
+        {% if user.is_authenticated %}
+            <span style="font-size: 0.8rem; color: #888; font-weight: bold;">
+                {{ user.username }} 
+                {% if user.estudiante %}
+                    | <b style="color: var(--accent-color);">{{ user.estudiante.xp_total|default:"0" }} XP</b>
+                {% elif user.reclutador %}
+                    | <b style="color: #00e5ff;">Reclutador</b>
+                {% endif %}
+            </span>
+            
+            {% if user.estudiante %}
+                <div class="energia-nav-container" title="Tu energía actual. ¡No dejes que llegue a 0!">
+                    <span class="energia-icon">⚡</span>
+                    
+                    <div class="energia-bar-wrapper">
+                        <div class="energia-bar" data-progress="{% widthratio user.estudiante.energia 5 100 %}"></div>
+                    </div>
+                    
+                    <span class="energia-texto">{{ user.estudiante.energia }}/5</span>
+                </div>
+            {% endif %}
+
+            <div style="position: relative; display: inline-block;" id="notif-wrapper">
+                <button onclick="toggleNotificaciones(event)" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #fff; padding: 5px; position: relative; display: flex; align-items: center;">
+                    🔔
+                    {% if total_notificaciones > 0 %}
+                        <span id="notif-contador" style="position: absolute; top: -2px; right: -2px; background: #ff4d4d; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 0.65rem; font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px #ff4d4d;">
+                            {{ total_notificaciones }}
+                        </span>
+                    {% endif %}
+                </button>
+                
+                <div id="notif-dropdown" style="display: none; position: absolute; right: 0; top: 40px; background: #111; border: 1px solid #333; width: 280px; border-radius: 8px; padding: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.8); z-index: 1000;">
+                    <h4 style="margin: 0 0 10px 0; color: #ffaa00; font-size: 0.85rem; border-bottom: 1px solid #222; padding-bottom: 8px; font-family: monospace; letter-spacing: 1px;">🚨 ALERTAS DEL SISTEMA</h4>
+                    
+                    <div style="max-height: 240px; overflow-y: auto;">
+                        {% for notificacion in mis_notificaciones %}
+                            <div class="notif-item 
+                                {% if '🎉' in notificacion.mensaje %} notif-success 
+                                {% elif '❌' in notificacion.mensaje %} notif-error 
+                                {% else %} notif-info {% endif %}">
+                                
+                                <p style="margin: 0; font-size: 0.8rem; color: #ddd; line-height: 1.4;">{{ notificacion.mensaje }}</p>
+                                <small style="color: #555; font-size: 0.65rem; display: block; margin-top: 4px;">📡 Transmisión entrante</small>
+                            </div>
+                        {% empty %}
+                            <p style="color: #555; font-size: 0.8rem; text-align: center; margin: 15px 0; font-style: italic;">Sin transmisiones pendientes.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline" style="padding: 8px 15px; font-size: 10px;">SALIR</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline" style="padding: 8px 15px; font-size: 11px;">Entrar</a>
+            <a href="{% url 'registro' %}" class="btn" style="padding: 8px 15px; font-size: 11px;">Registrarse</a>
+        {% endif %}
+
+        <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+    </div>
+</nav>
+
+<script>
+    function toggleNotificaciones(event) {
+        event.stopPropagation();
+        const dropdown = document.getElementById('notif-dropdown');
+        const contador = document.getElementById('notif-contador');
+        
+        // Verificamos si se va a abrir el panel
+        const seVaAOpen = (dropdown.style.display === 'none' || dropdown.style.display === '');
+        
+        if (seVaAOpen) {
+            dropdown.style.display = 'block';
+            
+            // Si hay un contador visible en pantalla, procedemos a borrarlo en la base de datos
+            if (contador) {
+                // Obtenemos el token CSRF que Django genera por seguridad en los formularios
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+
+                fetch("{% url 'marcar_notificaciones_leidas' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'ok') {
+                        // Desaparecemos el círculo rojo de la interfaz con estilo
+                        contador.style.transition = 'opacity 0.3s ease';
+                        contador.style.opacity = '0';
+                        setTimeout(() => contador.remove(), 300);
+                    }
+                })
+                .catch(error => console.error('Error al actualizar alertas:', error));
+            }
+        } else {
+            dropdown.style.display = 'none';
+        }
+    }
+
+    // Cierra el panel de notificaciones automáticamente si el usuario hace clic en el vacío de la pantalla
+    document.addEventListener('click', function(event) {
+        const wrapper = document.getElementById('notif-wrapper');
+        const dropdown = document.getElementById('notif-dropdown');
+        if (wrapper && !wrapper.contains(event.target)) {
+            if (dropdown) dropdown.style.display = 'none';
+        }
+    });
+</script>
+
+<div class="app-container {% if user.is_authenticated %}con-menu{% endif %}">
+    
+    {% if user.is_authenticated %}
+    <aside class="sidebar-menu">
+        
+        {% if user.estudiante %}
+            <a href="{% url 'lista_cursos' %}" class="menu-btn {% if request.path == '/' or '/curso/' in request.path %}active{% endif %}">
+                <span class="menu-icon">🏠</span> Aprender
+            </a>
+            <a href="{% url 'bolsa_trabajo' %}" class="menu-btn {% if request.path == '/misiones-laborales/' %}active{% endif %}">
+                <span class="menu-icon">💼</span> Misiones
+            </a>
+            <a href="{% url 'desafios' %}" class="menu-btn {% if request.path == '/desafios/' %}active{% endif %}">
+                <span class="menu-icon">🎁</span> Desafíos
+            </a>
+        {% elif user.reclutador %}
+            <a href="{% url 'dashboard_reclutador' %}" class="menu-btn {% if request.path == '/empresa/dashboard/' %}active{% endif %}">
+                <span class="menu-icon">📊</span> Mi Panel
+            </a>
+            <a href="{% url 'crear_oferta' %}" class="menu-btn {% if request.path == '/empresa/nueva-oferta/' %}active{% endif %}">
+                <span class="menu-icon">➕</span> Publicar Oferta
+            </a>
+        {% endif %}
+
+        <a href="{% url 'novedades' %}" class="menu-btn {% if request.path == '/novedades/' %}active{% endif %}">
+            <span class="menu-icon">📢</span> Novedades
+        </a>
+
+        <a href="{% url 'ligas' %}" class="menu-btn {% if request.path == '/ligas/' %}active{% endif %}">
+            <span class="menu-icon">🛡️</span> Ligas
+        </a>
+        <a href="{% url 'perfil' %}" class="menu-btn {% if request.path == '/perfil/' %}active{% endif %}">
+            <span class="menu-icon">👤</span> Perfil
+        </a>
+        
+    </aside>
+    {% endif %}
+
+    <main class="content-area">
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div style="background-color: var(--accent-color); color: white; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: center; font-weight: bold; box-shadow: 0 4px 10px rgba(255, 51, 51, 0.3);">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</div>
+
+{% if user.is_authenticated %}
+    <nav class="mobile-bottom-nav">
+        {% if user.estudiante %}
+            <a href="{% url 'lista_cursos' %}" class="mobile-nav-btn {% if request.path == '/' or '/curso/' in request.path %}active{% endif %}">
+                <span class="menu-icon">🏠</span> Aprender
+            </a>
+            <a href="{% url 'bolsa_trabajo' %}" class="mobile-nav-btn {% if request.path == '/misiones-laborales/' %}active{% endif %}">
+                <span class="menu-icon">💼</span> Misiones
+            </a>
+        {% elif user.reclutador %}
+            <a href="{% url 'dashboard_reclutador' %}" class="mobile-nav-btn {% if request.path == '/empresa/dashboard/' %}active{% endif %}">
+                <span class="menu-icon">📊</span> Panel
+            </a>
+            <a href="{% url 'crear_oferta' %}" class="mobile-nav-btn {% if request.path == '/empresa/nueva-oferta/' %}active{% endif %}">
+                <span class="menu-icon">➕</span> Oferta
+            </a>
+        {% endif %}
+
+        <a href="{% url 'ligas' %}" class="mobile-nav-btn {% if request.path == '/ligas/' %}active{% endif %}">
+            <span class="menu-icon">🛡️</span> Ligas
+        </a>
+        <a href="{% url 'perfil' %}" class="mobile-nav-btn {% if request.path == '/perfil/' %}active{% endif %}">
+            <span class="menu-icon">👤</span> Perfil
+        </a>
+    </nav>
+{% endif %}
+
+<script>
+    function toggleTheme() {
+        const body = document.documentElement;
+        const currentTheme = body.getAttribute('data-theme');
+        if (currentTheme === 'light') {
+            body.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            body.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    // Cargar tema guardado
+    if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+</script>
+<script>
+    // Espera a que la página cargue, busca la barra de energía y le da su ancho real
+    document.addEventListener("DOMContentLoaded", function() {
+        const barraEnergia = document.querySelector('.energia-bar');
+        if (barraEnergia) {
+            const progreso = barraEnergia.getAttribute('data-progress');
+            barraEnergia.style.width = progreso + '%';
+        }
+    });
+</script>
+</body>
+</html>

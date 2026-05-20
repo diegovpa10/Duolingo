@@ -1,0 +1,50 @@
+{% extends 'aprendizaje/base.html' %}
+
+{% block content %}
+<style>
+    .cyberpunk-input {
+        width: 100%;
+        background: #1a1a1a;
+        border: 1px solid #333;
+        color: #fff;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .cyberpunk-input:focus {
+        outline: none;
+        border-color: #00ffff;
+        box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
+    }
+</style>
+
+<div class="container" style="color: #fff; padding: 20px; max-width: 600px; margin: 0 auto;">
+    <h2>🚀 Publicar Oferta Laboral</h2>
+    <p style="color: #bbb;">Define la misión para nuestros estudiantes.</p>
+
+    <form method="POST" style="background: #111; padding: 20px; border-radius: 8px; border: 1px solid #333;">
+        {% csrf_token %}
+        
+        <label>Título del Puesto:</label>
+        {{ form.titulo }}
+
+        <label>Descripción de la Misión:</label>
+        {{ form.descripcion }}
+
+        <label>Requisitos / Habilidades (Separadas por comas para el sistema):</label>
+        {{ form.requisitos }}
+
+        <label>Rango Salarial (Opcional):</label>
+        {{ form.rango_salarial }}
+
+        <div style="text-align: right; margin-top: 20px;">
+            <a href="{% url 'dashboard_reclutador' %}" style="color: #bbb; text-decoration: none; margin-right: 15px;">Cancelar</a>
+            <button type="submit" style="background: #ffaa00; border: none; color: #000; font-weight: bold; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                Publicar Misión
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

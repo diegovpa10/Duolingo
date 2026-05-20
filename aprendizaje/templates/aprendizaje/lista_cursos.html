@@ -1,0 +1,199 @@
+{% extends 'aprendizaje/base.html' %}
+
+{% block title %}Catálogo - RedOwl Academy{% endblock %}
+
+{% block content %}
+<style>
+    .catalogo-header {
+        margin-bottom: 3rem;
+        border-bottom: 1px solid var(--secondary-accent);
+        padding-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .catalogo-title {
+        color: var(--text-color);
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .catalogo-title span {
+        color: var(--accent-color);
+    }
+
+    .catalogo-subtitle {
+        color: #888;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+    }
+
+    .catalogo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+    }
+
+    .curso-card {
+        background-color: var(--card-bg);
+        border: 2px solid var(--secondary-accent);
+        border-radius: 16px; 
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 260px;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* El resplandor rojo de Arquímedes al pasar el mouse */
+    .curso-card:hover {
+        border-color: var(--accent-color);
+        transform: translateY(-8px);
+        box-shadow: 0 12px 25px rgba(255, 51, 51, 0.15), 0 0 0 1px var(--accent-color) inset;
+    }
+
+    /* Icono de fondo decorativo */
+    .curso-icon-bg {
+        position: absolute;
+        top: -15px;
+        right: -10px;
+        font-size: 8rem;
+        opacity: 0.03;
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+
+    .curso-card:hover .curso-icon-bg {
+        opacity: 0.08;
+        color: var(--accent-color);
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .curso-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .curso-title {
+        font-size: 1.5rem;
+        margin: 0;
+        color: var(--text-color);
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    .badge-en {
+        font-size: 0.65rem;
+        background-color: transparent;
+        border: 1px solid var(--support-border);
+        color: var(--support-color); /* Un pequeño toque de Hedwig aquí */
+        padding: 5px 8px;
+        border-radius: 6px;
+        letter-spacing: 1px;
+        font-weight: 800;
+    }
+
+    .curso-core {
+        font-size: 0.85rem;
+        color: #777;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 2rem;
+        font-weight: 700;
+        position: relative;
+        z-index: 2;
+    }
+
+    .curso-core span {
+        color: #fff;
+        background-color: #1a1a1a;
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: 1px solid #333;
+        margin-left: 8px;
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+    }
+
+    .curso-footer {
+        margin-top: auto;
+        position: relative;
+        z-index: 2;
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 5rem 2rem;
+        border: 2px dashed var(--secondary-accent);
+        border-radius: 15px;
+        background-color: rgba(255,255,255,0.02);
+    }
+
+    .terminal-footer {
+        margin-top: 5rem;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #555;
+        letter-spacing: 4px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+</style>
+
+<div class="catalogo-header">
+    <div>
+        <h1 class="catalogo-title">Rutas de <span>Aprendizaje</span></h1>
+        <p class="catalogo-subtitle">Selecciona tu stack tecnológico y comienza el despliegue.</p>
+    </div>
+</div>
+
+<div class="catalogo-grid">
+    {% for curso in cursos %}
+        <div class="curso-card">
+            <div class="curso-icon-bg">&lt;/&gt;</div>
+            
+            <div>
+                <div class="curso-header">
+                    <h2 class="curso-title">{{ curso.nombre }}</h2>
+                    {% if curso.es_ingles_tecnico %}
+                        <span class="badge-en">EN_US</span>
+                    {% endif %}
+                </div>
+                
+                <p class="curso-core">
+                    Core <span>{{ curso.lenguaje }}</span>
+                </p>
+            </div>
+
+            <div class="curso-footer">
+                <a href="{% url 'detalle_curso' curso.id %}" class="btn" style="width: 100%; padding: 14px; font-size: 0.9rem; letter-spacing: 1.5px;">
+                    INICIALIZAR RUTA
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="empty-state">
+            <span style="font-size: 3rem; opacity: 0.4; display: block; margin-bottom: 20px;">📡</span>
+            <p style="color: #888; font-family: 'Courier New', monospace; margin: 0; font-size: 1.1rem;">
+                >_ SISTEMA: No se detectaron despliegues de cursos activos en el servidor.
+            </p>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="terminal-footer">
+    REDOWL_ACADEMY // SYS.CATALOG.V1.0
+</div>
+{% endblock %}
