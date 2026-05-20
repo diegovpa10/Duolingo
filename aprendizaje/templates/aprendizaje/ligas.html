@@ -1,0 +1,65 @@
+{% extends 'aprendizaje/base.html' %}
+
+{% block title %}Ligas - RedOwl Academy{% endblock %}
+
+{% block content %}
+<style>
+    .ligas-header { text-align: center; margin-bottom: 3rem; }
+    .ligas-title { color: var(--accent-color); font-size: 2.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; }
+    .ligas-subtitle { color: #888; font-size: 0.9rem; letter-spacing: 1px; }
+
+    .liga-container { max-width: 600px; margin: 0 auto; }
+    
+    .liga-rango {
+        display: flex; justify-content: space-between; align-items: center;
+        background-color: var(--card-bg); border: 2px solid var(--secondary-accent);
+        padding: 15px 25px; border-radius: 12px; margin-bottom: 15px;
+        transition: all 0.2s ease;
+    }
+    .liga-rango:hover { border-color: var(--accent-color); transform: translateX(5px); }
+    
+    .rango-top { background-color: rgba(255, 170, 0, 0.1); border-color: #ffaa00; }
+    .rango-yo { border-left: 4px solid var(--accent-color); background-color: rgba(255, 51, 51, 0.05); }
+
+    .user-info { display: flex; align-items: center; gap: 15px; }
+    .user-pos { font-size: 1.2rem; font-weight: 900; color: #555; width: 30px; }
+    .rango-top .user-pos { color: #ffaa00; }
+    .user-name { font-weight: bold; font-size: 1rem; color: var(--text-color); }
+    .user-xp { color: #1cb0f6; font-weight: 800; font-size: 0.9rem; }
+</style>
+
+<div class="ligas-header">
+    <div style="font-size: 3rem; margin-bottom: 10px;">🛡️</div>
+    <h1 class="ligas-title">Liga Bronce</h1>
+    <p class="ligas-subtitle">COMPITE CON OTROS OPERADORES Y ASCIENDE DE RANGO</p>
+</div>
+
+<div class="liga-container">
+    <div class="liga-rango rango-top">
+        <div class="user-info">
+            <span class="user-pos">1</span>
+            <span style="font-size: 1.5rem;">🤖</span>
+            <span class="user-name">CyberNinja99</span>
+        </div>
+        <span class="user-xp">1450 XP</span>
+    </div>
+
+    <div class="liga-rango rango-top">
+        <div class="user-info">
+            <span class="user-pos">2</span>
+            <span style="font-size: 1.5rem;">👻</span>
+            <span class="user-name">CodeGhost</span>
+        </div>
+        <span class="user-xp">1200 XP</span>
+    </div>
+
+    <div class="liga-rango rango-yo">
+        <div class="user-info">
+            <span class="user-pos">14</span>
+            <span style="font-size: 1.5rem;">🦉</span>
+            <span class="user-name">{{ user.username }} (Tú)</span>
+        </div>
+        <span class="user-xp">{{ user.estudiante.xp_total|default:"350" }} XP</span>
+    </div>
+</div>
+{% endblock %}

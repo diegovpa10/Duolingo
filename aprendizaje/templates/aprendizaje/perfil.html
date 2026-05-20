@@ -1,0 +1,71 @@
+{% extends 'aprendizaje/base.html' %}
+
+{% block title %}Perfil - RedOwl Academy{% endblock %}
+
+{% block content %}
+<style>
+    .perfil-container { display: grid; grid-template-columns: 300px 1fr; gap: 40px; margin-top: 2rem; }
+    
+    .id-card {
+        background-color: var(--card-bg); border: 2px solid var(--secondary-accent);
+        border-radius: 15px; padding: 30px; text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2); height: fit-content;
+    }
+    
+    .avatar { font-size: 5rem; background-color: #000; border: 2px solid var(--accent-color); border-radius: 50%; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto; }
+    .username { font-size: 1.5rem; font-weight: 800; color: var(--text-color); margin-bottom: 5px; }
+    .join-date { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .stat-box { background-color: var(--card-bg); border: 2px solid var(--secondary-accent); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px; }
+    .stat-icon { font-size: 2rem; }
+    .stat-value { font-size: 1.5rem; font-weight: 900; color: var(--text-color); margin: 0; }
+    .stat-label { font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold; margin: 0; }
+    
+    .btn-logout { background-color: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); width: 100%; margin-top: 30px; }
+    .btn-logout:hover { background-color: rgba(255, 51, 51, 0.1); }
+</style>
+
+<div class="perfil-container">
+    <aside class="id-card">
+        <div class="avatar">🦉</div>
+        <h2 class="username">{{ user.username|default:"Operador Anónimo" }}</h2>
+        <p class="join-date">MIEMBRO DESDE 2024</p>
+        
+        <form action="#" method="POST" style="margin-top: 20px;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-logout" style="letter-spacing: 1px;">CERRAR SESIÓN</button>
+        </form>
+    </aside>
+
+    <main>
+        <h2 style="color: var(--accent-color); font-weight: 800; text-transform: uppercase; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;">Estadísticas de Sistema</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-icon">🔥</div>
+                <div>
+                    <p class="stat-value">{{ user.estudiante.racha_dias|default:"0" }}</p>
+                    <p class="stat-label">Días de Racha</p>
+                </div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-icon">💎</div>
+                <div>
+                    <p class="stat-value">{{ user.estudiante.xp_total|default:"0" }}</p>
+                    <p class="stat-label">Experiencia Total</p>
+                </div>
+            </div>
+            
+            <div class="stat-box" style="border-color: #ffaa00;">
+                <div class="stat-icon">🛡️</div>
+                <div>
+                    <p class="stat-value" style="color: #ffaa00;">Bronce</p>
+                    <p class="stat-label">Liga Actual</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

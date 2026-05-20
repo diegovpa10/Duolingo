@@ -1,0 +1,56 @@
+{% extends 'aprendizaje/base.html' %}
+
+{% block title %}Desafíos - RedOwl Academy{% endblock %}
+
+{% block content %}
+<style>
+    .desafios-header { margin-bottom: 3rem; border-bottom: 1px solid var(--secondary-accent); padding-bottom: 1.5rem; }
+    .desafios-title { color: var(--accent-color); font-size: 2.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; }
+    
+    .desafio-card {
+        background-color: var(--card-bg); border: 2px solid var(--secondary-accent);
+        border-radius: 15px; padding: 25px; margin-bottom: 20px;
+        display: flex; align-items: center; gap: 20px;
+    }
+    
+    .desafio-icon { font-size: 2.5rem; background-color: #000; padding: 15px; border-radius: 12px; border: 1px solid #333; }
+    
+    .desafio-info { flex: 1; }
+    .desafio-nombre { font-size: 1.2rem; font-weight: bold; margin: 0 0 5px 0; color: var(--text-color); }
+    .desafio-recompensa { font-size: 0.8rem; color: #ffaa00; font-weight: 900; letter-spacing: 1px; }
+    
+    .progress-bg { width: 100%; height: 12px; background-color: #222; border-radius: 6px; margin-top: 15px; overflow: hidden; }
+    .progress-bar { height: 100%; background-color: var(--accent-color); border-radius: 6px; transition: width 0.5s ease; }
+</style>
+
+<div class="desafios-header">
+    <h1 class="desafios-title">Desafíos del Día</h1>
+    <p style="color: #888; font-size: 0.9rem;">COMPLETA LAS MISIONES PARA OBTENER RECOMPENSAS EXTRA</p>
+</div>
+
+<div style="max-width: 800px;">
+    <div class="desafio-card">
+        <div class="desafio-icon">⚡</div>
+        <div class="desafio-info">
+            <h3 class="desafio-nombre">Gana 50 de Experiencia</h3>
+            <span class="desafio-recompensa">+ 10 XP EXTRA</span>
+            <div class="progress-bg">
+                <div class="progress-bar" style="width: 60%; background-color: #ffaa00;"></div>
+            </div>
+            <p style="text-align: right; font-size: 0.75rem; color: #666; margin-top: 5px;">30 / 50 XP</p>
+        </div>
+    </div>
+
+    <div class="desafio-card">
+        <div class="desafio-icon">🎯</div>
+        <div class="desafio-info">
+            <h3 class="desafio-nombre">Completa 2 lecciones perfectas</h3>
+            <span class="desafio-recompensa">+ 15 XP EXTRA</span>
+            <div class="progress-bg">
+                <div class="progress-bar" style="width: 50%;"></div>
+            </div>
+            <p style="text-align: right; font-size: 0.75rem; color: #666; margin-top: 5px;">1 / 2</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
