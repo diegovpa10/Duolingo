@@ -1,0 +1,191 @@
+{% extends 'aprendizaje/base.html' %}
+
+{% block content %}
+<style>
+    .novedades-wrapper {
+        padding: 30px;
+        color: var(--text-color);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* Contenedor principal del carrusel */
+    .carrusel-container {
+        position: relative;
+        background: var(--card-bg);
+        border: 2px solid var(--secondary-accent);
+        border-radius: 12px;
+        padding: 40px;
+        overflow: hidden;
+        min-height: 250px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    /* Diapositivas ocultas por defecto */
+    .carrusel-item {
+        display: none;
+        width: 100%;
+        text-align: center;
+        animation: fadeEffect 0.6s ease-in-out;
+    }
+
+    /* Animación de transición suave */
+    @keyframes fadeEffect {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .novedad-tag {
+        background: var(--accent-color, #ff3333);
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .novedad-titulo {
+        color: var(--support-color);
+        margin: 15px 0 10px 0;
+        font-size: 1.8rem;
+    }
+
+    .novedad-fecha {
+        font-size: 0.85rem;
+        opacity: 0.5;
+        margin-bottom: 20px;
+    }
+
+    .novedad-cuerpo {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        opacity: 0.9;
+    }
+
+    /* Botones de navegación (Flechas) */
+    .carrusel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: var(--text-color);
+        font-size: 2rem;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: opacity 0.2s, color 0.2s;
+        padding: 10px;
+        user-select: none;
+        z-index: 10;
+    }
+    .carrusel-btn:hover {
+        opacity: 1;
+        color: var(--support-color);
+    }
+    .btn-prev { left: 10px; }
+    .btn-next { right: 10px; }
+
+    /* Indicadores de puntos inferiores */
+    .carrusel-dots {
+        text-align: center;
+        margin-top: 15px;
+    }
+    .dot {
+        cursor: pointer;
+        height: 10px;
+        width: 10px;
+        margin: 0 5px;
+        background-color: var(--secondary-accent);
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+    .dot.active {
+        background-color: var(--support-color);
+        transform: scale(1.2);
+    }
+</style>
+
+<div class="novedades-wrapper">
+    <h2 style="margin-bottom: 5px;">📢 Central de Actualizaciones</h2>
+    <p style="opacity: 0.7; margin-bottom: 25px;">Entérate de los últimos cambios y mejoras del sistema en tiempo real.</p>
+
+    {% if novedades %}
+        <div class="carrusel-container">
+            <button class="carrusel-btn btn-prev" onclick="cambiarSlide(-1)">&#10094;</button>
+            <button class="carrusel-btn btn-next" onclick="cambiarSlide(1)">&#10095;</button>
+
+            {% for n in novedades %}
+                <div class="carrusel-item">
+                    <span class="novedad-tag">Update</span>
+                    <h3 class="novedad-titulo">{{ n.titulo }}</h3>
+                    <div class="novedad-fecha">📅 {{ n.fecha_publicacion|date:"d M, Y" }}</div>
+                    <p class="novedad-cuerpo">{{ n.contenido|linebreaksbr }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="carrusel-dots">
+            {% for n in novedades %}
+                <span class="dot" data-slide="{{ forloop.counter0 }}"></span>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="carrusel-container" style="justify-content: center;">
+            <p style="opacity: 0.5; text-align: center;">📭 No hay novedades registradas por el momento.</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    let slideIndex = 0;
+    const slides = document.getElementsByClassName("carrusel-item");
+    const dots = document.getElementsByClassName("dot");
+
+    if (slides.length > 0) {
+        mostrarSlides(slideIndex);
+        
+        // Carrusel automático cada 7 segundos
+        setInterval(() => {
+            cambiarSlide(1);
+        }, 7000);
+    }
+
+    function mostrarSlides(n) {
+        if (n >= slides.length) { slideIndex = 0; }
+        if (n < 0) { slideIndex = slides.length - 1; }
+        
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        
+        slides[slideIndex].style.display = "block";
+        if(dots.length > 0) {
+            dots[slideIndex].className += " active";
+        }
+    }
+
+    function cambiarSlide(n) {
+        mostrarSlides(slideIndex += n);
+    }
+
+    function irASlide(n) {
+        mostrarSlides(slideIndex = n);
+    }
+
+    // 🌟 ESCUCHADOR DE CLICS PARA LOS PUNTOS (Evita errores en el editor)
+    document.querySelectorAll('.dot').forEach(dot => {
+        dot.addEventListener('click', function() {
+            const slideNum = parseInt(this.getAttribute('data-slide'));
+            irASlide(slideNum);
+        });
+    });
+</script>
+{% endblock %}

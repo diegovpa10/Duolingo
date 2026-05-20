@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.timezone import now
 
 # --- 1. SISTEMA DE USUARIOS ---
 
@@ -20,6 +21,44 @@ class Estudiante(models.Model):
 
     def __str__(self):
         return f"Estudiante: {self.usuario.username}"
+
+    # 🛡️ SISTEMA DE LIGAS DINÁMICO
+    @property
+    def obtener_liga_info(self):
+        """Retorna un diccionario con el nombre, emoji y color hexadecimal de su liga actual."""
+        xp = self.xp_total
+        if xp <= 500:
+            return {
+                "nombre": "Liga de Bronce",
+                "emoji": "🟤",
+                "color": "#cd7f32",
+                "siguiente_liga": "Plata",
+                "xp_necesaria": 501 - xp
+            }
+        elif xp <= 1500:
+            return {
+                "nombre": "Liga de Plata",
+                "emoji": "⚪",
+                "color": "#c0c0c0",
+                "siguiente_liga": "Oro",
+                "xp_necesaria": 1501 - xp
+            }
+        elif xp <= 3500:
+            return {
+                "nombre": "Liga de Oro",
+                "emoji": "🟡",
+                "color": "#ffaa00",
+                "siguiente_liga": "Diamante",
+                "xp_necesaria": 3501 - xp
+            }
+        else:
+            return {
+                "nombre": "Liga Diamante",
+                "emoji": "💎",
+                "color": "#00e5ff",
+                "siguiente_liga": "Máximo Rango alcanzado",
+                "xp_necesaria": 0
+            }
 
 class Reclutador(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -210,3 +249,58 @@ class Notificacion(models.Model):
 
     def __str__(self):
         return f"Notificación para {self.usuario.username}: {self.mensaje}"
+    
+class Novedad(models.Model):
+    titulo = models.CharField(max_length=150, verbose_name="Título de la Novedad")
+    contenido = models.TextField(verbose_name="Contenido / Cuerpo del mensaje")
+    fecha_publicacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Publicación")
+    activo = models.BooleanField(default=True, verbose_name="¿Mostrar en el sistema?")
+
+    class Meta:
+        verbose_name = "Novedad"
+        verbose_name_plural = "Novedades"
+        ordering = ['-fecha_publicacion'] # Las más nuevas primero
+
+    def __str__(self):
+        return self.titulo
+    
+class DesafioDiario(models.Model):
+    TIPO_OPCIONES = [
+        ('xp', 'Recolectar XP'),
+        ('lecciones', 'Completar Lecciones'),
+        ('racha', 'Mantener Conexión (Racha)'),
+    ]
+    
+    nombre = models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=200)
+    tipo = models.CharField(max_length=20, choices=TIPO_OPCIONES)
+    meta = models.IntegerField(help_text="Cantidad a alcanzar (Ej: 50 para XP, 2 para lecciones)")
+    xp_recompensa = models.IntegerField(help_text="XP extra al completar el desafío")
+    icono = models.CharField(max_length=10, default="⚡")
+    color_barra = models.CharField(max_length=20, default="bar-gold", help_text="Clase CSS: bar-gold, bar-red, bar-blue")
+    
+    def __str__(self):
+        return f"{self.nombre} ({self.meta} {self.tipo})"
+
+
+class ProgresoDesafio(models.Model):
+    estudiante = models.ForeignKey('Estudiante', on_delete=models.CASCADE, related_name='desafios_diarios')
+    desafio = models.ForeignKey(DesafioDiario, on_delete=models.CASCADE)
+    fecha = models.DateField(default=now)
+    progreso_actual = models.IntegerField(default=0)
+    completado = models.BooleanField(default=False)
+    recompensa_reclamada = models.BooleanField(default=False)
+
+    class Meta:
+        # Asegura que un estudiante solo tenga un registro por desafío al día
+        unique_together = ('estudiante', 'desafio', 'fecha')
+
+    @property
+    def porcentaje(self):
+        if self.desafio.meta == 0:
+            return 0
+        calculo = int((self.progreso_actual / self.desafio.meta) * 100)
+        return min(calculo, 100) # Nunca superar el 100%
+
+    def __str__(self):
+        return f"{self.estudiante.usuario.username} - {self.desafio.nombre} - {self.fecha}"

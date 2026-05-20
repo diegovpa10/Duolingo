@@ -59,13 +59,12 @@
         overflow: hidden;
     }
     
-    .desafio-card:hover {
+    .desafio-card:not(.card-completado):hover {
         border-color: var(--accent-color);
         transform: translateX(8px);
         box-shadow: -5px 10px 20px rgba(255, 51, 51, 0.1);
     }
 
-    /* Brillo lateral decorativo */
     .desafio-card::before {
         content: "";
         position: absolute;
@@ -77,7 +76,7 @@
         transition: background-color 0.3s ease;
     }
 
-    .desafio-card:hover::before {
+    .desafio-card:not(.card-completado):hover::before {
         background-color: var(--accent-color);
         box-shadow: 0 0 15px var(--accent-color);
     }
@@ -138,8 +137,6 @@
         height: 100%; 
         border-radius: 8px; 
         transition: width 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); 
-        
-        /* Efecto de rayas diagonales tecnológicas */
         background-image: linear-gradient(
             45deg, 
             rgba(255, 255, 255, 0.15) 25%, 
@@ -153,7 +150,6 @@
         background-size: 1rem 1rem;
     }
 
-    /* Colores dinámicos para las barras */
     .bar-gold { background-color: #ffaa00; box-shadow: 0 0 10px #ffaa00; }
     .bar-red { background-color: var(--accent-color); box-shadow: 0 0 10px var(--accent-color); }
     .bar-blue { background-color: var(--support-color); box-shadow: 0 0 10px var(--support-color); }
@@ -166,65 +162,75 @@
         font-family: 'Courier New', monospace;
         font-weight: bold;
     }
+
+    /* Estilo para tarjetas completadas */
+    .card-completado {
+        opacity: 0.6; 
+        cursor: not-allowed;
+    }
 </style>
 
 <div class="desafios-header">
     <div class="header-icon">🎯</div>
     <div>
         <h1 class="desafios-title">Misiones <span>Diarias</span></h1>
-        <p class="desafios-subtitle">>_ STATUS: ESPERANDO EJECUCIÓN</p>
+        <p class="desafios-subtitle">>_ STATUS: {{ status_terminal }}</p>
     </div>
 </div>
 
 <div style="max-width: 800px; margin: 0 auto;">
     
-    <div class="desafio-card">
-        <div class="desafio-icon">⚡</div>
-        <div class="desafio-info">
-            <div class="desafio-header-row">
-                <h3 class="desafio-nombre">Recolección de Datos</h3>
-                <span class="desafio-recompensa">+ 10 XP EXTRA</span>
+    {% for prog in progresos %}
+        <div class="desafio-card {% if prog.completado %}card-completado{% endif %}">
+            <div class="desafio-icon" {% if prog.completado %}style="filter: grayscale(100%);"{% endif %}>
+                {{ prog.desafio.icono }}
             </div>
-            <p style="margin: 0; color: #777; font-size: 0.9rem;">Obtén 50 puntos de experiencia hoy.</p>
-            
-            <div class="progress-bg">
-                <div class="progress-bar bar-gold" style="width: 60%;"></div>
+            <div class="desafio-info">
+                <div class="desafio-header-row">
+                    <h3 class="desafio-nombre">{{ prog.desafio.nombre }}</h3>
+                    
+                    {% if prog.completado %}
+                        <span class="desafio-recompensa" style="background-color: #444; color: #888; box-shadow: none;">COMPLETADO</span>
+                    {% else %}
+                        <span class="desafio-recompensa">+ {{ prog.desafio.xp_recompensa }} XP EXTRA</span>
+                    {% endif %}
+                </div>
+                <p style="margin: 0; color: #777; font-size: 0.9rem;">{{ prog.desafio.descripcion }}</p>
+                
+                <div class="progress-bg">
+                    <div class="progress-bar {{ prog.desafio.color_barra }}" data-width="{{ prog.porcentaje }}"></div>
+                </div>
+                
+                {% if prog.completado %}
+                    <p class="progress-text" style="color: var(--support-color);">MÁXIMA CAPACIDAD ALCANZADA</p>
+                {% else %}
+                    <p class="progress-text">
+                        {{ prog.progreso_actual }} / {{ prog.desafio.meta }} 
+                        {% if prog.desafio.tipo == 'xp' %}XP{% else %}LECCIONES{% endif %}
+                    </p>
+                {% endif %}
             </div>
-            <p class="progress-text">30 / 50 XP</p>
         </div>
-    </div>
-
-    <div class="desafio-card">
-        <div class="desafio-icon">💻</div>
-        <div class="desafio-info">
-            <div class="desafio-header-row">
-                <h3 class="desafio-nombre">Ejecución Sin Errores</h3>
-                <span class="desafio-recompensa">+ 15 XP EXTRA</span>
-            </div>
-            <p style="margin: 0; color: #777; font-size: 0.9rem;">Completa 2 lecciones perfectas.</p>
-            
-            <div class="progress-bg">
-                <div class="progress-bar bar-red" style="width: 50%;"></div>
-            </div>
-            <p class="progress-text">1 / 2 COMPLETA</p>
+    {% empty %}
+        <div style="text-align: center; color: #555; padding: 3rem; border: 2px dashed #222; border-radius: 12px;">
+            <p style="font-family: 'Courier New', monospace;">>_ LOG: No hay desafíos activos registrados en el panel de control.</p>
         </div>
-    </div>
-
-    <div class="desafio-card" style="opacity: 0.6; cursor: not-allowed;">
-        <div class="desafio-icon" style="filter: grayscale(100%);">🔥</div>
-        <div class="desafio-info">
-            <div class="desafio-header-row">
-                <h3 class="desafio-nombre">Mantener Conexión</h3>
-                <span class="desafio-recompensa" style="background-color: #444; color: #888; box-shadow: none;">COMPLETADO</span>
-            </div>
-            <p style="margin: 0; color: #555; font-size: 0.9rem;">Extiende tu racha de días de estudio.</p>
-            
-            <div class="progress-bg">
-                <div class="progress-bar bar-blue" style="width: 100%;"></div>
-            </div>
-            <p class="progress-text" style="color: var(--support-color);">MÁXIMA CAPACIDAD ALCANZADA</p>
-        </div>
-    </div>
+    {% endfor %}
 
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Busca todas las barras de progreso en la página
+        const barras = document.querySelectorAll('.progress-bar');
+        
+        barras.forEach(barra => {
+            // Lee el número que Django guardó en data-width
+            const porcentaje = barra.getAttribute('data-width');
+            if (porcentaje) {
+                // Aplica el estilo CSS nativo sin que el editor se queje
+                barra.style.width = porcentaje + "%";
+            }
+        });
+    });
+</script>
 {% endblock %}

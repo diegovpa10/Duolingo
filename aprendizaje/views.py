@@ -4,6 +4,7 @@ import json
 import subprocess
 import tempfile
 import os
+import random
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import *
@@ -14,12 +15,14 @@ from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Curso, Leccion, Ejercicio, Estudiante, Reclutador, PerfilProfesional, Amistad, RetoCodigo, RetoInteractivo, OfertaLaboral, RankingSemanal, LigaSemanal, Postulacion, PerfilProfesional, Notificacion
+from .models import Curso, Leccion, Ejercicio, Estudiante, Reclutador, PerfilProfesional, Amistad, RetoCodigo, RetoInteractivo, OfertaLaboral, RankingSemanal, LigaSemanal, Postulacion, PerfilProfesional, Notificacion, Novedad, DesafioDiario, ProgresoDesafio
 from .forms import RegistroRedOwlForm, EditarEstudianteForm, EditarPerfilProfesionalForm
 from django.utils import timezone
+from django.utils.timezone import now
 from datetime import timedelta
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import OfertaLaboralForm
+from .utils import registrar_avance_misiones
 
 @login_required(login_url='login')
 def lista_cursos(request):
@@ -292,6 +295,11 @@ def detalle_leccion(request, leccion_id):
                     ranking_actual.xp_ganada_esta_semana += puntos_a_ganar
                     ranking_actual.save()
                 
+                # 🚀 NUEVO: ¡DISPARADORES PARA LAS MISIONES DIARIAS!
+                # Asegúrate de importar 'registrar_avance_misiones' arriba si lo pusiste en un utils.py
+                registrar_avance_misiones(estudiante, 'xp', puntos_a_ganar)
+                registrar_avance_misiones(estudiante, 'lecciones', 1)
+                
                 mensaje += f" ¡Ganaste {puntos_a_ganar} XP!"
                     
             leccion.completada = True
@@ -477,6 +485,18 @@ def ligas(request):
     top_global = Estudiante.objects.all().order_by('-xp_total')[:50]
     contexto['top_global'] = top_global
 
+    # Colores y emojis por defecto por si ocurre un imprevisto
+    contexto['color_liga'] = "#ffaa00"  
+    contexto['emoji_liga'] = "🛡️"
+
+    # Mapeo de estilos según la división guardada en tu base de datos
+    estilos_ligas = {
+        "bronce": {"color": "#cd7f32", "emoji": "🟤"},
+        "plata": {"color": "#c0c0c0", "emoji": "⚪"},
+        "oro": {"color": "#ffaa00", "emoji": "🟡"},
+        "diamante": {"color": "#00e5ff", "emoji": "💎"},
+    }
+
     # LÓGICA PARA ESTUDIANTES
     if hasattr(request.user, 'estudiante'):
         contexto['tipo_usuario'] = 'estudiante'
@@ -494,17 +514,34 @@ def ligas(request):
             contexto['nombre_liga'] = ranking_usuario.liga.division
             contexto['competidores'] = competidores
         else:
-            contexto['nombre_liga'] = "Liga Bronce"
+            # Si no tiene ranking en la BD, usamos la propiedad de su XP total o por defecto "Liga Bronce"
+            liga_info = estudiante_actual.obtener_liga_info
+            contexto['nombre_liga'] = liga_info['nombre']
             contexto['competidores'] = []
+
+        # Buscamos qué color y emoji corresponde al nombre de la liga (Ej: "Liga Plata" -> "plata")
+        nombre_clean = contexto['nombre_liga'].lower()
+        key_encontrada = "bronce"  # Caída por defecto
+        for key in estilos_ligas:
+            if key in nombre_clean:
+                key_encontrada = key
+                break
+        
+        contexto['color_liga'] = estilos_ligas[key_encontrada]['color']
+        contexto['emoji_liga'] = estilos_ligas[key_encontrada]['emoji']
 
     # LÓGICA PARA RECLUTADORES
     elif hasattr(request.user, 'reclutador'):
         contexto['tipo_usuario'] = 'reclutador'
         contexto['nombre_liga'] = "Ranking de Talentos"
+        contexto['color_liga'] = "#00e5ff"  # Color Cyan tecnológico para reclutadores
+        contexto['emoji_liga'] = "⭐"
     
     else:
         contexto['tipo_usuario'] = 'reclutador'
         contexto['nombre_liga'] = "Ranking Global"
+        contexto['color_liga'] = "#888888"
+        contexto['emoji_liga'] = "🌐"
 
     return render(request, 'aprendizaje/ligas.html', contexto)
 
@@ -729,3 +766,83 @@ def marcar_notificaciones_leidas(request):
         Notificacion.objects.filter(usuario=request.user, leida=False).update(leida=True)
         return JsonResponse({'status': 'ok'})
     return JsonResponse({'status': 'error'}, status=400)
+
+def novedades_view(request):
+    # Traemos solo las novedades activas
+    lista_novedades = Novedad.objects.filter(activo=True)
+    return render(request, 'aprendizaje/novedades.html', {'novedades': lista_novedades})
+
+@login_required(login_url='login')
+def desafios(request):
+    contexto = {}
+    
+    if not hasattr(request.user, 'estudiante'):
+        return redirect('ligas')
+        
+    estudiante_actual = request.user.estudiante
+    hoy = now().date()
+    
+    progresos = ProgresoDesafio.objects.filter(estudiante=estudiante_actual, fecha=hoy)
+    
+    # NUEVA LÓGICA: Inicialización inteligente limitada a 3 desafíos
+    if not progresos.exists():
+        desafios_globales = list(DesafioDiario.objects.all())
+        
+        # Seleccionamos máximo 3 desafíos aleatorios del catálogo
+        cantidad_a_elegir = min(len(desafios_globales), 3)
+        desafios_hoy = random.sample(desafios_globales, cantidad_a_elegir)
+        
+        for desafio in desafios_hoy:
+            progreso_obj = ProgresoDesafio.objects.create(
+                estudiante=estudiante_actual,
+                desafio=desafio,
+                fecha=hoy
+            )
+            
+            # 💡 EXCEPCIÓN DE RACHA: Se comprueba inmediatamente al crearse
+            if desafio.tipo == 'racha':
+                racha_alumno = getattr(estudiante_actual, 'racha', 0) # Busca el campo 'racha'
+                progreso_obj.progreso_actual = min(racha_alumno, desafio.meta)
+                
+                if progreso_obj.progreso_actual >= desafio.meta:
+                    progreso_obj.completado = True
+                    # Le sumamos la XP de recompensa por su constancia
+                    estudiante_actual.xp_total += desafio.xp_recompensa
+                    estudiante_actual.save()
+                    
+                progreso_obj.save()
+                
+        # Volvemos a consultar para tener los 3 desafíos definitivos del día
+        progresos = ProgresoDesafio.objects.filter(estudiante=estudiante_actual, fecha=hoy)
+    
+    # Métricas de la terminal
+    totales = progresos.count()
+    completados = progresos.filter(completado=True).count()
+    
+    if totales > 0 and completados == totales:
+        contexto['status_terminal'] = "SISTEMA COMPLETADO - TODOS LOS OBJETIVOS ALCANZADOS"
+    elif totales > 0:
+        contexto['status_terminal'] = f"EJECUTANDO: {completados}/{totales} OBJETIVOS CONSEGUIDOS"
+    else:
+        contexto['status_terminal'] = "SISTEMA EN ESPERA - SIN MISIONES CONFIGURADAS"
+        
+    contexto['progresos'] = progresos
+    return render(request, 'aprendizaje/desafios.html', contexto)
+
+@login_required
+def completar_leccion(request, leccion_id):
+    # ... tu lógica para validar la lección ...
+    
+    estudiante = request.user.estudiante
+    
+    # 1. El alumno gana, por ejemplo, 10 XP normales por terminar la lección
+    estudiante.xp_total += 10
+    estudiante.save()
+    
+    # 2. 🚀 ¡DISPARAMOS LAS MISIONES DIARIAS!
+    # Avanza la misión de acumular XP hoy
+    registrar_avance_misiones(estudiante, 'xp', 10) 
+    # Avanza la misión de completar lecciones hoy (sumamos 1 lección)
+    registrar_avance_misiones(estudiante, 'lecciones', 1)
+    
+    return render(request, 'aprendizaje/leccion_terminada.html')

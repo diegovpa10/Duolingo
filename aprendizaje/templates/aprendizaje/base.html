@@ -10,17 +10,32 @@
 <style>
 :root {
     /* 🔴 EL DOMINIO DE ARQUÍMEDES (ROJO) */
-    --bg-color: #0a0a0a;          /* Negro profundo */
-    --card-bg: #121212;           /* Gris casi negro para tarjetas */
-    --text-color: #e0e0e0;        /* Gris claro para lectura */
-    --accent-color: #ff3333;      /* ROJO REDOWL NEÓN */
-    --secondary-accent: #222222;  /* Gris oscuro para bordes */
-    --btn-hover: #cc0000;         /* Rojo oscuro */
+    --bg-color: #0a0a0a;
+    --card-bg: #121212;
+    --text-color: #e0e0e0;
+    --accent-color: #ff3333;
+    --secondary-accent: #222222;
+    --btn-hover: #cc0000;
 
     /* 🔵 EL DOMINIO DE HEDWIG (AZUL SOPORTE) */
-    --support-color: #00e5ff;     /* Azul Cyan neón para resaltar en negro */
-    --support-bg: rgba(0, 229, 255, 0.1); /* Fondo azul transparente */
-    --support-border: #00acc1;    /* Borde azul brillante */
+    --support-color: #00e5ff;
+    --support-bg: rgba(0, 229, 255, 0.1);
+    --support-border: #00acc1;
+
+    /* 🟢 NUEVO: VARIABLES PARA INPUTS (MODO OSCURO) */
+    --input-bg: #111111;
+    --input-text: #ffffff;
+    --input-border: #333333;
+    --input-focus: #00ffff;
+
+    /* 🟢 VARIABLES PARA EL TABLERO DE MISIONES (MODO OSCURO) */
+    --tablero-bg: #111111;
+    --tablero-text: #e0e0e0;
+    --tablero-titulo: #00e5ff;          /* Cyan neón */
+    --tablero-requisitos-bg: #1a1a1a;
+    --tablero-asignado-bg: rgba(0, 255, 65, 0.05);
+    --tablero-asignado-border: #00ff41;  /* Verde neón */
+    --tablero-asignado-text: #00ff41;
 }
 
 [data-theme="light"] {
@@ -33,9 +48,105 @@
     --btn-hover: #b71c1c;
 
     /* 🔵 HEDWIG DE DÍA */
-    --support-color: #007bb5;     /* Azul profesional oscuro */
+    --support-color: #007bb5;
     --support-bg: rgba(0, 123, 181, 0.1);
     --support-border: #0288d1;
+
+    /* 🟢 NUEVO: VARIABLES PARA INPUTS (MODO CLARO) */
+    --input-bg: #ffffff;
+    --input-text: #1a1a1a;
+    --input-border: #cccccc;
+    --input-focus: #007bb5;
+
+    /* 🟢 VARIABLES PARA EL TABLERO DE MISIONES (MODO CLARO) */
+    --tablero-bg: #f9f9f9;
+    --tablero-text: #222222;
+    --tablero-titulo: #007bb5;          /* Azul profesional */
+    --tablero-requisitos-bg: #e0e0e0;   /* Gris claro sutil */
+    --tablero-asignado-bg: rgba(46, 125, 50, 0.1); /* Verde suave legible */
+    --tablero-asignado-border: #2e7d32; /* Verde bosque */
+    --tablero-asignado-text: #2e7d32;
+}
+
+/* =========================================
+   ESTILOS DINÁMICOS PARA FORMULARIOS
+   ========================================= */
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="number"], 
+textarea, 
+select {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    width: 100%; /* Para asegurar que llenen el espacio de su contenedor */
+}
+
+/* Efecto Focus: Cuando el usuario da clic para escribir */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--input-focus);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Corrección del autocompletado de los navegadores usando variables dinámicas */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--input-text) !important;
+    -webkit-box-shadow: 0 0 0px 1000px var(--input-bg) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Estilo para los placeholders dinámicos */
+::placeholder {
+    color: #888888;
+    opacity: 1;
+}
+
+/* =========================================
+   ESTILOS DINÁMICOS PARA LA BOLSA DE TRABAJO
+   ========================================= */
+.mision-card {
+    background-color: var(--tablero-bg) !important;
+    color: var(--tablero-text) !important;
+    border: 1px solid var(--secondary-accent);
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.mision-card h3 {
+    color: var(--tablero-titulo) !important;
+}
+
+.mision-requisitos {
+    background-color: var(--tablero-requisitos-bg) !important;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.mision-asignada-box {
+    background-color: var(--tablero-asignado-bg) !important;
+    border: 1px solid var(--tablero-asignado-border) !important;
+    color: var(--tablero-asignado-text) !important;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
 }
 
 * {
@@ -532,6 +643,10 @@ form input[type="checkbox"] {
                 <span class="menu-icon">➕</span> Publicar Oferta
             </a>
         {% endif %}
+
+        <a href="{% url 'novedades' %}" class="menu-btn {% if request.path == '/novedades/' %}active{% endif %}">
+            <span class="menu-icon">📢</span> Novedades
+        </a>
 
         <a href="{% url 'ligas' %}" class="menu-btn {% if request.path == '/ligas/' %}active{% endif %}">
             <span class="menu-icon">🛡️</span> Ligas
