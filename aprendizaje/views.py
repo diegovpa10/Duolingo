@@ -1,27 +1,27 @@
-import sys
-import io
 import json
 import subprocess
 import tempfile
 import os
 import random
+from datetime import timedelta
 
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import *
-from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, logout
-from django.shortcuts import redirect
-from django.contrib.auth.hashers import make_password, check_password
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Curso, Leccion, Ejercicio, Estudiante, Reclutador, PerfilProfesional, Amistad, RetoCodigo, RetoInteractivo, OfertaLaboral, RankingSemanal, LigaSemanal, Postulacion, PerfilProfesional, Notificacion, Novedad, DesafioDiario, ProgresoDesafio
-from .forms import RegistroRedOwlForm, EditarEstudianteForm, EditarPerfilProfesionalForm, EditarReclutadorForm
+from .utils import registrar_avance_misiones, evaluar_codigo, evaluar_reto_interactivo
 from django.utils import timezone
 from django.utils.timezone import now
-from datetime import timedelta
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import OfertaLaboralForm
+from django.contrib import messages
+from django.http import JsonResponse
+
+from .models import (Curso, Leccion, Ejercicio, Estudiante, Reclutador, 
+                     PerfilProfesional, Amistad, OfertaLaboral, RankingSemanal, 
+                     LigaSemanal, Postulacion, Notificacion, Novedad, 
+                     DesafioDiario, ProgresoDesafio, ProgresoLeccion)
+from .forms import (RegistroRedOwlForm, EditarEstudianteForm, 
+                    EditarPerfilProfesionalForm, EditarReclutadorForm, 
+                    OfertaLaboralForm)
 from .utils import registrar_avance_misiones
 
 @login_required(login_url='login')
@@ -34,8 +34,21 @@ def lista_cursos(request):
 
 def detalle_curso(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)  
-    # Buscamos las lecciones de este curso específico
     lecciones = Leccion.objects.filter(curso=curso).order_by('orden')
+    
+    # Pre-calculamos el estado de bloqueo y completado para inyectarlo al HTML
+    if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
+        estudiante = request.user.estudiante
+        for leccion in lecciones:
+            leccion.bloqueada = leccion.esta_bloqueada_para(estudiante)
+            progreso = ProgresoLeccion.objects.filter(estudiante=estudiante, leccion=leccion).first()
+            leccion.esta_completada = progreso.completada if progreso else False
+    else:
+        # Si no hay estudiante, bloqueamos todo menos la lección 1 por defecto
+        for leccion in lecciones:
+            leccion.bloqueada = (leccion.orden != 1)
+            leccion.esta_completada = False
+
     return render(request, 'aprendizaje/detalle_curso.html', {
         'curso': curso, 
         'lecciones': lecciones
@@ -44,6 +57,16 @@ def detalle_curso(request, curso_id):
 def detalle_leccion(request, leccion_id):
     leccion = get_object_or_404(Leccion, id=leccion_id)
     ejercicios = Ejercicio.objects.filter(leccion=leccion)
+
+    # 🛡️ NUEVO CERROJO DE SEGURIDAD: Evitar acceso por URL
+    if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
+        estudiante = request.user.estudiante
+        if leccion.esta_bloqueada_para(estudiante):
+            # Si está bloqueada, lo regresamos al mapa del curso
+            return redirect('detalle_curso', curso_id=leccion.curso.id)
+    elif leccion.orden != 1:
+        # Si no está logueado y no es la lección 1, también lo rebotamos
+        return redirect('detalle_curso', curso_id=leccion.curso.id)
     
     # Variables para enviar a la plantilla
     mensaje = None
@@ -81,67 +104,11 @@ def detalle_leccion(request, leccion_id):
             respuesta_alumno = request.POST.get('respuesta_alumno', '').strip()
             
             if reto:
-                config = reto.configuracion
-                try:
-                    if tipo_reto == 'OM':
-                        if respuesta_alumno and int(respuesta_alumno) == int(config.get('indice_correcto', -1)):
-                            mensaje = "¡Excelente! Respuesta correcta. 🔮"
-                            es_correcto = True
-                        else:
-                            mensaje = "❌ Respuesta incorrecta. Vuelve a intentarlo."
-                            es_correcto = False
-
-                    elif tipo_reto == 'RH':
-                        respuesta_esperada = config.get('respuesta_correcta', '').strip()
-                        if respuesta_alumno.lower() == respuesta_esperada.lower():
-                            mensaje = "¡Excelente! Has completado el espacio correctamente. 🔮"
-                            es_correcto = True
-                        else:
-                            mensaje = "❌ Respuesta incorrecta. El texto no coincide."
-                            es_correcto = False
-
-                    elif tipo_reto == 'OT':
-                        try:
-                            lista_alumno = json.loads(respuesta_alumno) if respuesta_alumno else []
-                        except json.JSONDecodeError:
-                            lista_alumno = []
-                        lista_esperada = config.get('orden_correcto', [])
-                        
-                        if lista_alumno == lista_esperada:
-                            mensaje = "¡Perfecto! El orden es totalmente correcto. 🔮"
-                            es_correcto = True
-                        else:
-                            if len(lista_alumno) < len(lista_esperada):
-                                mensaje = "⚠️ Parece que olvidaste arrastrar algunos bloques. ¡Inténtalo de nuevo!"
-                            else:
-                                mensaje = "❌ El orden no es el correcto. Revisa la lógica paso a paso."
-                            es_correcto = False
-
-                    elif tipo_reto == 'EP':
-                        try:
-                            dict_alumno = json.loads(respuesta_alumno) if respuesta_alumno else {}
-                        except json.JSONDecodeError:
-                            dict_alumno = {}
-                            
-                        dict_esperado = config.get('parejas', {})
-                        
-                        if dict_alumno == dict_esperado:
-                            mensaje = "¡Espléndido! Has enlazado todos los conceptos con su definición correcta. 🔮"
-                            es_correcto = True
-                        else:
-                            if len(dict_alumno) < len(dict_esperado):
-                                mensaje = "⚠️ Faltan conceptos por enlazar en la matriz de juego."
-                            else:
-                                mensaje = "❌ Algunos enlaces no son correctos. Haz clic en los bloques morados para romper el enlace e intentar de nuevo."
-                            es_correcto = False
-
-                except Exception as e:
-                    mensaje = f"⚠️ Error al procesar los datos del reto: {str(e)}"
-                    es_correcto = False
+                # 🚀 LLAMAMOS A NUESTRA NUEVA HERRAMIENTA EXTERNA
+                es_correcto, mensaje = evaluar_reto_interactivo(tipo_reto, respuesta_alumno, reto.configuracion)
             else:
                 mensaje = "⚠️ El reto interactivo no está configurado correctamente en la base de datos."
                 es_correcto = False
-
         # ---------------------------------------------------------
         # 💻 RAMA B: PROCESAR RETO DE CÓDIGO
         # ---------------------------------------------------------
@@ -149,14 +116,7 @@ def detalle_leccion(request, leccion_id):
             codigo_recibido = request.POST.get('codigo_alumno', '')
             codigo_previo = codigo_recibido 
             
-            nombre_curso = leccion.curso.nombre.lower()
-            if 'javascript' in nombre_curso or 'js' in nombre_curso:
-                lenguaje = 'javascript'
-            elif 'java' in nombre_curso:
-                lenguaje = 'java'
-            else:
-                lenguaje = 'python'
-            
+            # 1. Buscamos el output esperado en el JSON
             expected_output = ""
             if ejercicio_actual and hasattr(ejercicio_actual, 'retocodigo'):
                 casos_prueba = ejercicio_actual.retocodigo.casos_prueba
@@ -167,53 +127,8 @@ def detalle_leccion(request, leccion_id):
                         casos_prueba = {}
                 expected_output = casos_prueba.get('test_1', {}).get('expected_output', '').strip()
 
-            salida_texto = ""
-            error_texto = ""
-
-            try:
-                if lenguaje == 'java':
-                    with tempfile.TemporaryDirectory() as temp_dir:
-                        file_path = os.path.join(temp_dir, 'Main.java')
-                        with open(file_path, 'w', encoding='utf-8') as f:
-                            f.write(codigo_recibido)
-                        
-                        compilacion = subprocess.run(['javac', 'Main.java'], cwd=temp_dir, capture_output=True, text=True, timeout=5)
-                        if compilacion.returncode != 0:
-                            error_texto = f"Error de sintaxis en Java:\n{compilacion.stderr.strip()}"
-                        else:
-                            ejecucion = subprocess.run(['java', 'Main'], cwd=temp_dir, capture_output=True, text=True, timeout=3)
-                            salida_texto = ejecucion.stdout.strip()
-                            error_texto = ejecucion.stderr.strip()
-                elif lenguaje == 'javascript':
-                    resultado = subprocess.run(['node', '-e', codigo_recibido], capture_output=True, text=True, timeout=3)
-                    salida_texto = resultado.stdout.strip()
-                    error_texto = resultado.stderr.strip()
-                else:
-                    resultado = subprocess.run(['python', '-c', codigo_recibido], capture_output=True, text=True, timeout=3)
-                    salida_texto = resultado.stdout.strip()
-                    error_texto = resultado.stderr.strip()
-
-                if error_texto and not salida_texto:
-                    mensaje = f"Ups, encontramos un error:\n{error_texto}"
-                    es_correcto = False
-                else:
-                    if expected_output:
-                        if salida_texto == expected_output:
-                            mensaje = f"¡Perfecto! Tu código imprimió exactamente: {salida_texto}"
-                            es_correcto = True
-                        else:
-                            mensaje = f"Salida incorrecta. Se esperaba '{expected_output}', pero tu código imprimió: '{salida_texto}'"
-                            es_correcto = False
-                    else:
-                        mensaje = f"¡Tu código corrió sin errores! Resultado: {salida_texto}"
-                        es_correcto = True
-
-            except subprocess.TimeoutExpired:
-                mensaje = "Tu código tardó demasiado. ¿Tienes un ciclo infinito?"
-                es_correcto = False
-            except Exception as e:
-                mensaje = f"Error del servidor: {str(e)}"
-                es_correcto = False
+            # 2. 🚀 LLAMAMOS A NUESTRA HERRAMIENTA EXTERNA
+            es_correcto, mensaje = evaluar_codigo(leccion.curso.nombre, codigo_recibido, expected_output)
 
         # =========================================================
         # SISTEMA DE ENERGÍA (⚡) Y RACHAS
@@ -256,9 +171,17 @@ def detalle_leccion(request, leccion_id):
     # BONO POR LECCIÓN COMPLETADA
     # =========================================================
     if es_correcto:
-        if not leccion.completada:
-            if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
-                estudiante = request.user.estudiante
+        if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
+            estudiante = request.user.estudiante
+            
+            # 🚀 NUEVO: Buscamos o creamos el progreso para ESTE estudiante
+            progreso_leccion, created = ProgresoLeccion.objects.get_or_create(
+                estudiante=estudiante, 
+                leccion=leccion
+            )
+            
+            # Si el registro no estaba marcado como completado, damos la recompensa
+            if not progreso_leccion.completada:
                 puntos_a_ganar = ejercicio_actual.xp_recompensa if ejercicio_actual else 15
                 estudiante.xp_total += puntos_a_ganar 
                 
@@ -285,8 +208,9 @@ def detalle_leccion(request, leccion_id):
                 
                 mensaje += f" ¡Ganaste {puntos_a_ganar} XP!"
                     
-            leccion.completada = True
-            leccion.save()
+                # 🚀 NUEVO: Guardamos el progreso como completado en la tabla intermedia
+                progreso_leccion.completada = True
+                progreso_leccion.save()
 
     ejercicios_con_datos = []
     for ej in ejercicios:
@@ -504,10 +428,6 @@ def ligas(request):
 
     return render(request, 'aprendizaje/ligas.html', contexto)
 
-@login_required(login_url='login')
-def desafios(request):
-    return render(request, 'aprendizaje/desafios.html')
-
 def login_usuario(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -622,26 +542,6 @@ from django.contrib.auth.decorators import login_required
 from .models import OfertaLaboral, Postulacion
 
 @login_required
-def dashboard_reclutador(request):
-    # Verificamos que el usuario tenga el perfil de reclutador
-    if not hasattr(request.user, 'reclutador'):
-        return redirect('bolsa_trabajo') # Si es estudiante, lo mandamos a la bolsa
-        
-    reclutador = request.user.reclutador
-    
-    # Traemos las ofertas creadas por este reclutador específico
-    # Usamos prefetch_related o un contador para saber cuántas postulaciones tiene cada una
-    ofertas = OfertaLaboral.objects.filter(reclutador=reclutador).order_by('-fecha_publicacion')
-    
-    # Añadimos el conteo de postulaciones de forma dinámica para mostrarlo en el HTML
-    for oferta in ofertas:
-        oferta.total_postulantes = oferta.postulacion_set.count()
-
-    return render(request, 'aprendizaje/dashboard_reclutador.html', {
-        'ofertas': ofertas
-    })
-
-@login_required
 def ver_postulantes(request, oferta_id):
     if not hasattr(request.user, 'reclutador'):
         return redirect('bolsa_trabajo')
@@ -753,21 +653,3 @@ def desafios(request):
         
     contexto['progresos'] = progresos
     return render(request, 'aprendizaje/desafios.html', contexto)
-
-@login_required
-def completar_leccion(request, leccion_id):
-    # ... tu lógica para validar la lección ...
-    
-    estudiante = request.user.estudiante
-    
-    # 1. El alumno gana, por ejemplo, 10 XP normales por terminar la lección
-    estudiante.xp_total += 10
-    estudiante.save()
-    
-    # 2. 🚀 ¡DISPARAMOS LAS MISIONES DIARIAS!
-    # Avanza la misión de acumular XP hoy
-    registrar_avance_misiones(estudiante, 'xp', 10) 
-    # Avanza la misión de completar lecciones hoy (sumamos 1 lección)
-    registrar_avance_misiones(estudiante, 'lecciones', 1)
-    
-    return render(request, 'aprendizaje/leccion_terminada.html')
