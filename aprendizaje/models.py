@@ -14,7 +14,7 @@ class Estudiante(models.Model):
     xp_total = models.BigIntegerField(default=0)
     fecha_ultima_leccion = models.DateField(null=True, blank=True)
     fecha_ultima_recarga = models.DateTimeField(default=timezone.now, null=True, blank=True)
-    energia = models.IntegerField(default=5) 
+    energia = models.IntegerField(default=10) 
     racha_ejercicios = models.IntegerField(default=0)
     avatar = models.ImageField(upload_to='avatares/', default='avatares/default_owl.png', null=True, blank=True)
     escuela = models.CharField(max_length=200, blank=True, null=True)

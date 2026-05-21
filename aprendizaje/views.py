@@ -147,21 +147,21 @@ def detalle_leccion(request, leccion_id):
                     ranking_actual.save()
                 
                 if estudiante.racha_ejercicios == 3:
-                    estudiante.energia = min(5, estudiante.energia + 1)
+                    estudiante.energia = min(10, estudiante.energia + 1)
                     mensaje += "\n\n⚡ ¡Racha de 3 aciertos! Has recuperado 1 de energía."
                 elif estudiante.racha_ejercicios == 5:
-                    estudiante.energia = min(5, estudiante.energia + 2)
+                    estudiante.energia = min(10, estudiante.energia + 2)
                     mensaje += "\n\n⚡ ¡Racha de 5 aciertos! Has recuperado 2 de energía."
                 elif estudiante.racha_ejercicios == 7:
-                    estudiante.energia = min(5, estudiante.energia + 3)
+                    estudiante.energia = min(10, estudiante.energia + 3)
                     mensaje += "\n\n⚡ ¡Imparable! (7 aciertos) Has recuperado 3 de energía."
             else:
                 estudiante.racha_ejercicios = 0 
                 if estudiante.energia > 0:
-                    if estudiante.energia == 5:
+                    if estudiante.energia == 10:
                         estudiante.fecha_ultima_recarga = timezone.now()
                     estudiante.energia -= 1
-                    mensaje += f"\n\n⚠️ ¡Fallaste! Pierdes 1 de energía. Nivel actual: {estudiante.energia}/5 ⚡."
+                    mensaje += f"\n\n⚠️ ¡Fallaste! Pierdes 1 de energía. Nivel actual: {estudiante.energia}/10 ⚡."
                 else:
                     mensaje = "❌ ¡ENERGÍA AGOTADA! Sistema bloqueado. Espera a recargar."
             
