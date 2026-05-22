@@ -138,7 +138,7 @@
                                         🏢 <strong>Empresa:</strong> {{ item.oferta.reclutador.empresa|default:"No especificada" }}
                                     </p>
                                     <p style="color: var(--support-color); margin: 0; font-size: 0.9rem;">
-                                        📧 <strong>Contacto:</strong> {{ item.oferta.reclutador.usuario.email }}
+                                        📧 <strong>Contacto:</strong> {{ item.oferta.reclutador.contacto|default:item.oferta.reclutador.usuario.email|default:"Sin contacto" }}
                                     </p>
                                 </div>
                             </div>

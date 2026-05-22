@@ -218,9 +218,22 @@
 
         {% else %}
             <h2 class="stats-header">Panel de Contratista</h2>
-            <div class="edit-section" style="text-align: center; padding: 50px;">
-                <h3 style="color: var(--text-color); margin-bottom: 15px;">Módulo de Reclutamiento En Construcción</h3>
-                <p style="color: #888;">Próximamente podrás publicar ofertas de trabajo y buscar operadores calificados desde este panel.</p>
+            
+            <div class="edit-section">
+                <h2 class="stats-header" style="font-size: 1.2rem; margin-bottom: 15px;">Actualizar Información de Contacto</h2>
+                <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">
+                    Actualiza los datos de tu empresa. Esta información será visible para los operadores calificados cuando completen tus misiones.
+                </p>
+
+                <form method="POST" class="edit-form">
+                    {% csrf_token %}
+                    
+                    <div style="display: grid; gap: 20px; max-width: 600px;">
+                        {{ form_reclutador.as_p }}
+                    </div>
+                    
+                    <button type="submit" class="btn" style="margin-top: 20px;">GUARDAR CAMBIOS</button>
+                </form>
             </div>
         {% endif %}
 

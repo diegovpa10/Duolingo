@@ -12,7 +12,7 @@ def regeneracion_energia(request):
             estudiante.fecha_ultima_recarga = ahora
             estudiante.save()
 
-        if estudiante.energia < 5:
+        if estudiante.energia < 10:
             tiempo_pasado = ahora - estudiante.fecha_ultima_recarga
             minutos_pasados = tiempo_pasado.total_seconds() / 60
             
@@ -21,8 +21,8 @@ def regeneracion_energia(request):
             
             if puntos_recuperados > 0:
                 nueva_energia = estudiante.energia + puntos_recuperados
-                if nueva_energia >= 5:
-                    estudiante.energia = 5
+                if nueva_energia >= 10:
+                    estudiante.energia = 10
                     estudiante.fecha_ultima_recarga = ahora
                 else:
                     estudiante.energia = nueva_energia

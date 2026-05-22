@@ -3,9 +3,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.timezone import now
+from datetime import date, timedelta
 
 # --- 1. SISTEMA DE USUARIOS ---
-
 # La clase usuario creada a mano fue eliminado para usar la predefinida de Django
 
 class Estudiante(models.Model):
@@ -14,13 +14,49 @@ class Estudiante(models.Model):
     xp_total = models.BigIntegerField(default=0)
     fecha_ultima_leccion = models.DateField(null=True, blank=True)
     fecha_ultima_recarga = models.DateTimeField(default=timezone.now, null=True, blank=True)
-    energia = models.IntegerField(default=5) 
+    energia = models.IntegerField(default=10) 
     racha_ejercicios = models.IntegerField(default=0)
     avatar = models.ImageField(upload_to='avatares/', default='avatares/default_owl.png', null=True, blank=True)
     escuela = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f"Estudiante: {self.usuario.username}"
+    
+    def verificar_y_limpiar_racha(self):
+        """
+        Comprueba si el estudiante dejó pasar más de un día sin completar lecciones.
+        Si es así, la racha se rompe y vuelve a 0.
+        Se debe ejecutar cada vez que el estudiante entra a su panel principal.
+        """
+        hoy = date.today()
+        if self.fecha_ultima_leccion:
+            diferencia = hoy - self.fecha_ultima_leccion
+            # Si ha pasado más de 1 día completo desde su última lección (ej: hoy es miércoles y su última lección fue el lunes)
+            if diferencia.days > 1:
+                self.racha_dias = 0
+                self.save()
+
+    def extender_racha(self):
+        """
+        Suma un día a la racha o la mantiene si ya hizo un ejercicio hoy.
+        Se ejecuta SOLO cuando completa un ejercicio NUEVO.
+        """
+        hoy = date.today()
+        ayer = hoy - timedelta(days=1)
+
+        if self.fecha_ultima_leccion == hoy:
+            # Ya hizo un ejercicio hoy, la racha se mantiene igual (no se suma doble)
+            pass
+        elif self.fecha_ultima_leccion == ayer:
+            # Su última lección fue ayer, ¡mantiene la continuidad! Suma 1 día
+            self.racha_dias += 1
+            self.fecha_ultima_leccion = hoy
+        else:
+            # No tenía racha activa o se había roto. Inicia una racha nueva de 1 día
+            self.racha_dias = 1
+            self.fecha_ultima_leccion = hoy
+        
+        self.save()
 
     # 🛡️ SISTEMA DE LIGAS DINÁMICO
     @property
@@ -63,6 +99,7 @@ class Estudiante(models.Model):
 class Reclutador(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     empresa = models.CharField(max_length=200)
+    contacto = models.CharField(max_length=200, blank=True, null=True, help_text="Correo electrónico o URL de LinkedIn")
 
     def __str__(self):
         return f"Reclutador: {self.empresa} ({self.usuario.username})"
@@ -116,7 +153,7 @@ class Leccion(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     orden = models.PositiveIntegerField()
     titulo = models.CharField(max_length=200)
-    completada = models.BooleanField(default=False)
+    # ❌ Borramos: completada = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('curso', 'orden')
@@ -124,22 +161,36 @@ class Leccion(models.Model):
     def __str__(self):
         return f"{self.orden}. {self.titulo} ({self.curso.nombre})"
     
-    # 👇 ¡FÍJATE EN LOS ESPACIOS AQUÍ! Debe estar alineado con el def __str__ 👇
-    @property
-    def esta_bloqueada(self):
+    # 👇 NUEVA LÓGICA: Ahora evalúa por estudiante
+    def esta_bloqueada_para(self, estudiante):
         # La lección 1 nunca está bloqueada
         if self.orden == 1:
             return False
             
-        # --- ¡NUEVA LÓGICA! ---
-        # Obtenemos TODAS las lecciones anteriores del mismo curso en orden
-        lecciones_anteriores = Leccion.objects.filter(curso=self.curso, orden__lt=self.orden)
-            
-        # Usamos 'all()' para verificar que CADA UNA de las lecciones anteriores esté completada.
-        # Si NO todas están completadas (not all(...)), entonces esta lección está bloqueada.
-        if not all(leccion.completada for leccion in lecciones_anteriores):
-            return True   
-        return False
+        # Buscamos la lección anterior
+        leccion_anterior = Leccion.objects.filter(curso=self.curso, orden=self.orden - 1).first()
+        
+        if leccion_anterior:
+            # Buscamos si el estudiante actual completó esa lección anterior
+            progreso = ProgresoLeccion.objects.filter(estudiante=estudiante, leccion=leccion_anterior).first()
+            if progreso and progreso.completada:
+                return False # Si completó la anterior, esta NO está bloqueada
+                
+        return True # En cualquier otro caso, está bloqueada
+    
+class ProgresoLeccion(models.Model):
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE)
+    leccion = models.ForeignKey(Leccion, on_delete=models.CASCADE)
+    completada = models.BooleanField(default=False)
+    fecha_completado = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Asegura que un estudiante no pueda tener dos registros de la misma lección
+        unique_together = ('estudiante', 'leccion') 
+
+    def __str__(self):
+        estado = "Completada" if self.completada else "Pendiente"
+        return f"{self.estudiante.usuario.username} - {self.leccion.titulo}: {estado}"
 
 class Ejercicio(models.Model):
     TIPOS = [('C', 'Código'), ('Q', 'Quiz')]

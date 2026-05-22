@@ -85,17 +85,15 @@ select {
     font-size: 0.95rem;
     font-family: inherit;
     transition: all 0.3s ease;
-    width: 100%; /* Para asegurar que llenen el espacio de su contenedor */
+    width: 100%;
 }
 
-/* Efecto Focus: Cuando el usuario da clic para escribir */
 input:focus, textarea:focus, select:focus {
     outline: none;
     border-color: var(--input-focus);
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Corrección del autocompletado de los navegadores usando variables dinámicas */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus,
@@ -110,7 +108,6 @@ select:-webkit-autofill:focus {
     transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Estilo para los placeholders dinámicos */
 ::placeholder {
     color: #888888;
     opacity: 1;
@@ -129,9 +126,7 @@ select:-webkit-autofill:focus {
     transition: all 0.3s ease;
 }
 
-.mision-card h3 {
-    color: var(--tablero-titulo) !important;
-}
+.mision-card h3 { color: var(--tablero-titulo) !important; }
 
 .mision-requisitos {
     background-color: var(--tablero-requisitos-bg) !important;
@@ -168,7 +163,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 5%; /* Ajustado para dar más espacio a los lados */
+    padding: 1.5rem 5%;
     background-color: var(--bg-color);
     border-bottom: 1px solid var(--secondary-accent);
     position: sticky;
@@ -184,11 +179,19 @@ body {
     text-decoration: none;
 }
 
-.logo span {
-    color: var(--accent-color);
+.logo span { color: var(--accent-color); }
+
+/* BOTÓN HAMBURGUESA PARA MÓVIL */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.8rem;
+    cursor: pointer;
+    margin-right: 15px;
 }
 
-/* TARJETAS CON HOVER ROJO */
 .card {
     background-color: var(--card-bg);
     border: 1px solid var(--secondary-accent);
@@ -200,13 +203,12 @@ body {
 
 .card:hover { border-color: var(--accent-color); }
 
-/* BOTONES ROJOS */
 .btn {
     display: inline-block;
     background-color: var(--accent-color);
     color: white;
     padding: 12px 24px;
-    border-radius: 12px; /* Redondeado para verse más moderno */
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 700;
     font-size: 0.8rem;
@@ -218,10 +220,7 @@ body {
     text-align: center;
 }
 
-.btn:hover {
-    background-color: var(--btn-hover);
-    box-shadow: 0 4px 0 #990000; transform: translateY(-2px);
-}
+.btn:hover { background-color: var(--btn-hover); box-shadow: 0 4px 0 #990000; transform: translateY(-2px); }
 .btn:active { transform: translateY(2px); box-shadow: 0 0 0 #990000; }
 
 .btn-outline {
@@ -229,42 +228,21 @@ body {
     border: 2px solid var(--accent-color);
     color: var(--accent-color);
 }
-
 .btn-outline:hover {
-    background-color: rgba(255, 51, 51, 0.1);
-    color: var(--accent-color);
-    box-shadow: none;
-    transform: none;
+    background-color: rgba(255, 51, 51, 0.1); color: var(--accent-color); box-shadow: none; transform: none;
 }
 
-/* EDITOR DE CÓDIGO CON MARCA ROJA */
 .editor-codigo {
-    width: 100%;
-    height: 200px;
-    background-color: #000;
-    color: #00ff41; 
-    font-family: 'Courier New', monospace;
-    padding: 15px;
-    border: 1px solid #222;
-    border-left: 3px solid var(--accent-color);
-    border-radius: 2px;
-    margin-top: 10px;
-    resize: vertical;
+    width: 100%; height: 200px; background-color: #000; color: #00ff41; 
+    font-family: 'Courier New', monospace; padding: 15px;
+    border: 1px solid #222; border-left: 3px solid var(--accent-color);
+    border-radius: 2px; margin-top: 10px; resize: vertical;
 }
 
-/* UTILIDADES */
 .d-flex { display: flex; }
 .justify-content-between { justify-content: space-between; }
 .align-items-center { align-items: center; }
-
-/* MODO DARK/LIGHT SWITCH */
-.theme-toggle {
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: var(--text-color);
-    font-size: 1.2rem;
-}
+.theme-toggle { cursor: pointer; background: none; border: none; color: var(--text-color); font-size: 1.2rem; }
 
 /* =========================================
    ESTRUCTURA BASE (LIMPIA Y SEPARADA)
@@ -278,18 +256,14 @@ body {
     padding: 0 20px;
     min-height: 80vh;
     width: 100%;
-    /* Por defecto (Login/Registro sin menú) se centra en la pantalla */
     justify-content: center; 
 }
 
-/* Cuando el usuario SÍ tiene menú, alineamos todo a la izquierda */
-.app-container.con-menu {
-    justify-content: flex-start;
-}
+.app-container.con-menu { justify-content: flex-start; }
 
 .sidebar-menu {
     width: 200px;
-    flex-shrink: 0; /* Obliga al menú a no encogerse nunca */
+    flex-shrink: 0;
     position: sticky;
     top: 100px;
     height: fit-content;
@@ -298,56 +272,43 @@ body {
     gap: 10px;
 }
 
-.content-area {
-    flex-grow: 1; /* El área de contenido toma todo el espacio libre restante */
-    max-width: 100%;
-}
+.content-area { flex-grow: 1; max-width: 100%; }
 
 /* =========================================
-   📱 NAVEGACIÓN MÓVIL (APP STYLE)
+   📱 RESPONSIVE Y MENÚ MÓVIL (DESLIZANTE)
    ========================================= */
-.mobile-bottom-nav { display: none; } /* Oculto en PC */
-
 @media (max-width: 768px) {
-    .sidebar-menu { display: none; } /* Oculta el menú lateral en PC */
+    /* Mostramos el botón hamburguesa */
+    .hamburger-btn { display: block; }
     
-    .app-container {
-        margin-bottom: 80px; /* Deja espacio para que el menú no tape el contenido */
-        padding: 0 15px;
-    }
+    /* Adaptamos el contenedor principal */
+    .app-container { padding: 0 15px; }
 
-    /* Barra inferior estilo App */
-    .mobile-bottom-nav {
-        display: flex;
+    /* El menú lateral se convierte en un panel deslizante */
+    .sidebar-menu {
         position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: var(--bg-color);
-        border-top: 1px solid var(--secondary-accent);
-        z-index: 2000;
-        justify-content: space-around;
-        padding: 12px 0;
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        top: 0;
+        left: -100%; /* Oculto fuera de la pantalla por defecto */
+        width: 260px;
+        height: 100vh;
+        background-color: var(--card-bg);
+        border-right: 1px solid var(--secondary-accent);
+        padding: 90px 20px 20px 20px; /* 90px de top para quedar bajo la navbar */
+        z-index: 999; /* La navbar tiene 1000, así que pasa por debajo */
+        transition: left 0.3s ease-in-out;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.5);
     }
 
-    .mobile-nav-btn {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        color: #888;
-        text-decoration: none;
-        font-size: 0.65rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        gap: 5px;
-        transition: color 0.2s;
-    }
+    /* Clase que añadimos con JavaScript para mostrarlo */
+    .sidebar-menu.active { left: 0; }
 
-    .mobile-nav-btn .menu-icon { font-size: 1.4rem; filter: grayscale(100%); }
+    /* Optimizamos la Navbar para que todo quepa en móviles */
+    .logo-text-academy { display: none; } /* Esconde "ACADEMY" */
+    .user-info-text { display: none; } /* Esconde "Usuario | 10 XP" */
+    .energia-texto { display: none; } /* Esconde "5/5" de la energía */
+    .btn-salir-text { display: none; } /* Esconde el texto de salir */
     
-    .mobile-nav-btn.active { color: var(--accent-color); }
-    .mobile-nav-btn.active .menu-icon { filter: drop-shadow(0 0 5px rgba(255,51,51,0.5)) grayscale(0%); }
+    .navbar { padding: 1rem 15px; }
 }
 
 .menu-btn {
@@ -356,7 +317,7 @@ body {
     gap: 15px;
     padding: 12px 20px;
     color: var(--text-color);
-    text-decoration: none; /* Esto quita el subrayado feo */
+    text-decoration: none;
     font-weight: 700;
     font-size: 0.9rem;
     border-radius: 12px;
@@ -366,148 +327,67 @@ body {
     letter-spacing: 1px;
 }
 
-.menu-btn:hover { 
-    background-color: var(--secondary-accent); 
-}
-
+.menu-btn:hover { background-color: var(--secondary-accent); }
 .menu-btn.active {
     background-color: rgba(255, 51, 51, 0.1);
     border-color: var(--accent-color);
     color: var(--accent-color);
 }
-
-.menu-icon { 
-    font-size: 1.5rem; 
-}
+.menu-icon { font-size: 1.5rem; }
 
 /* =========================================
-   🔵 HEDWIG: ASISTENTE DE CÓDIGO
+   🔵 HEDWIG & ENERGÍA (SISTEMAS)
    ========================================= */
 .hedwig-box {
-    display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    background-color: var(--support-bg);
-    border: 2px solid var(--support-border);
-    border-radius: 12px;
-    padding: 15px;
-    margin-top: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    animation: aparecer 0.3s ease-out; /* Una pequeña animación de entrada */
+    display: flex; align-items: flex-start; gap: 15px; background-color: var(--support-bg);
+    border: 2px solid var(--support-border); border-radius: 12px; padding: 15px; margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); animation: aparecer 0.3s ease-out;
 }
+.hedwig-icon { font-size: 2.5rem; flex-shrink: 0; filter: drop-shadow(0 0 5px var(--support-color)); }
+.hedwig-text { color: var(--text-color); font-size: 0.95rem; font-weight: 500; line-height: 1.5; }
+.hedwig-text span { color: var(--support-color); font-weight: 800; }
 
-.hedwig-icon {
-    font-size: 2.5rem;
-    flex-shrink: 0;
-    filter: drop-shadow(0 0 5px var(--support-color)); /* Le da un brillo mágico/tech */
-}
+@keyframes aparecer { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-.hedwig-text {
-    color: var(--text-color);
-    font-size: 0.95rem;
-    font-weight: 500;
-    line-height: 1.5;
-}
-
-.hedwig-text span {
-    color: var(--support-color);
-    font-weight: 800;
-}
-
-/* Animación para que Hedwig no aparezca de golpe */
-@keyframes aparecer {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* =========================================
-   SISTEMA DE ENERGÍA (⚡)
-   ========================================= */
 .energia-nav-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background-color: #0a0a0a;
-    border: 1px solid rgba(255, 51, 51, 0.3);
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-family: monospace;
+    display: flex; align-items: center; gap: 8px; background-color: #0a0a0a;
+    border: 1px solid rgba(255, 51, 51, 0.3); padding: 5px 12px; border-radius: 20px; font-family: monospace;
 }
+.energia-icon { color: #ffcc00; font-size: 1.1rem; animation: pulse-energia 2s infinite alternate; }
+.energia-bar-wrapper { width: 60px; height: 10px; background-color: #1a1a1a; border-radius: 5px; overflow: hidden; border: 1px solid #333; }
+.energia-bar { height: 100%; background: linear-gradient(90deg, #ff3333, #ff6666); box-shadow: 0 0 8px rgba(255, 51, 51, 0.7); transition: width 0.5s ease; }
+.energia-texto { color: #e0e0e0; font-size: 0.85rem; font-weight: bold; }
 
-.energia-icon {
-    color: #ffcc00;
-    font-size: 1.1rem;
-    animation: pulse-energia 2s infinite alternate;
-}
+@keyframes pulse-energia { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 204, 0, 0.5)); } 100% { transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.9)); } }
 
-.energia-bar-wrapper {
-    width: 80px;
-    height: 10px;
-    background-color: #1a1a1a;
-    border-radius: 5px;
-    overflow: hidden;
-    border: 1px solid #333;
-}
+form a { word-break: break-all; overflow-wrap: break-word; color: var(--accent-color); }
+form input[type="checkbox"] { margin-left: 5px; cursor: pointer; }
 
-.energia-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #ff3333, #ff6666);
-    box-shadow: 0 0 8px rgba(255, 51, 51, 0.7);
-    transition: width 0.5s ease;
-}
-
-.energia-texto {
-    color: #e0e0e0;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
-
-/* Pequeña animación para hacer que el rayo pulse sutilmente */
-@keyframes pulse-energia {
-    0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 204, 0, 0.5)); }
-    100% { transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.9)); }
-}
-
-/* Ajuste para enlaces largos en los formularios (como el del Avatar) */
-form a {
-    word-break: break-all;
-    overflow-wrap: break-word;
-    color: var(--accent-color); /* Para que mantenga el color de tu diseño */
-}
-
-/* Para que la caja del checkbox de "Borrar" se alinee mejor */
-form input[type="checkbox"] {
-    margin-left: 5px;
-    cursor: pointer;
-}
-
-/* Estilos base para cada alerta */
-.notif-item {
-        background: #161616;
-        padding: 10px;
-        border-radius: 4px;
-        margin-bottom: 6px;
-}
-    
-    /* Colores dinámicos del borde izquierdo */
-.notif-success { border-left: 3px solid #00ff41; } /* Verde para Aceptada */
-.notif-error { border-left: 3px solid #ff4d4d; }   /* Rojo para Rechazada */
-.notif-info { border-left: 3px solid #00ffff; }    /* Cyan para En Revisión */
+.notif-item { background: #161616; padding: 10px; border-radius: 4px; margin-bottom: 6px; }
+.notif-success { border-left: 3px solid #00ff41; } 
+.notif-error { border-left: 3px solid #ff4d4d; } 
+.notif-info { border-left: 3px solid #00ffff; } 
 
 </style>
 </head>
 <body>
 
 <nav class="navbar">
-    {% if user.is_authenticated and user.reclutador %}
-        <a href="{% url 'dashboard_reclutador' %}" class="logo">🦉REDOWL <span>ACADEMY</span></a>
-    {% else %}
-        <a href="/" class="logo">🦉REDOWL <span>ACADEMY</span></a>
-    {% endif %}
-
-    <div class="d-flex align-items-center" style="gap: 20px;">
+    <div style="display: flex; align-items: center;">
         {% if user.is_authenticated %}
-            <span style="font-size: 0.8rem; color: #888; font-weight: bold;">
+            <button class="hamburger-btn" onclick="toggleMobileMenu()">☰</button>
+        {% endif %}
+        
+        {% if user.is_authenticated and user.reclutador %}
+            <a href="{% url 'dashboard_reclutador' %}" class="logo">🦉REDOWL <span class="logo-text-academy">ACADEMY</span></a>
+        {% else %}
+            <a href="/" class="logo">🦉REDOWL <span class="logo-text-academy">ACADEMY</span></a>
+        {% endif %}
+    </div>
+
+    <div class="d-flex align-items-center" style="gap: 15px;">
+        {% if user.is_authenticated %}
+            <span class="user-info-text" style="font-size: 0.8rem; color: #888; font-weight: bold;">
                 {{ user.username }} 
                 {% if user.estudiante %}
                     | <b style="color: var(--accent-color);">{{ user.estudiante.xp_total|default:"0" }} XP</b>
@@ -517,14 +397,17 @@ form input[type="checkbox"] {
             </span>
             
             {% if user.estudiante %}
+                <div class="racha-nav-container" title="Racha de estudio. ¡Haz un ejercicio nuevo para no perderla!" style="display: flex; align-items: center; gap: 5px; background: rgba(255, 170, 0, 0.1); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255, 170, 0, 0.3);">
+                    <span style="font-size: 1.2rem;">🔥</span>
+                    <span style="color: #ffaa00; font-weight: bold; font-family: monospace; font-size: 1.1rem;">{{ user.estudiante.racha_dias }}</span>
+                </div>
+
                 <div class="energia-nav-container" title="Tu energía actual. ¡No dejes que llegue a 0!">
                     <span class="energia-icon">⚡</span>
-                    
                     <div class="energia-bar-wrapper">
-                        <div class="energia-bar" data-progress="{% widthratio user.estudiante.energia 5 100 %}"></div>
+                        <div class="energia-bar" data-progress="{% widthratio user.estudiante.energia 10 100 %}"></div>
                     </div>
-                    
-                    <span class="energia-texto">{{ user.estudiante.energia }}/5</span>
+                    <span class="energia-texto">{{ user.estudiante.energia }}/10</span>
                 </div>
             {% endif %}
 
@@ -559,7 +442,10 @@ form input[type="checkbox"] {
             </div>
             <form action="{% url 'logout' %}" method="post" style="display: inline;">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-outline" style="padding: 8px 15px; font-size: 10px;">SALIR</button>
+                <button type="submit" class="btn btn-outline" style="padding: 8px 15px; font-size: 10px;">
+                    <span class="btn-salir-text">SALIR</span>
+                    <span style="display: none;" class="btn-salir-icon">✖</span>
+                </button>
             </form>
         {% else %}
             <a href="{% url 'login' %}" class="btn btn-outline" style="padding: 8px 15px; font-size: 11px;">Entrar</a>
@@ -571,20 +457,34 @@ form input[type="checkbox"] {
 </nav>
 
 <script>
+    /* Script del Botón Hamburguesa */
+    function toggleMobileMenu() {
+        const menu = document.querySelector('.sidebar-menu');
+        if (menu) {
+            menu.classList.toggle('active');
+        }
+    }
+
+    /* Cerrar el menú si hacemos clic fuera de él en móvil */
+    document.addEventListener('click', function(event) {
+        const menu = document.querySelector('.sidebar-menu');
+        const btn = document.querySelector('.hamburger-btn');
+        if (menu && menu.classList.contains('active') && !menu.contains(event.target) && !btn.contains(event.target)) {
+            menu.classList.remove('active');
+        }
+    });
+
     function toggleNotificaciones(event) {
         event.stopPropagation();
         const dropdown = document.getElementById('notif-dropdown');
         const contador = document.getElementById('notif-contador');
         
-        // Verificamos si se va a abrir el panel
         const seVaAOpen = (dropdown.style.display === 'none' || dropdown.style.display === '');
         
         if (seVaAOpen) {
             dropdown.style.display = 'block';
             
-            // Si hay un contador visible en pantalla, procedemos a borrarlo en la base de datos
             if (contador) {
-                // Obtenemos el token CSRF que Django genera por seguridad en los formularios
                 const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
                 fetch("{% url 'marcar_notificaciones_leidas' %}", {
@@ -597,7 +497,6 @@ form input[type="checkbox"] {
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'ok') {
-                        // Desaparecemos el círculo rojo de la interfaz con estilo
                         contador.style.transition = 'opacity 0.3s ease';
                         contador.style.opacity = '0';
                         setTimeout(() => contador.remove(), 300);
@@ -610,7 +509,6 @@ form input[type="checkbox"] {
         }
     }
 
-    // Cierra el panel de notificaciones automáticamente si el usuario hace clic en el vacío de la pantalla
     document.addEventListener('click', function(event) {
         const wrapper = document.getElementById('notif-wrapper');
         const dropdown = document.getElementById('notif-dropdown');
@@ -673,33 +571,6 @@ form input[type="checkbox"] {
 
 </div>
 
-{% if user.is_authenticated %}
-    <nav class="mobile-bottom-nav">
-        {% if user.estudiante %}
-            <a href="{% url 'lista_cursos' %}" class="mobile-nav-btn {% if request.path == '/' or '/curso/' in request.path %}active{% endif %}">
-                <span class="menu-icon">🏠</span> Aprender
-            </a>
-            <a href="{% url 'bolsa_trabajo' %}" class="mobile-nav-btn {% if request.path == '/misiones-laborales/' %}active{% endif %}">
-                <span class="menu-icon">💼</span> Misiones
-            </a>
-        {% elif user.reclutador %}
-            <a href="{% url 'dashboard_reclutador' %}" class="mobile-nav-btn {% if request.path == '/empresa/dashboard/' %}active{% endif %}">
-                <span class="menu-icon">📊</span> Panel
-            </a>
-            <a href="{% url 'crear_oferta' %}" class="mobile-nav-btn {% if request.path == '/empresa/nueva-oferta/' %}active{% endif %}">
-                <span class="menu-icon">➕</span> Oferta
-            </a>
-        {% endif %}
-
-        <a href="{% url 'ligas' %}" class="mobile-nav-btn {% if request.path == '/ligas/' %}active{% endif %}">
-            <span class="menu-icon">🛡️</span> Ligas
-        </a>
-        <a href="{% url 'perfil' %}" class="mobile-nav-btn {% if request.path == '/perfil/' %}active{% endif %}">
-            <span class="menu-icon">👤</span> Perfil
-        </a>
-    </nav>
-{% endif %}
-
 <script>
     function toggleTheme() {
         const body = document.documentElement;
@@ -713,18 +584,22 @@ form input[type="checkbox"] {
         }
     }
 
-    // Cargar tema guardado
     if (localStorage.getItem('theme') === 'light') {
         document.documentElement.setAttribute('data-theme', 'light');
     }
 </script>
 <script>
-    // Espera a que la página cargue, busca la barra de energía y le da su ancho real
     document.addEventListener("DOMContentLoaded", function() {
         const barraEnergia = document.querySelector('.energia-bar');
         if (barraEnergia) {
             const progreso = barraEnergia.getAttribute('data-progress');
             barraEnergia.style.width = progreso + '%';
+        }
+        
+        /* Pequeño arreglo para el botón salir en celular */
+        if (window.innerWidth <= 768) {
+            const iconoSalir = document.querySelector('.btn-salir-icon');
+            if (iconoSalir) iconoSalir.style.display = 'inline';
         }
     });
 </script>
