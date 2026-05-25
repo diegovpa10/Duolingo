@@ -630,6 +630,32 @@
         let juego = epSeleccionados[ejercicioId];
         document.getElementById(`ep-hidden-${ejercicioId}`).value = JSON.stringify(juego.parejas);
     }
+
+    // =========================================================================
+    // 🔥 SOPORTE PARA TABULACIÓN EN EL EDITOR DE CÓDIGO (Mantiene Ctrl+Z)
+    // =========================================================================
+    document.querySelectorAll('.editor-codigo').forEach(textarea => {
+        textarea.addEventListener('keydown', function(e) {
+            // Si el usuario presiona la tecla Tab
+            if (e.key === 'Tab') {
+                e.preventDefault(); // Evitamos que salte a otro botón de la página
+
+                // Intentamos inyectar los 4 espacios simulando que el usuario los tecleó.
+                // Esto es MAGIA para que el Ctrl+Z siga funcionando perfectamente.
+                let insercionExitosa = document.execCommand('insertText', false, '    ');
+                
+                // Fallback de seguridad: Si el navegador es muy antiguo y rechaza el comando anterior, 
+                // hacemos la inserción manual (aunque sacrifique el Ctrl+Z en ese salto específico).
+                if (!insercionExitosa) {
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            }
+        });
+    });
+    
 </script>
 
 {% endblock %}

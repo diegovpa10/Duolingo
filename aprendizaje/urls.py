@@ -16,6 +16,7 @@ urlpatterns = [
     path('red/', views.red_amigos, name='red_amigos'),
     path('empresa/dashboard/', views.dashboard_reclutador, name='dashboard_reclutador'),
     path('empresa/nueva-oferta/', views.crear_oferta, name='crear_oferta'),
+    path('empresa/editar-oferta/<int:oferta_id>/', views.editar_oferta, name='editar_oferta'),
     path('redireccion/', views.redireccion_inicio, name='redireccion_inicio'),
     path('misiones-laborales/', views.bolsa_trabajo, name='bolsa_trabajo'),
     path('dev/iniciar-semana/', views.iniciar_semana_prueba, name='iniciar_semana'),

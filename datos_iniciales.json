@@ -1,2426 +1,3120 @@
 [
-{
-    "model": "aprendizaje.estudiante",
-    "pk": 3,
-    "fields": {
-        "racha_dias": 2,
-        "xp_total": 30,
-        "fecha_ultima_leccion": "2026-03-27",
-        "fecha_ultima_recarga": "2026-05-20T17:43:32.939Z",
-        "energia": 5,
-        "racha_ejercicios": 0,
-        "avatar": "avatares/default_owl.png",
-        "escuela": null
-    }
-},
-{
-    "model": "aprendizaje.estudiante",
-    "pk": 4,
-    "fields": {
-        "racha_dias": 2,
-        "xp_total": 75,
-        "fecha_ultima_leccion": "2026-03-26",
-        "fecha_ultima_recarga": "2026-05-20T17:43:32.939Z",
-        "energia": 5,
-        "racha_ejercicios": 0,
-        "avatar": "avatares/default_owl.png",
-        "escuela": null
-    }
-},
-{
-    "model": "aprendizaje.curso",
-    "pk": 1,
-    "fields": {
-        "nombre": "Curso básico de Python",
-        "lenguaje": "Python",
-        "es_ingles_tecnico": false
-    }
-},
-{
-    "model": "aprendizaje.curso",
-    "pk": 4,
-    "fields": {
-        "nombre": "Curso avanzado de Python en inglés",
-        "lenguaje": "Python",
-        "es_ingles_tecnico": true
-    }
-},
-{
-    "model": "aprendizaje.curso",
-    "pk": 5,
-    "fields": {
-        "nombre": "Curso básico Java",
-        "lenguaje": "Java",
-        "es_ingles_tecnico": false
-    }
-},
-{
-    "model": "aprendizaje.curso",
-    "pk": 7,
-    "fields": {
-        "nombre": "Curso básico JavaScript",
-        "lenguaje": "JavaScript",
-        "es_ingles_tecnico": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 2,
-    "fields": {
-        "curso": 1,
-        "orden": 1,
-        "titulo": "Bienvenidos",
-        "completada": true
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 4,
-    "fields": {
-        "curso": 1,
-        "orden": 2,
-        "titulo": "Variables",
-        "completada": true
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 5,
-    "fields": {
-        "curso": 1,
-        "orden": 3,
-        "titulo": "Ciclos",
-        "completada": true
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 6,
-    "fields": {
-        "curso": 1,
-        "orden": 4,
-        "titulo": "Tu color favorito y tu nombre",
-        "completada": true
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 7,
-    "fields": {
-        "curso": 1,
-        "orden": 5,
-        "titulo": "Proyecto Final",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 8,
-    "fields": {
-        "curso": 4,
-        "orden": 1,
-        "titulo": "The Hacker's Filter (List Comprehensions)",
-        "completada": true
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 9,
-    "fields": {
-        "curso": 4,
-        "orden": 2,
-        "titulo": "RedOwl Security System (Object-Oriented Programming)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 10,
-    "fields": {
-        "curso": 4,
-        "orden": 3,
-        "titulo": "Defusing the Bomb (Error Handling)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 11,
-    "fields": {
-        "curso": 5,
-        "orden": 1,
-        "titulo": "El Primer Vuelo (Imprimir en consola)",
-        "completada": true
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 12,
-    "fields": {
-        "curso": 5,
-        "orden": 2,
-        "titulo": "Calculando la Experiencia (Variables y Tipos)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 13,
-    "fields": {
-        "curso": 5,
-        "orden": 3,
-        "titulo": "El Guardián del Nido (Condicionales If-Else)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 14,
-    "fields": {
-        "curso": 7,
-        "orden": 1,
-        "titulo": "El primer mensaje en la consola",
-        "completada": true
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 15,
-    "fields": {
-        "curso": 7,
-        "orden": 2,
-        "titulo": "El tesoro del Búho (Variables y Matemáticas)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 16,
-    "fields": {
-        "curso": 7,
-        "orden": 3,
-        "titulo": "El Portero de la Academia (Condicionales)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 17,
-    "fields": {
-        "curso": 1,
-        "orden": 6,
-        "titulo": "Colecciones y Listas",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 18,
-    "fields": {
-        "curso": 1,
-        "orden": 7,
-        "titulo": "Modificando Listas",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 19,
-    "fields": {
-        "curso": 1,
-        "orden": 8,
-        "titulo": "Bucles automatizados (For)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 20,
-    "fields": {
-        "curso": 1,
-        "orden": 9,
-        "titulo": "Bucles condicionales (While)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 21,
-    "fields": {
-        "curso": 1,
-        "orden": 10,
-        "titulo": "Creación de Funciones",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 22,
-    "fields": {
-        "curso": 1,
-        "orden": 11,
-        "titulo": "Diccionarios y Claves",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 23,
-    "fields": {
-        "curso": 1,
-        "orden": 12,
-        "titulo": "Accediendo a valores",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 24,
-    "fields": {
-        "curso": 1,
-        "orden": 13,
-        "titulo": "Números Pares e Impares",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 25,
-    "fields": {
-        "curso": 1,
-        "orden": 14,
-        "titulo": "Retorno de valores",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 26,
-    "fields": {
-        "curso": 1,
-        "orden": 15,
-        "titulo": "Evaluador Final de Python",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 27,
-    "fields": {
-        "curso": 5,
-        "orden": 4,
-        "titulo": "Tomando decisiones (if/else)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 28,
-    "fields": {
-        "curso": 5,
-        "orden": 5,
-        "titulo": "Textos (String)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 29,
-    "fields": {
-        "curso": 5,
-        "orden": 6,
-        "titulo": "Colecciones y Arreglos",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 30,
-    "fields": {
-        "curso": 5,
-        "orden": 7,
-        "titulo": "Bucles automatizados (For)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 31,
-    "fields": {
-        "curso": 5,
-        "orden": 8,
-        "titulo": "Bucles condicionales (While)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 32,
-    "fields": {
-        "curso": 5,
-        "orden": 9,
-        "titulo": "Creación de Métodos",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 33,
-    "fields": {
-        "curso": 5,
-        "orden": 10,
-        "titulo": "Retorno de Valores",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 34,
-    "fields": {
-        "curso": 5,
-        "orden": 11,
-        "titulo": "Bucle For Avanzado (For-Each)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 35,
-    "fields": {
-        "curso": 5,
-        "orden": 12,
-        "titulo": "Números Pares e Impares",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 36,
-    "fields": {
-        "curso": 5,
-        "orden": 13,
-        "titulo": "Manipulación de Strings",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 37,
-    "fields": {
-        "curso": 5,
-        "orden": 14,
-        "titulo": "Métodos con Condicionales",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 38,
-    "fields": {
-        "curso": 5,
-        "orden": 15,
-        "titulo": "Evaluador Final de Java",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 39,
-    "fields": {
-        "curso": 7,
-        "orden": 4,
-        "titulo": "Tomando decisiones",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 40,
-    "fields": {
-        "curso": 7,
-        "orden": 5,
-        "titulo": "Cadenas de texto (Strings)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 41,
-    "fields": {
-        "curso": 7,
-        "orden": 6,
-        "titulo": "Colecciones y Arreglos",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 42,
-    "fields": {
-        "curso": 7,
-        "orden": 7,
-        "titulo": "Agregando elementos (Push)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 43,
-    "fields": {
-        "curso": 7,
-        "orden": 8,
-        "titulo": "Bucles automatizados (For)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 44,
-    "fields": {
-        "curso": 7,
-        "orden": 9,
-        "titulo": "Bucles condicionales (While)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 45,
-    "fields": {
-        "curso": 7,
-        "orden": 10,
-        "titulo": "Creación de Funciones",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 46,
-    "fields": {
-        "curso": 7,
-        "orden": 11,
-        "titulo": "Objetos y Propiedades",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 47,
-    "fields": {
-        "curso": 7,
-        "orden": 12,
-        "titulo": "Números Pares e Impares",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 48,
-    "fields": {
-        "curso": 7,
-        "orden": 13,
-        "titulo": "Funciones con Retorno",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 49,
-    "fields": {
-        "curso": 7,
-        "orden": 14,
-        "titulo": "Bucles Modernos (for...of)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 50,
-    "fields": {
-        "curso": 7,
-        "orden": 15,
-        "titulo": "Evaluador Final de JavaScript",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 51,
-    "fields": {
-        "curso": 4,
-        "orden": 4,
-        "titulo": "List Comprehensions",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 52,
-    "fields": {
-        "curso": 4,
-        "orden": 5,
-        "titulo": "Dictionary Comprehensions",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 53,
-    "fields": {
-        "curso": 4,
-        "orden": 6,
-        "titulo": "Lambda Functions",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 54,
-    "fields": {
-        "curso": 4,
-        "orden": 7,
-        "titulo": "The Map Function",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 55,
-    "fields": {
-        "curso": 4,
-        "orden": 8,
-        "titulo": "The Filter Function",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 56,
-    "fields": {
-        "curso": 4,
-        "orden": 9,
-        "titulo": "Variable Arguments (*args)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 57,
-    "fields": {
-        "curso": 4,
-        "orden": 10,
-        "titulo": "Keyword Arguments (kwargs)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 58,
-    "fields": {
-        "curso": 4,
-        "orden": 11,
-        "titulo": "Try and Except Blocks",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 59,
-    "fields": {
-        "curso": 4,
-        "orden": 12,
-        "titulo": "Generators",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 60,
-    "fields": {
-        "curso": 4,
-        "orden": 13,
-        "titulo": "Basic Decorators",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 61,
-    "fields": {
-        "curso": 4,
-        "orden": 14,
-        "titulo": "Classes and Objects (OOP)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 62,
-    "fields": {
-        "curso": 4,
-        "orden": 15,
-        "titulo": "Inheritance (OOP)",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 63,
-    "fields": {
-        "curso": 1,
-        "orden": 16,
-        "titulo": "Q-Variables Numéricas",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 64,
-    "fields": {
-        "curso": 1,
-        "orden": 17,
-        "titulo": "Q-Concatenación de Textos",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 65,
-    "fields": {
-        "curso": 1,
-        "orden": 18,
-        "titulo": "Q-Condicionales Básicos",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 66,
-    "fields": {
-        "curso": 1,
-        "orden": 19,
-        "titulo": "Q-Introducción a Listas",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 67,
-    "fields": {
-        "curso": 1,
-        "orden": 20,
-        "titulo": "Q-El Bucle While",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 68,
-    "fields": {
-        "curso": 5,
-        "orden": 16,
-        "titulo": "Q-Salida de Datos en Java",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 69,
-    "fields": {
-        "curso": 5,
-        "orden": 17,
-        "titulo": "Q-Variables de tipo int",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 70,
-    "fields": {
-        "curso": 5,
-        "orden": 18,
-        "titulo": "Q-Condicionales en Java",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 71,
-    "fields": {
-        "curso": 5,
-        "orden": 19,
-        "titulo": "Q=Estructura For",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.leccion",
-    "pk": 72,
-    "fields": {
-        "curso": 5,
-        "orden": 20,
-        "titulo": "Q-Variables booleanas",
-        "completada": false
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 1,
-    "fields": {
-        "leccion": 2,
-        "tipo_ejercicio": "Q",
-        "enunciado": "Bienvenido al curso de Python, este tipo de ejercicios se resuelven seleccionando un recuadro de la parte inferior",
-        "xp_recompensa": 10
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 2,
-    "fields": {
-        "leccion": 4,
-        "tipo_ejercicio": "C",
-        "enunciado": "Imprime tu primer \"hola mundo\" usando print( )",
-        "xp_recompensa": 25
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 3,
-    "fields": {
-        "leccion": 5,
-        "tipo_ejercicio": "C",
-        "enunciado": "Asignar variables\r\nedad = 30\r\nprint(edad)",
-        "xp_recompensa": 15
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 4,
-    "fields": {
-        "leccion": 6,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"¡Crea tu identidad secreta! Escribe un programa que pida el nombre del usuario y su color favorito. El programa debe imprimir su nombre ninja combinando ambos, por ejemplo: 'Ninja Rojo Juan'.\r\n\r\nRequisitos: > 1. Usa input() para obtener los datos.\r\n2. Usa print() para mostrar el resultado final.\"",
-        "xp_recompensa": 50
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 5,
-    "fields": {
-        "leccion": 7,
-        "tipo_ejercicio": "C",
-        "enunciado": "¡El desafío final de RedOwl Academy! El Consejo de los Búhos necesita clasificar a los nuevos reclutas.\r\n\r\nEscribe un programa que pida al usuario su 'Nivel de Hacking' (debe ser un número).\r\n\r\nSi el nivel es 90 o mayor, el programa debe imprimir: Rango S\r\n\r\nSi el nivel está entre 50 y 89, debe imprimir: Rango A\r\n\r\nSi el nivel es menor a 50, debe imprimir: Rango B\r\n\r\nPista: Recuerda usar int() para convertir la respuesta del input() en un número entero antes de usar los condicionales (if, elif, else).\"",
-        "xp_recompensa": 500
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 6,
-    "fields": {
-        "leccion": 8,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Welcome to the advanced tier! RedOwl Academy needs to filter server logs quickly.\r\n\r\nYou are given a list of user network pings. Use a list comprehension to create a new list called high_pings that only contains numbers greater than 100. Finally, print() the new list.\r\n\r\nHint: A list comprehension looks like this: [item for item in list if condition]\"",
-        "xp_recompensa": 100
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 7,
-    "fields": {
-        "leccion": 9,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"It's time to build a real system using OOP (Object-Oriented Programming).\r\n\r\nCreate a class named Firewall.\r\n\r\nInside the class, create an __init__ method that takes a status parameter and saves it as an instance variable (self.status).\r\n\r\nCreate a method called show_status() that prints: \"Firewall is \" + self.status\r\n\r\nOutside the class, create an object from Firewall passing \"ACTIVE\" as the status, and call the show_status() method.\"",
-        "xp_recompensa": 150
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 8,
-    "fields": {
-        "leccion": 10,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"A true senior developer knows how to handle system crashes gracefully!\r\n\r\nYou have a variable called encrypted_data. We want to divide it by 2, but unfortunately, the data was corrupted and turned into a string. Dividing a string by a number will crash Python!\r\n\r\nUse a try...except block. Inside the try, attempt to print encrypted_data / 2. Inside the except block, catch the TypeError and print: \"Decryption failed!\"\"",
-        "xp_recompensa": 200
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 9,
-    "fields": {
-        "leccion": 11,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"¡Bienvenido al nido de Java! Todo gran programador empieza saludando al mundo.\r\n\r\nUtiliza System.out.println() para imprimir exactamente el siguiente mensaje: Hola, RedOwl.\r\n\r\n(Recuerda que en Java, cada instrucción debe terminar con un punto y coma ;)\"",
-        "xp_recompensa": 50
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 10,
-    "fields": {
-        "leccion": 12,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"¡Es hora de recolectar experiencia! En Java, debes decirle al sistema qué tipo de dato vas a guardar.\r\n\r\nCrea una variable entera (int) llamada xpBase y asígnale el valor de 100.\r\n\r\nCrea otra variable entera llamada xpBonus con el valor de 50.\r\n\r\nSuma ambas en una nueva variable llamada xpTotal.\r\n\r\nImprime el valor de xpTotal.\"",
-        "xp_recompensa": 75
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 11,
-    "fields": {
-        "leccion": 13,
-        "tipo_ejercicio": "C",
-        "enunciado": "Crea una lección tipo \"3. Decisiones con If-Else\"\r\n\"El búho guardián necesita verificar si tienes el nivel suficiente para entrar a las Ligas Competitivas.\r\n\r\nTienes una variable nivel. Escribe un condicional if-else:\r\n\r\nSi el nivel es mayor o igual a 5, imprime: Acceso concedido\r\n\r\nSi es menor, imprime: Sigue practicando\"",
-        "xp_recompensa": 100
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 12,
-    "fields": {
-        "leccion": 14,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"¡Bienvenido al lado web de la programación! En JavaScript, utilizamos la consola para ver nuestros resultados.\r\n\r\nUtiliza console.log() para imprimir exactamente el siguiente mensaje: Hola, JavaScript.\r\n\r\n(Nota: Aunque en las versiones modernas de JS el punto y coma ; al final es opcional, es una buena práctica ponerlo).\"",
-        "xp_recompensa": 50
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 13,
-    "fields": {
-        "leccion": 15,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"¡Vamos a contar el tesoro de RedOwl!\r\n\r\nDeclara una variable usando let llamada monedasOro y asígnale el valor de 50.\r\n\r\nDeclara otra variable llamada monedasPlata con el valor de 25.\r\n\r\nSuma ambas variables y guarda el resultado en una nueva variable llamada total.\r\n\r\nUtiliza console.log() para imprimir la variable total.\"",
-        "xp_recompensa": 75
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 14,
-    "fields": {
-        "leccion": 16,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"El portero de la academia necesita un programa para saber si un estudiante tiene la edad suficiente para ver los cursos avanzados.\r\n\r\nYa tienes una variable edad. Escribe un bloque if / else:\r\n\r\nSi la edad es mayor o igual a 18, imprime en consola: Permitido\r\n\r\nSi es menor, imprime en consola: Denegado\"",
-        "xp_recompensa": 100
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 15,
-    "fields": {
-        "leccion": 17,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"En lugar de tener muchas variables, podemos agrupar datos en una Lista. Crea una lista llamada inventario que contenga exactamente estos tres textos en este orden: 'mapa', 'brujula' y 'pluma'. Luego imprime la lista completa.\"",
-        "xp_recompensa": 35
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 16,
-    "fields": {
-        "leccion": 18,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"Las listas pueden crecer. Tienes una lista llamada mochila que solo tiene un 'libro'. Utiliza el método .append() para agregar el texto 'pocion' a la mochila. Finalmente, imprime la mochila actualizada.\"",
-        "xp_recompensa": 35
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 17,
-    "fields": {
-        "leccion": 19,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"Los ciclos nos permiten repetir acciones. Tienes una lista de pasos. Utiliza un ciclo for para recorrer la lista e imprimir cada número de forma individual (uno por línea).\"",
-        "xp_recompensa": 40
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 18,
-    "fields": {
-        "leccion": 20,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"El ciclo while se repite mientras una condición sea verdadera. Tu energia es 3. Crea un ciclo while que funcione mientras la energía sea mayor a 0. Dentro del ciclo, imprime la energia y luego réstale 1 (energia -= 1).\"",
-        "xp_recompensa": 45
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 19,
-    "fields": {
-        "leccion": 21,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"Las funciones son bloques de código reutilizables. Utiliza la palabra clave def para crear una función llamada saludar(). Dentro de ella, imprime 'Hola Maestro'. Fuera de la función, no olvides llamarla (invocarla) para que se ejecute.\"",
-        "xp_recompensa": 50
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 20,
-    "fields": {
-        "leccion": 22,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"Los diccionarios guardan datos usando una estructura de 'clave: valor'. Crea un diccionario llamado jugador que tenga dos claves: 'nombre' con el valor 'Búho' (texto), y 'nivel' con el valor 10 (número). Finalmente, imprime el diccionario completo.\"",
-        "xp_recompensa": 55
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 21,
-    "fields": {
-        "leccion": 23,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"Ya tienes un diccionario jugador creado. Ahora, no queremos imprimir todo, solo queremos saber su nivel. Utiliza la sintaxis de corchetes jugador['clave'] para imprimir únicamente el número del nivel.\"",
-        "xp_recompensa": 60
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 22,
-    "fields": {
-        "leccion": 24,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"El operador módulo % nos da el residuo de una división. Es perfecto para saber si un número es par. Tienes un numero = 7. Escribe un condicional if / else que verifique si numero % 2 == 0. Si lo es, imprime 'Par'. Si no, imprime 'Impar'.\"",
-        "xp_recompensa": 65
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 23,
-    "fields": {
-        "leccion": 25,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"Las funciones no solo imprimen, también pueden 'devolver' un resultado. Crea una función llamada multiplicar(a, b) que utilice la palabra reservada return para devolver el resultado de a * b. Luego, imprime el resultado de llamar a multiplicar(3, 4).\"",
-        "xp_recompensa": 70
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 24,
-    "fields": {
-        "leccion": 26,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"¡Prueba final! Tienes una lista de notas = [10, 5, 8]. Utiliza un ciclo for para recorrer la lista. Dentro del ciclo, usa un if / else: si la nota es mayor o igual a 6, imprime 'Aprobado'; de lo contrario, imprime 'Reprobado'.\"",
-        "xp_recompensa": 100
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 25,
-    "fields": {
-        "leccion": 27,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"Los condicionales en Java requieren paréntesis () para la condición y llaves {} para el bloque de código. Si nivel es mayor a 3, imprime Avanzado. Si no, imprime Novato.\"",
-        "xp_recompensa": 30
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 26,
-    "fields": {
-        "leccion": 28,
-        "tipo_ejercicio": "C",
-        "enunciado": "Enunciado: \"En Java, los textos se guardan en variables de tipo String (con 'S' mayúscula). Une las variables saludo y nombre usando el operador + y manda el resultado a imprimir. Debe decir Bienvenido Búho.\"",
-        "xp_recompensa": 35
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 27,
-    "fields": {
-        "leccion": 29,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"En Java, los arreglos (arrays) tienen un tamaño y tipo fijo. Crea un arreglo de enteros int[] llamado pasos que contenga los números 1, 2 y 3: int[] pasos = {1, 2, 3};. Luego, imprime el primer elemento del arreglo accediendo a la posición cero: pasos[0].\"",
-        "xp_recompensa": 35
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 28,
-    "fields": {
-        "leccion": 30,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"El bucle for en Java necesita tres partes: inicialización, condición y aumento. Escribe un ciclo for clásico que comience en int i = 1, termine cuando i <= 3, y aumente de uno en uno i++. Dentro del ciclo, imprime el valor de i.\"",
-        "xp_recompensa": 40
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 29,
-    "fields": {
-        "leccion": 31,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"El ciclo while es excelente cuando no sabes cuántas veces iterar. Tienes una variable energia = 3. Escribe un ciclo while que funcione mientras energia > 0. Dentro del ciclo imprime la energia y luego réstale uno usando energia--;.\"",
-        "xp_recompensa": 45
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 30,
-    "fields": {
-        "leccion": 32,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"En Java, las funciones se llaman 'métodos'. Debajo de main (pero dentro de la clase Main), crea un método llamado public static void saludar(). Dentro de él, imprime Hola Maestro. Luego, regresa al bloque main e invoca saludar();.\"",
-        "xp_recompensa": 50
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 31,
-    "fields": {
-        "leccion": 33,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Los métodos también devuelven datos. Crea un método public static int sumar(int a, int b) que devuelva la suma de a + b usando la palabra return. En el main, imprime el resultado de llamar a sumar(5, 5).\"",
-        "xp_recompensa": 55
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 32,
-    "fields": {
-        "leccion": 34,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Java tiene un ciclo especial para recorrer arreglos fácilmente. Tienes un arreglo int[] armas = {10, 20, 30};. Utiliza un bucle for-each con la sintaxis for (int arma : armas) para imprimir cada número uno por uno.\"",
-        "xp_recompensa": 60
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 33,
-    "fields": {
-        "leccion": 35,
-        "tipo_ejercicio": "C",
-        "enunciado": "Al igual que en otros lenguajes, el operador % (módulo) obtiene el residuo de una división. Tienes la variable int numero = 7;. Crea un condicional if / else para evaluar si numero % 2 == 0. Si es verdadero imprime Par, de lo contrario imprime Impar.\"",
-        "xp_recompensa": 65
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 34,
-    "fields": {
-        "leccion": 36,
-        "tipo_ejercicio": "C",
-        "enunciado": "En Java, los String son objetos que tienen sus propios métodos. Tienes la variable String hechizo = \"Fuego\";. Utiliza el método .length() para obtener cuántas letras tiene la palabra e imprime el resultado.\"",
-        "xp_recompensa": 70
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 35,
-    "fields": {
-        "leccion": 37,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Vamos a combinar métodos y decisiones. Crea un método public static int mayor(int a, int b) que use un if / else para retornar el número más grande entre 'a' y 'b'. En el main, imprime el resultado de llamar a mayor(10, 20).\"",
-        "xp_recompensa": 75
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 36,
-    "fields": {
-        "leccion": 38,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"¡Prueba final! Tienes un arreglo de calificaciones int[] notas = {10, 5, 8};. Utiliza un ciclo for clásico o un for-each para recorrerlo. Dentro del ciclo, evalúa: si la nota es >= 6, imprime Aprobado; si no, imprime Reprobado.\"",
-        "xp_recompensa": 100
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 37,
-    "fields": {
-        "leccion": 39,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"La sintaxis de los condicionales en JS es casi idéntica a Java: usa paréntesis () y llaves {}. Tienes un nivel = 5. Si el nivel es mayor a 3, imprime Avanzado. Si no, imprime Novato.\"",
-        "xp_recompensa": 30
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 38,
-    "fields": {
-        "leccion": 40,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Puedes unir textos usando el operador +. Une las variables saludo y nombre dentro de tu console.log() para que el resultado exacto sea Bienvenido Búho.\"",
-        "xp_recompensa": 35
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 39,
-    "fields": {
-        "leccion": 41,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"En JavaScript, los arreglos se crean usando corchetes []. Crea un arreglo llamado inventario que contenga los textos 'mapa', 'brujula' y 'pluma'. Luego, utiliza console.log() para imprimir el primer elemento (recuerda que empezamos a contar desde el índice 0).\"",
-        "xp_recompensa": 35
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 40,
-    "fields": {
-        "leccion": 42,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Los arreglos en JS son dinámicos. Tienes un arreglo mochila que solo tiene un 'libro'. Utiliza el método .push('pocion') para agregar este nuevo ítem al final. Luego, imprime cuántos objetos tienes usando console.log(mochila.length).\"",
-        "xp_recompensa": 40
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 41,
-    "fields": {
-        "leccion": 43,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"El ciclo for en JS usa la misma lógica que Java. Escribe un ciclo que empiece en let i = 1, se repita mientras i <= 3, y aumente de uno en uno con i++. Dentro del ciclo, imprime el valor de i.\"",
-        "xp_recompensa": 40
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 42,
-    "fields": {
-        "leccion": 44,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Tienes una variable energia = 3. Escribe un ciclo while que se ejecute mientras la energía sea mayor a 0. Dentro del ciclo, imprime la energía con console.log(energia) y luego réstale uno usando energia--;.\"",
-        "xp_recompensa": 45
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 43,
-    "fields": {
-        "leccion": 45,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"En JS usamos la palabra clave function para crear bloques de código reutilizables. Crea una función llamada saludar(). Dentro de ella, imprime 'Hola Maestro'. Afuera de la función, no olvides llamarla escribiendo saludar();.\"",
-        "xp_recompensa": 50
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 44,
-    "fields": {
-        "leccion": 46,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"En JS agrupamos características usando Objetos (con llaves {}). Crea un objeto llamado jugador que tenga dos propiedades: nombre: 'Búho' y nivel: 10. Luego, imprime solo el nivel accediendo con la sintaxis de punto: console.log(jugador.nivel).\"",
-        "xp_recompensa": 60
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 45,
-    "fields": {
-        "leccion": 47,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Usa el operador módulo % para saber si un número es par. Tienes la variable let numero = 7;. Escribe un condicional if / else para evaluar si numero % 2 == 0. Si es cierto, imprime Par, de lo contrario imprime Impar.\"",
-        "xp_recompensa": 60
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 46,
-    "fields": {
-        "leccion": 48,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Las funciones pueden devolver resultados. Crea una función sumar(a, b) que utilice la palabra return para devolver el resultado de a + b. Luego, imprime el resultado de ejecutar sumar(10, 10).\"",
-        "xp_recompensa": 65
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 47,
-    "fields": {
-        "leccion": 49,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"JS tiene un ciclo muy cómodo para recorrer arreglos. Tienes let armas = [10, 20, 30];. Usa la sintaxis for (let arma of armas) para iterar el arreglo e imprimir cada número de forma individual en la consola.\"",
-        "xp_recompensa": 70
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 48,
-    "fields": {
-        "leccion": 50,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"¡Desafío final! Tienes un arreglo let notas = [10, 5, 8];. Usa un ciclo for clásico o for...of para recorrerlo. Por cada iteración, usa un if / else: si la nota es mayor o igual a 6, imprime Aprobado; si es menor, imprime Reprobado.\"",
-        "xp_recompensa": 100
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 49,
-    "fields": {
-        "leccion": 51,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"List comprehensions provide a concise way to create lists. Create a list called squares that contains the squares of all even numbers from 1 to 10 using a list comprehension. Print the resulting list.\"",
-        "xp_recompensa": 150
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 50,
-    "fields": {
-        "leccion": 52,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"You have a list of words: words = ['apple', 'bat', 'cat']. Create a dictionary called word_lengths where the keys are the words and the values are their lengths (number of letters) using a dictionary comprehension. Print the dictionary.\"",
-        "xp_recompensa": 155
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 51,
-    "fields": {
-        "leccion": 53,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Lambdas are small anonymous functions. Create a lambda function called multiply that takes two arguments x and y and returns their product. Print the result of calling multiply(5, 6).\"",
-        "xp_recompensa": 160
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 52,
-    "fields": {
-        "leccion": 54,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"The map() function executes a specified function for each item in an iterable. You have a list nums = [1, 2, 3, 4]. Use map() and a lambda to double each number in the list. Convert the result to a list and print it.\"",
-        "xp_recompensa": 165
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 53,
-    "fields": {
-        "leccion": 55,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Given the list ages = [12, 18, 25, 15, 30], use the filter() function and a lambda to extract only the ages that are 18 or older. Convert the result to a list and print it.\"",
-        "xp_recompensa": 170
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 54,
-    "fields": {
-        "leccion": 56,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Write a function called sum_all(*args) that takes any number of numerical arguments and returns their total sum using the built-in sum() function. Print the result of sum_all(10, 20, 30, 40).\"",
-        "xp_recompensa": 175
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 55,
-    "fields": {
-        "leccion": 57,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Write a function print_info(kwargs) that iterates over the kwargs dictionary using .items() and prints exactly key: value on separate lines. Call it by passing name='Owl', age=5.\"",
-        "xp_recompensa": 185
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 56,
-    "fields": {
-        "leccion": 58,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Write a try block that attempts to divide 10 / 0. Since this causes an error, catch the ZeroDivisionError in an except block and print exactly: Cannot divide by zero.\"",
-        "xp_recompensa": 190
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 57,
-    "fields": {
-        "leccion": 59,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Unlike standard functions, generators use yield to return data one step at a time. Write a generator function countdown(start) that uses a while loop to yield numbers from start down to 1. Iterate over countdown(3) with a for loop and print each number.\"",
-        "xp_recompensa": 195
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 58,
-    "fields": {
-        "leccion": 60,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Decorators modify the behavior of functions. Write a decorator uppercase_decorator(func) that wraps a function and returns its result in uppercase (.upper()). Apply it using @uppercase_decorator to a function greet() that returns 'hello'. Print greet().\"",
-        "xp_recompensa": 200
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 59,
-    "fields": {
-        "leccion": 61,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Create a class named Warrior. Define the __init__ method to take self and name as parameters, assigning name to self.name. Create an instance of Warrior named Arthur and print its name attribute.\"",
-        "xp_recompensa": 250
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 60,
-    "fields": {
-        "leccion": 62,
-        "tipo_ejercicio": "C",
-        "enunciado": "\"Final Challenge! Create a base class Animal with a method speak(self) that returns 'Sound'. Create a subclass Dog that inherits from Animal but overrides the speak(self) method to return 'Woof'. Print the result of calling speak() on a new Dog instance.\"",
-        "xp_recompensa": 300
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 61,
-    "fields": {
-        "leccion": 63,
-        "tipo_ejercicio": "Q",
-        "enunciado": "\"Las variables nos permiten guardar información. Tienes dos variables: gatos = 8 y perros = 5. Escribe una línea de código que sume ambas variables e imprima el resultado en pantalla.\"",
-        "xp_recompensa": 50
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 62,
-    "fields": {
-        "leccion": 64,
-        "tipo_ejercicio": "Q",
-        "enunciado": "Para unir dos textos en Python usamos el operador +. Une la variable saludo con la variable mascota agregando un espacio en medio para que imprima exactamente: Hola Owl. (Usa: saludo + \" \" + mascota)",
-        "xp_recompensa": 55
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 63,
-    "fields": {
-        "leccion": 65,
-        "tipo_ejercicio": "Q",
-        "enunciado": "Tienes la variable edad = 20. Escribe una estructura condicional if que verifique si la edad es mayor o igual a 18 (edad >= 18). Si se cumple la condición, imprime exactamente el mensaje: Acceso permitido.",
-        "xp_recompensa": 60
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 64,
-    "fields": {
-        "leccion": 66,
-        "tipo_ejercicio": "Q",
-        "enunciado": "\"En Python, las posiciones de las listas empiezan a contarse desde el 0. Tienes la lista inventario = ['pocion', 'escudo', 'espada']. Escribe el comando para mandar a imprimir únicamente el elemento escudo accediendo a su índice.\"",
-        "xp_recompensa": 70
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 65,
-    "fields": {
-        "leccion": 67,
-        "tipo_ejercicio": "Q",
-        "enunciado": "\"El bucle while se ejecuta mientras una condición sea verdadera. Tienes una variable contador = 0. Completa el ciclo while para que imprima el valor de contador y luego increméntalo en 1 (contador += 1) en cada vuelta hasta que deje de ser menor que 3.\"",
-        "xp_recompensa": 75
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 66,
-    "fields": {
-        "leccion": 68,
-        "tipo_ejercicio": "Q",
-        "enunciado": "En Java, para mostrar texto en consola se utiliza el comando System.out.println(). Modifica el método main para que imprima exactamente el texto: Hola RedOwl.",
-        "xp_recompensa": 50
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 67,
-    "fields": {
-        "leccion": 69,
-        "tipo_ejercicio": "Q",
-        "enunciado": "En Java debemos declarar obligatoriamente el tipo de dato. Crea una variable entera llamada puntos con el valor 100 y otra llamada bono con el valor 50. Manda a imprimir la suma de ambas.",
-        "xp_recompensa": 60
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 68,
-    "fields": {
-        "leccion": 70,
-        "tipo_ejercicio": "Q",
-        "enunciado": "\"Tienes int calificacion = 85;. Crea una estructura if-else. Si la calificación es mayor o igual a 70, imprime Aprobado. De lo contrario (else), imprime Reprobado.\"",
-        "xp_recompensa": 70
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 69,
-    "fields": {
-        "leccion": 71,
-        "tipo_ejercicio": "Q",
-        "enunciado": "\"El ciclo for en Java requiere inicialización, condición e incremento. Escribe un ciclo for que comience en int i = 1;, se ejecute mientras i <= 3; e incremente i++. Dentro del cuerpo, imprime el valor de i.\"",
-        "xp_recompensa": 80
-    }
-},
-{
-    "model": "aprendizaje.ejercicio",
-    "pk": 70,
-    "fields": {
-        "leccion": 72,
-        "tipo_ejercicio": "Q",
-        "enunciado": "\"El tipo de dato boolean solo guarda true (verdadero) o false (falso). Tienes boolean estaLogueado = true;. Escribe un condicional simple if que evalúe si la variable es verdadera. Si lo es, imprime Bienvenido.\"",
-        "xp_recompensa": 85
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 2,
-    "fields": {
-        "codigo_base": "#Escribe aqui tu codigo:",
-        "casos_prueba": {
-            "prueba": 1
-        },
-        "tiempo_limite": 15.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 3,
-    "fields": {
-        "codigo_base": "print()",
-        "casos_prueba": {
-            "prueba": 2
-        },
-        "tiempo_limite": 15.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 4,
-    "fields": {
-        "codigo_base": "# Pide el nombre y el color favorito usando input()\r\nnombre = \r\ncolor = \r\n\r\n# Muestra el resultado final usando print()",
-        "casos_prueba": {
-            "test_1": {
-                "inputs": [
-                    "Juan",
-                    "Rojo"
+    {
+        "model": "aprendizaje.estudiante",
+        "pk": 3,
+        "fields": {
+            "racha_dias": 2,
+            "xp_total": 30,
+            "fecha_ultima_leccion": "2026-03-27",
+            "fecha_ultima_recarga": "2026-05-20T17:43:32.939Z",
+            "energia": 5,
+            "racha_ejercicios": 0,
+            "avatar": "avatares/default_owl.png",
+            "escuela": null
+        }
+    },
+    {
+        "model": "aprendizaje.estudiante",
+        "pk": 4,
+        "fields": {
+            "racha_dias": 2,
+            "xp_total": 75,
+            "fecha_ultima_leccion": "2026-03-26",
+            "fecha_ultima_recarga": "2026-05-20T17:43:32.939Z",
+            "energia": 5,
+            "racha_ejercicios": 0,
+            "avatar": "avatares/default_owl.png",
+            "escuela": null
+        }
+    },
+    {
+        "model": "aprendizaje.curso",
+        "pk": 1,
+        "fields": {
+            "nombre": "Curso bÃ¡sico de Python",
+            "lenguaje": "Python",
+            "es_ingles_tecnico": false
+        }
+    },
+    {
+        "model": "aprendizaje.curso",
+        "pk": 4,
+        "fields": {
+            "nombre": "Curso avanzado de Python en inglÃ©s",
+            "lenguaje": "Python",
+            "es_ingles_tecnico": true
+        }
+    },
+    {
+        "model": "aprendizaje.curso",
+        "pk": 5,
+        "fields": {
+            "nombre": "Curso bÃ¡sico Java",
+            "lenguaje": "Java",
+            "es_ingles_tecnico": false
+        }
+    },
+    {
+        "model": "aprendizaje.curso",
+        "pk": 7,
+        "fields": {
+            "nombre": "Curso bÃ¡sico JavaScript",
+            "lenguaje": "JavaScript",
+            "es_ingles_tecnico": false
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 2,
+        "fields": {
+            "curso": 1,
+            "orden": 1,
+            "titulo": "Bienvenidos"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 4,
+        "fields": {
+            "curso": 1,
+            "orden": 2,
+            "titulo": "Variables"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 5,
+        "fields": {
+            "curso": 1,
+            "orden": 3,
+            "titulo": "Ciclos"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 6,
+        "fields": {
+            "curso": 1,
+            "orden": 4,
+            "titulo": "Tu color favorito y tu nombre"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 7,
+        "fields": {
+            "curso": 1,
+            "orden": 5,
+            "titulo": "Proyecto Final"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 8,
+        "fields": {
+            "curso": 4,
+            "orden": 1,
+            "titulo": "The Hacker's Filter (List Comprehensions)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 9,
+        "fields": {
+            "curso": 4,
+            "orden": 2,
+            "titulo": "RedOwl Security System (Object-Oriented Programming)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 10,
+        "fields": {
+            "curso": 4,
+            "orden": 3,
+            "titulo": "Defusing the Bomb (Error Handling)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 11,
+        "fields": {
+            "curso": 5,
+            "orden": 1,
+            "titulo": "El Primer Vuelo (Imprimir en consola)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 12,
+        "fields": {
+            "curso": 5,
+            "orden": 2,
+            "titulo": "Calculando la Experiencia (Variables y Tipos)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 13,
+        "fields": {
+            "curso": 5,
+            "orden": 3,
+            "titulo": "El GuardiÃ¡n del Nido (Condicionales If-Else)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 14,
+        "fields": {
+            "curso": 7,
+            "orden": 1,
+            "titulo": "El primer mensaje en la consola"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 15,
+        "fields": {
+            "curso": 7,
+            "orden": 2,
+            "titulo": "El tesoro del BÃºho (Variables y MatemÃ¡ticas)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 16,
+        "fields": {
+            "curso": 7,
+            "orden": 3,
+            "titulo": "El Portero de la Academia (Condicionales)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 17,
+        "fields": {
+            "curso": 1,
+            "orden": 6,
+            "titulo": "Colecciones y Listas"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 18,
+        "fields": {
+            "curso": 1,
+            "orden": 7,
+            "titulo": "Modificando Listas"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 19,
+        "fields": {
+            "curso": 1,
+            "orden": 8,
+            "titulo": "Bucles automatizados (For)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 20,
+        "fields": {
+            "curso": 1,
+            "orden": 9,
+            "titulo": "Bucles condicionales (While)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 21,
+        "fields": {
+            "curso": 1,
+            "orden": 10,
+            "titulo": "CreaciÃ³n de Funciones"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 22,
+        "fields": {
+            "curso": 1,
+            "orden": 11,
+            "titulo": "Diccionarios y Claves"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 23,
+        "fields": {
+            "curso": 1,
+            "orden": 12,
+            "titulo": "Accediendo a valores"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 24,
+        "fields": {
+            "curso": 1,
+            "orden": 13,
+            "titulo": "NÃºmeros Pares e Impares"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 25,
+        "fields": {
+            "curso": 1,
+            "orden": 14,
+            "titulo": "Retorno de valores"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 26,
+        "fields": {
+            "curso": 1,
+            "orden": 15,
+            "titulo": "Evaluador Final de Python"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 27,
+        "fields": {
+            "curso": 5,
+            "orden": 4,
+            "titulo": "Tomando decisiones (if/else)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 28,
+        "fields": {
+            "curso": 5,
+            "orden": 5,
+            "titulo": "Textos (String)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 29,
+        "fields": {
+            "curso": 5,
+            "orden": 6,
+            "titulo": "Colecciones y Arreglos"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 30,
+        "fields": {
+            "curso": 5,
+            "orden": 7,
+            "titulo": "Bucles automatizados (For)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 31,
+        "fields": {
+            "curso": 5,
+            "orden": 8,
+            "titulo": "Bucles condicionales (While)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 32,
+        "fields": {
+            "curso": 5,
+            "orden": 9,
+            "titulo": "CreaciÃ³n de MÃ©todos"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 33,
+        "fields": {
+            "curso": 5,
+            "orden": 10,
+            "titulo": "Retorno de Valores"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 34,
+        "fields": {
+            "curso": 5,
+            "orden": 11,
+            "titulo": "Bucle For Avanzado (For-Each)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 35,
+        "fields": {
+            "curso": 5,
+            "orden": 12,
+            "titulo": "NÃºmeros Pares e Impares"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 36,
+        "fields": {
+            "curso": 5,
+            "orden": 13,
+            "titulo": "ManipulaciÃ³n de Strings"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 37,
+        "fields": {
+            "curso": 5,
+            "orden": 14,
+            "titulo": "MÃ©todos con Condicionales"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 38,
+        "fields": {
+            "curso": 5,
+            "orden": 15,
+            "titulo": "Evaluador Final de Java"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 39,
+        "fields": {
+            "curso": 7,
+            "orden": 4,
+            "titulo": "Tomando decisiones"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 40,
+        "fields": {
+            "curso": 7,
+            "orden": 5,
+            "titulo": "Cadenas de texto (Strings)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 41,
+        "fields": {
+            "curso": 7,
+            "orden": 6,
+            "titulo": "Colecciones y Arreglos"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 42,
+        "fields": {
+            "curso": 7,
+            "orden": 7,
+            "titulo": "Agregando elementos (Push)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 43,
+        "fields": {
+            "curso": 7,
+            "orden": 8,
+            "titulo": "Bucles automatizados (For)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 44,
+        "fields": {
+            "curso": 7,
+            "orden": 9,
+            "titulo": "Bucles condicionales (While)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 45,
+        "fields": {
+            "curso": 7,
+            "orden": 10,
+            "titulo": "CreaciÃ³n de Funciones"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 46,
+        "fields": {
+            "curso": 7,
+            "orden": 11,
+            "titulo": "Objetos y Propiedades"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 47,
+        "fields": {
+            "curso": 7,
+            "orden": 12,
+            "titulo": "NÃºmeros Pares e Impares"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 48,
+        "fields": {
+            "curso": 7,
+            "orden": 13,
+            "titulo": "Funciones con Retorno"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 49,
+        "fields": {
+            "curso": 7,
+            "orden": 14,
+            "titulo": "Bucles Modernos (for...of)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 50,
+        "fields": {
+            "curso": 7,
+            "orden": 15,
+            "titulo": "Evaluador Final de JavaScript"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 51,
+        "fields": {
+            "curso": 4,
+            "orden": 4,
+            "titulo": "List Comprehensions"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 52,
+        "fields": {
+            "curso": 4,
+            "orden": 5,
+            "titulo": "Dictionary Comprehensions"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 53,
+        "fields": {
+            "curso": 4,
+            "orden": 6,
+            "titulo": "Lambda Functions"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 54,
+        "fields": {
+            "curso": 4,
+            "orden": 7,
+            "titulo": "The Map Function"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 55,
+        "fields": {
+            "curso": 4,
+            "orden": 8,
+            "titulo": "The Filter Function"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 56,
+        "fields": {
+            "curso": 4,
+            "orden": 9,
+            "titulo": "Variable Arguments (*args)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 57,
+        "fields": {
+            "curso": 4,
+            "orden": 10,
+            "titulo": "Keyword Arguments (kwargs)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 58,
+        "fields": {
+            "curso": 4,
+            "orden": 11,
+            "titulo": "Try and Except Blocks"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 59,
+        "fields": {
+            "curso": 4,
+            "orden": 12,
+            "titulo": "Generators"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 60,
+        "fields": {
+            "curso": 4,
+            "orden": 13,
+            "titulo": "Basic Decorators"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 61,
+        "fields": {
+            "curso": 4,
+            "orden": 14,
+            "titulo": "Classes and Objects (OOP)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 62,
+        "fields": {
+            "curso": 4,
+            "orden": 15,
+            "titulo": "Inheritance (OOP)"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 63,
+        "fields": {
+            "curso": 1,
+            "orden": 16,
+            "titulo": "Q-Variables NumÃ©ricas"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 64,
+        "fields": {
+            "curso": 1,
+            "orden": 17,
+            "titulo": "Q-ConcatenaciÃ³n de Textos"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 65,
+        "fields": {
+            "curso": 1,
+            "orden": 18,
+            "titulo": "Q-Condicionales BÃ¡sicos"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 66,
+        "fields": {
+            "curso": 1,
+            "orden": 19,
+            "titulo": "Q-IntroducciÃ³n a Listas"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 67,
+        "fields": {
+            "curso": 1,
+            "orden": 20,
+            "titulo": "Q-El Bucle While"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 68,
+        "fields": {
+            "curso": 5,
+            "orden": 16,
+            "titulo": "Q-Salida de Datos en Java"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 69,
+        "fields": {
+            "curso": 5,
+            "orden": 17,
+            "titulo": "Q-Variables de tipo int"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 70,
+        "fields": {
+            "curso": 5,
+            "orden": 18,
+            "titulo": "Q-Condicionales en Java"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 71,
+        "fields": {
+            "curso": 5,
+            "orden": 19,
+            "titulo": "Q=Estructura For"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 72,
+        "fields": {
+            "curso": 5,
+            "orden": 20,
+            "titulo": "Q-Variables booleanas"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 1,
+        "fields": {
+            "leccion": 2,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Bienvenido al curso de Python, este tipo de ejercicios se resuelven seleccionando un recuadro de la parte inferior",
+            "xp_recompensa": 10
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 2,
+        "fields": {
+            "leccion": 4,
+            "tipo_ejercicio": "C",
+            "enunciado": "Imprime tu primer \"hola mundo\" usando print( )",
+            "xp_recompensa": 25
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 3,
+        "fields": {
+            "leccion": 5,
+            "tipo_ejercicio": "C",
+            "enunciado": "Asignar variables\r\nedad = 30\r\nprint(edad)",
+            "xp_recompensa": 15
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 4,
+        "fields": {
+            "leccion": 6,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Â¡Crea tu identidad secreta! Escribe un programa que pida el nombre del usuario y su color favorito. El programa debe imprimir su nombre ninja combinando ambos, por ejemplo: 'Ninja Rojo Juan'.\r\n\r\nRequisitos: > 1. Usa input() para obtener los datos.\r\n2. Usa print() para mostrar el resultado final.\"",
+            "xp_recompensa": 50
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 5,
+        "fields": {
+            "leccion": 7,
+            "tipo_ejercicio": "C",
+            "enunciado": "Â¡El desafÃ­o final de RedOwl Academy! El Consejo de los BÃºhos necesita clasificar a los nuevos reclutas.\r\n\r\nEscribe un programa que pida al usuario su 'Nivel de Hacking' (debe ser un nÃºmero).\r\n\r\nSi el nivel es 90 o mayor, el programa debe imprimir: Rango S\r\n\r\nSi el nivel estÃ¡ entre 50 y 89, debe imprimir: Rango A\r\n\r\nSi el nivel es menor a 50, debe imprimir: Rango B\r\n\r\nPista: Recuerda usar int() para convertir la respuesta del input() en un nÃºmero entero antes de usar los condicionales (if, elif, else).\"",
+            "xp_recompensa": 500
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 6,
+        "fields": {
+            "leccion": 8,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Welcome to the advanced tier! RedOwl Academy needs to filter server logs quickly.\r\n\r\nYou are given a list of user network pings. Use a list comprehension to create a new list called high_pings that only contains numbers greater than 100. Finally, print() the new list.\r\n\r\nHint: A list comprehension looks like this: [item for item in list if condition]\"",
+            "xp_recompensa": 100
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 7,
+        "fields": {
+            "leccion": 9,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"It's time to build a real system using OOP (Object-Oriented Programming).\r\n\r\nCreate a class named Firewall.\r\n\r\nInside the class, create an __init__ method that takes a status parameter and saves it as an instance variable (self.status).\r\n\r\nCreate a method called show_status() that prints: \"Firewall is \" + self.status\r\n\r\nOutside the class, create an object from Firewall passing \"ACTIVE\" as the status, and call the show_status() method.\"",
+            "xp_recompensa": 150
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 8,
+        "fields": {
+            "leccion": 10,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"A true senior developer knows how to handle system crashes gracefully!\r\n\r\nYou have a variable called encrypted_data. We want to divide it by 2, but unfortunately, the data was corrupted and turned into a string. Dividing a string by a number will crash Python!\r\n\r\nUse a try...except block. Inside the try, attempt to print encrypted_data / 2. Inside the except block, catch the TypeError and print: \"Decryption failed!\"\"",
+            "xp_recompensa": 200
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 9,
+        "fields": {
+            "leccion": 11,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Â¡Bienvenido al nido de Java! Todo gran programador empieza saludando al mundo.\r\n\r\nUtiliza System.out.println() para imprimir exactamente el siguiente mensaje: Hola, RedOwl.\r\n\r\n(Recuerda que en Java, cada instrucciÃ³n debe terminar con un punto y coma ;)\"",
+            "xp_recompensa": 50
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 10,
+        "fields": {
+            "leccion": 12,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Â¡Es hora de recolectar experiencia! En Java, debes decirle al sistema quÃ© tipo de dato vas a guardar.\r\n\r\nCrea una variable entera (int) llamada xpBase y asÃ­gnale el valor de 100.\r\n\r\nCrea otra variable entera llamada xpBonus con el valor de 50.\r\n\r\nSuma ambas en una nueva variable llamada xpTotal.\r\n\r\nImprime el valor de xpTotal.\"",
+            "xp_recompensa": 75
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 11,
+        "fields": {
+            "leccion": 13,
+            "tipo_ejercicio": "C",
+            "enunciado": "Crea una lecciÃ³n tipo \"3. Decisiones con If-Else\"\r\n\"El bÃºho guardiÃ¡n necesita verificar si tienes el nivel suficiente para entrar a las Ligas Competitivas.\r\n\r\nTienes una variable nivel. Escribe un condicional if-else:\r\n\r\nSi el nivel es mayor o igual a 5, imprime: Acceso concedido\r\n\r\nSi es menor, imprime: Sigue practicando\"",
+            "xp_recompensa": 100
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 12,
+        "fields": {
+            "leccion": 14,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Â¡Bienvenido al lado web de la programaciÃ³n! En JavaScript, utilizamos la consola para ver nuestros resultados.\r\n\r\nUtiliza console.log() para imprimir exactamente el siguiente mensaje: Hola, JavaScript.\r\n\r\n(Nota: Aunque en las versiones modernas de JS el punto y coma ; al final es opcional, es una buena prÃ¡ctica ponerlo).\"",
+            "xp_recompensa": 50
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 13,
+        "fields": {
+            "leccion": 15,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Â¡Vamos a contar el tesoro de RedOwl!\r\n\r\nDeclara una variable usando let llamada monedasOro y asÃ­gnale el valor de 50.\r\n\r\nDeclara otra variable llamada monedasPlata con el valor de 25.\r\n\r\nSuma ambas variables y guarda el resultado en una nueva variable llamada total.\r\n\r\nUtiliza console.log() para imprimir la variable total.\"",
+            "xp_recompensa": 75
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 14,
+        "fields": {
+            "leccion": 16,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"El portero de la academia necesita un programa para saber si un estudiante tiene la edad suficiente para ver los cursos avanzados.\r\n\r\nYa tienes una variable edad. Escribe un bloque if / else:\r\n\r\nSi la edad es mayor o igual a 18, imprime en consola: Permitido\r\n\r\nSi es menor, imprime en consola: Denegado\"",
+            "xp_recompensa": 100
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 15,
+        "fields": {
+            "leccion": 17,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"En lugar de tener muchas variables, podemos agrupar datos en una Lista. Crea una lista llamada inventario que contenga exactamente estos tres textos en este orden: 'mapa', 'brujula' y 'pluma'. Luego imprime la lista completa.\"",
+            "xp_recompensa": 35
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 16,
+        "fields": {
+            "leccion": 18,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"Las listas pueden crecer. Tienes una lista llamada mochila que solo tiene un 'libro'. Utiliza el mÃ©todo .append() para agregar el texto 'pocion' a la mochila. Finalmente, imprime la mochila actualizada.\"",
+            "xp_recompensa": 35
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 17,
+        "fields": {
+            "leccion": 19,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"Los ciclos nos permiten repetir acciones. Tienes una lista de pasos. Utiliza un ciclo for para recorrer la lista e imprimir cada nÃºmero de forma individual (uno por lÃ­nea).\"",
+            "xp_recompensa": 40
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 18,
+        "fields": {
+            "leccion": 20,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"El ciclo while se repite mientras una condiciÃ³n sea verdadera. Tu energia es 3. Crea un ciclo while que funcione mientras la energÃ­a sea mayor a 0. Dentro del ciclo, imprime la energia y luego rÃ©stale 1 (energia -= 1).\"",
+            "xp_recompensa": 45
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 19,
+        "fields": {
+            "leccion": 21,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"Las funciones son bloques de cÃ³digo reutilizables. Utiliza la palabra clave def para crear una funciÃ³n llamada saludar(). Dentro de ella, imprime 'Hola Maestro'. Fuera de la funciÃ³n, no olvides llamarla (invocarla) para que se ejecute.\"",
+            "xp_recompensa": 50
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 20,
+        "fields": {
+            "leccion": 22,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"Los diccionarios guardan datos usando una estructura de 'clave: valor'. Crea un diccionario llamado jugador que tenga dos claves: 'nombre' con el valor 'BÃºho' (texto), y 'nivel' con el valor 10 (nÃºmero). Finalmente, imprime el diccionario completo.\"",
+            "xp_recompensa": 55
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 21,
+        "fields": {
+            "leccion": 23,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"Ya tienes un diccionario jugador creado. Ahora, no queremos imprimir todo, solo queremos saber su nivel. Utiliza la sintaxis de corchetes jugador['clave'] para imprimir Ãºnicamente el nÃºmero del nivel.\"",
+            "xp_recompensa": 60
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 22,
+        "fields": {
+            "leccion": 24,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"El operador mÃ³dulo % nos da el residuo de una divisiÃ³n. Es perfecto para saber si un nÃºmero es par. Tienes un numero = 7. Escribe un condicional if / else que verifique si numero % 2 == 0. Si lo es, imprime 'Par'. Si no, imprime 'Impar'.\"",
+            "xp_recompensa": 65
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 23,
+        "fields": {
+            "leccion": 25,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"Las funciones no solo imprimen, tambiÃ©n pueden 'devolver' un resultado. Crea una funciÃ³n llamada multiplicar(a, b) que utilice la palabra reservada return para devolver el resultado de a * b. Luego, imprime el resultado de llamar a multiplicar(3, 4).\"",
+            "xp_recompensa": 70
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 24,
+        "fields": {
+            "leccion": 26,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"Â¡Prueba final! Tienes una lista de notas = [10, 5, 8]. Utiliza un ciclo for para recorrer la lista. Dentro del ciclo, usa un if / else: si la nota es mayor o igual a 6, imprime 'Aprobado'; de lo contrario, imprime 'Reprobado'.\"",
+            "xp_recompensa": 100
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 25,
+        "fields": {
+            "leccion": 27,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"Los condicionales en Java requieren parÃ©ntesis () para la condiciÃ³n y llaves {} para el bloque de cÃ³digo. Si nivel es mayor a 3, imprime Avanzado. Si no, imprime Novato.\"",
+            "xp_recompensa": 30
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 26,
+        "fields": {
+            "leccion": 28,
+            "tipo_ejercicio": "C",
+            "enunciado": "Enunciado: \"En Java, los textos se guardan en variables de tipo String (con 'S' mayÃºscula). Une las variables saludo y nombre usando el operador + y manda el resultado a imprimir. Debe decir Bienvenido BÃºho.\"",
+            "xp_recompensa": 35
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 27,
+        "fields": {
+            "leccion": 29,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"En Java, los arreglos (arrays) tienen un tamaÃ±o y tipo fijo. Crea un arreglo de enteros int[] llamado pasos que contenga los nÃºmeros 1, 2 y 3: int[] pasos = {1, 2, 3};. Luego, imprime el primer elemento del arreglo accediendo a la posiciÃ³n cero: pasos[0].\"",
+            "xp_recompensa": 35
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 28,
+        "fields": {
+            "leccion": 30,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"El bucle for en Java necesita tres partes: inicializaciÃ³n, condiciÃ³n y aumento. Escribe un ciclo for clÃ¡sico que comience en int i = 1, termine cuando i <= 3, y aumente de uno en uno i++. Dentro del ciclo, imprime el valor de i.\"",
+            "xp_recompensa": 40
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 29,
+        "fields": {
+            "leccion": 31,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"El ciclo while es excelente cuando no sabes cuÃ¡ntas veces iterar. Tienes una variable energia = 3. Escribe un ciclo while que funcione mientras energia > 0. Dentro del ciclo imprime la energia y luego rÃ©stale uno usando energia--;.\"",
+            "xp_recompensa": 45
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 30,
+        "fields": {
+            "leccion": 32,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"En Java, las funciones se llaman 'mÃ©todos'. Debajo de main (pero dentro de la clase Main), crea un mÃ©todo llamado public static void saludar(). Dentro de Ã©l, imprime Hola Maestro. Luego, regresa al bloque main e invoca saludar();.\"",
+            "xp_recompensa": 50
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 31,
+        "fields": {
+            "leccion": 33,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Los mÃ©todos tambiÃ©n devuelven datos. Crea un mÃ©todo public static int sumar(int a, int b) que devuelva la suma de a + b usando la palabra return. En el main, imprime el resultado de llamar a sumar(5, 5).\"",
+            "xp_recompensa": 55
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 32,
+        "fields": {
+            "leccion": 34,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Java tiene un ciclo especial para recorrer arreglos fÃ¡cilmente. Tienes un arreglo int[] armas = {10, 20, 30};. Utiliza un bucle for-each con la sintaxis for (int arma : armas) para imprimir cada nÃºmero uno por uno.\"",
+            "xp_recompensa": 60
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 33,
+        "fields": {
+            "leccion": 35,
+            "tipo_ejercicio": "C",
+            "enunciado": "Al igual que en otros lenguajes, el operador % (mÃ³dulo) obtiene el residuo de una divisiÃ³n. Tienes la variable int numero = 7;. Crea un condicional if / else para evaluar si numero % 2 == 0. Si es verdadero imprime Par, de lo contrario imprime Impar.\"",
+            "xp_recompensa": 65
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 34,
+        "fields": {
+            "leccion": 36,
+            "tipo_ejercicio": "C",
+            "enunciado": "En Java, los String son objetos que tienen sus propios mÃ©todos. Tienes la variable String hechizo = \"Fuego\";. Utiliza el mÃ©todo .length() para obtener cuÃ¡ntas letras tiene la palabra e imprime el resultado.\"",
+            "xp_recompensa": 70
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 35,
+        "fields": {
+            "leccion": 37,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Vamos a combinar mÃ©todos y decisiones. Crea un mÃ©todo public static int mayor(int a, int b) que use un if / else para retornar el nÃºmero mÃ¡s grande entre 'a' y 'b'. En el main, imprime el resultado de llamar a mayor(10, 20).\"",
+            "xp_recompensa": 75
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 36,
+        "fields": {
+            "leccion": 38,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Â¡Prueba final! Tienes un arreglo de calificaciones int[] notas = {10, 5, 8};. Utiliza un ciclo for clÃ¡sico o un for-each para recorrerlo. Dentro del ciclo, evalÃºa: si la nota es >= 6, imprime Aprobado; si no, imprime Reprobado.\"",
+            "xp_recompensa": 100
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 37,
+        "fields": {
+            "leccion": 39,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"La sintaxis de los condicionales en JS es casi idÃ©ntica a Java: usa parÃ©ntesis () y llaves {}. Tienes un nivel = 5. Si el nivel es mayor a 3, imprime Avanzado. Si no, imprime Novato.\"",
+            "xp_recompensa": 30
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 38,
+        "fields": {
+            "leccion": 40,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Puedes unir textos usando el operador +. Une las variables saludo y nombre dentro de tu console.log() para que el resultado exacto sea Bienvenido BÃºho.\"",
+            "xp_recompensa": 35
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 39,
+        "fields": {
+            "leccion": 41,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"En JavaScript, los arreglos se crean usando corchetes []. Crea un arreglo llamado inventario que contenga los textos 'mapa', 'brujula' y 'pluma'. Luego, utiliza console.log() para imprimir el primer elemento (recuerda que empezamos a contar desde el Ã­ndice 0).\"",
+            "xp_recompensa": 35
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 40,
+        "fields": {
+            "leccion": 42,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Los arreglos en JS son dinÃ¡micos. Tienes un arreglo mochila que solo tiene un 'libro'. Utiliza el mÃ©todo .push('pocion') para agregar este nuevo Ã­tem al final. Luego, imprime cuÃ¡ntos objetos tienes usando console.log(mochila.length).\"",
+            "xp_recompensa": 40
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 41,
+        "fields": {
+            "leccion": 43,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"El ciclo for en JS usa la misma lÃ³gica que Java. Escribe un ciclo que empiece en let i = 1, se repita mientras i <= 3, y aumente de uno en uno con i++. Dentro del ciclo, imprime el valor de i.\"",
+            "xp_recompensa": 40
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 42,
+        "fields": {
+            "leccion": 44,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Tienes una variable energia = 3. Escribe un ciclo while que se ejecute mientras la energÃ­a sea mayor a 0. Dentro del ciclo, imprime la energÃ­a con console.log(energia) y luego rÃ©stale uno usando energia--;.\"",
+            "xp_recompensa": 45
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 43,
+        "fields": {
+            "leccion": 45,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"En JS usamos la palabra clave function para crear bloques de cÃ³digo reutilizables. Crea una funciÃ³n llamada saludar(). Dentro de ella, imprime 'Hola Maestro'. Afuera de la funciÃ³n, no olvides llamarla escribiendo saludar();.\"",
+            "xp_recompensa": 50
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 44,
+        "fields": {
+            "leccion": 46,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"En JS agrupamos caracterÃ­sticas usando Objetos (con llaves {}). Crea un objeto llamado jugador que tenga dos propiedades: nombre: 'BÃºho' y nivel: 10. Luego, imprime solo el nivel accediendo con la sintaxis de punto: console.log(jugador.nivel).\"",
+            "xp_recompensa": 60
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 45,
+        "fields": {
+            "leccion": 47,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Usa el operador mÃ³dulo % para saber si un nÃºmero es par. Tienes la variable let numero = 7;. Escribe un condicional if / else para evaluar si numero % 2 == 0. Si es cierto, imprime Par, de lo contrario imprime Impar.\"",
+            "xp_recompensa": 60
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 46,
+        "fields": {
+            "leccion": 48,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Las funciones pueden devolver resultados. Crea una funciÃ³n sumar(a, b) que utilice la palabra return para devolver el resultado de a + b. Luego, imprime el resultado de ejecutar sumar(10, 10).\"",
+            "xp_recompensa": 65
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 47,
+        "fields": {
+            "leccion": 49,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"JS tiene un ciclo muy cÃ³modo para recorrer arreglos. Tienes let armas = [10, 20, 30];. Usa la sintaxis for (let arma of armas) para iterar el arreglo e imprimir cada nÃºmero de forma individual en la consola.\"",
+            "xp_recompensa": 70
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 48,
+        "fields": {
+            "leccion": 50,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Â¡DesafÃ­o final! Tienes un arreglo let notas = [10, 5, 8];. Usa un ciclo for clÃ¡sico o for...of para recorrerlo. Por cada iteraciÃ³n, usa un if / else: si la nota es mayor o igual a 6, imprime Aprobado; si es menor, imprime Reprobado.\"",
+            "xp_recompensa": 100
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 49,
+        "fields": {
+            "leccion": 51,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"List comprehensions provide a concise way to create lists. Create a list called squares that contains the squares of all even numbers from 1 to 10 using a list comprehension. Print the resulting list.\"",
+            "xp_recompensa": 150
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 50,
+        "fields": {
+            "leccion": 52,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"You have a list of words: words = ['apple', 'bat', 'cat']. Create a dictionary called word_lengths where the keys are the words and the values are their lengths (number of letters) using a dictionary comprehension. Print the dictionary.\"",
+            "xp_recompensa": 155
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 51,
+        "fields": {
+            "leccion": 53,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Lambdas are small anonymous functions. Create a lambda function called multiply that takes two arguments x and y and returns their product. Print the result of calling multiply(5, 6).\"",
+            "xp_recompensa": 160
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 52,
+        "fields": {
+            "leccion": 54,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"The map() function executes a specified function for each item in an iterable. You have a list nums = [1, 2, 3, 4]. Use map() and a lambda to double each number in the list. Convert the result to a list and print it.\"",
+            "xp_recompensa": 165
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 53,
+        "fields": {
+            "leccion": 55,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Given the list ages = [12, 18, 25, 15, 30], use the filter() function and a lambda to extract only the ages that are 18 or older. Convert the result to a list and print it.\"",
+            "xp_recompensa": 170
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 54,
+        "fields": {
+            "leccion": 56,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Write a function called sum_all(*args) that takes any number of numerical arguments and returns their total sum using the built-in sum() function. Print the result of sum_all(10, 20, 30, 40).\"",
+            "xp_recompensa": 175
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 55,
+        "fields": {
+            "leccion": 57,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Write a function print_info(kwargs) that iterates over the kwargs dictionary using .items() and prints exactly key: value on separate lines. Call it by passing name='Owl', age=5.\"",
+            "xp_recompensa": 185
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 56,
+        "fields": {
+            "leccion": 58,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Write a try block that attempts to divide 10 / 0. Since this causes an error, catch the ZeroDivisionError in an except block and print exactly: Cannot divide by zero.\"",
+            "xp_recompensa": 190
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 57,
+        "fields": {
+            "leccion": 59,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Unlike standard functions, generators use yield to return data one step at a time. Write a generator function countdown(start) that uses a while loop to yield numbers from start down to 1. Iterate over countdown(3) with a for loop and print each number.\"",
+            "xp_recompensa": 195
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 58,
+        "fields": {
+            "leccion": 60,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Decorators modify the behavior of functions. Write a decorator uppercase_decorator(func) that wraps a function and returns its result in uppercase (.upper()). Apply it using @uppercase_decorator to a function greet() that returns 'hello'. Print greet().\"",
+            "xp_recompensa": 200
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 59,
+        "fields": {
+            "leccion": 61,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Create a class named Warrior. Define the __init__ method to take self and name as parameters, assigning name to self.name. Create an instance of Warrior named Arthur and print its name attribute.\"",
+            "xp_recompensa": 250
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 60,
+        "fields": {
+            "leccion": 62,
+            "tipo_ejercicio": "C",
+            "enunciado": "\"Final Challenge! Create a base class Animal with a method speak(self) that returns 'Sound'. Create a subclass Dog that inherits from Animal but overrides the speak(self) method to return 'Woof'. Print the result of calling speak() on a new Dog instance.\"",
+            "xp_recompensa": 300
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 61,
+        "fields": {
+            "leccion": 63,
+            "tipo_ejercicio": "Q",
+            "enunciado": "\"Las variables nos permiten guardar informaciÃ³n. Tienes dos variables: gatos = 8 y perros = 5. Escribe una lÃ­nea de cÃ³digo que sume ambas variables e imprima el resultado en pantalla.\"",
+            "xp_recompensa": 50
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 62,
+        "fields": {
+            "leccion": 64,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Para unir dos textos en Python usamos el operador +. Une la variable saludo con la variable mascota agregando un espacio en medio para que imprima exactamente: Hola Owl. (Usa: saludo + \" \" + mascota)",
+            "xp_recompensa": 55
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 63,
+        "fields": {
+            "leccion": 65,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Tienes la variable edad = 20. Escribe una estructura condicional if que verifique si la edad es mayor o igual a 18 (edad >= 18). Si se cumple la condiciÃ³n, imprime exactamente el mensaje: Acceso permitido.",
+            "xp_recompensa": 60
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 64,
+        "fields": {
+            "leccion": 66,
+            "tipo_ejercicio": "Q",
+            "enunciado": "\"En Python, las posiciones de las listas empiezan a contarse desde el 0. Tienes la lista inventario = ['pocion', 'escudo', 'espada']. Escribe el comando para mandar a imprimir Ãºnicamente el elemento escudo accediendo a su Ã­ndice.\"",
+            "xp_recompensa": 70
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 65,
+        "fields": {
+            "leccion": 67,
+            "tipo_ejercicio": "Q",
+            "enunciado": "\"El bucle while se ejecuta mientras una condiciÃ³n sea verdadera. Tienes una variable contador = 0. Completa el ciclo while para que imprima el valor de contador y luego incremÃ©ntalo en 1 (contador += 1) en cada vuelta hasta que deje de ser menor que 3.\"",
+            "xp_recompensa": 75
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 66,
+        "fields": {
+            "leccion": 68,
+            "tipo_ejercicio": "Q",
+            "enunciado": "En Java, para mostrar texto en consola se utiliza el comando System.out.println(). Modifica el mÃ©todo main para que imprima exactamente el texto: Hola RedOwl.",
+            "xp_recompensa": 50
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 67,
+        "fields": {
+            "leccion": 69,
+            "tipo_ejercicio": "Q",
+            "enunciado": "En Java debemos declarar obligatoriamente el tipo de dato. Crea una variable entera llamada puntos con el valor 100 y otra llamada bono con el valor 50. Manda a imprimir la suma de ambas.",
+            "xp_recompensa": 60
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 68,
+        "fields": {
+            "leccion": 70,
+            "tipo_ejercicio": "Q",
+            "enunciado": "\"Tienes int calificacion = 85;. Crea una estructura if-else. Si la calificaciÃ³n es mayor o igual a 70, imprime Aprobado. De lo contrario (else), imprime Reprobado.\"",
+            "xp_recompensa": 70
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 69,
+        "fields": {
+            "leccion": 71,
+            "tipo_ejercicio": "Q",
+            "enunciado": "\"El ciclo for en Java requiere inicializaciÃ³n, condiciÃ³n e incremento. Escribe un ciclo for que comience en int i = 1;, se ejecute mientras i <= 3; e incremente i++. Dentro del cuerpo, imprime el valor de i.\"",
+            "xp_recompensa": 80
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 70,
+        "fields": {
+            "leccion": 72,
+            "tipo_ejercicio": "Q",
+            "enunciado": "\"El tipo de dato boolean solo guarda true (verdadero) o false (falso). Tienes boolean estaLogueado = true;. Escribe un condicional simple if que evalÃºe si la variable es verdadera. Si lo es, imprime Bienvenido.\"",
+            "xp_recompensa": 85
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 2,
+        "fields": {
+            "codigo_base": "#Escribe aqui tu codigo:",
+            "casos_prueba": {
+                "prueba": 1
+            },
+            "tiempo_limite": 15.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 3,
+        "fields": {
+            "codigo_base": "print()",
+            "casos_prueba": {
+                "prueba": 2
+            },
+            "tiempo_limite": 15.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 4,
+        "fields": {
+            "codigo_base": "# Pide el nombre y el color favorito usando input()\r\nnombre = \r\ncolor = \r\n\r\n# Muestra el resultado final usando print()",
+            "casos_prueba": {
+                "test_1": {
+                    "inputs": [
+                        "Juan",
+                        "Rojo"
+                    ],
+                    "expected": "Ninja Rojo Juan"
+                }
+            },
+            "tiempo_limite": 5.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 5,
+        "fields": {
+            "codigo_base": "# 1. Pide el nivel al usuario y conviÃ©rtelo a entero\r\nnivel = \r\n\r\n# 2. Crea la lÃ³gica de condicionales (if, elif, else)\r\n\r\n\r\n# 3. Imprime el rango correspondiente",
+            "casos_prueba": {
+                "test": "final_eval"
+            },
+            "tiempo_limite": 10.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 6,
+        "fields": {
+            "codigo_base": "network_pings = [45, 120, 89, 210, 30, 105, 12]\r\n\r\n# 1. Create the list comprehension here\r\nhigh_pings = \r\n\r\n# 2. Print the high_pings list",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar que imprima la lista filtrada correctamente",
+                    "expected_output": "[120, 210, 105]"
+                }
+            },
+            "tiempo_limite": 10.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 7,
+        "fields": {
+            "codigo_base": "# 1. Define the Firewall class and its methods\r\nclass Firewall:\r\n\r\n\r\n\r\n\r\n# 2. Instantiate the class and call the method",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar que el mÃ©todo show_status imprima el texto exacto",
+                    "expected_output": "Firewall is ACTIVE"
+                }
+            },
+            "tiempo_limite": 15.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 8,
+        "fields": {
+            "codigo_base": "encrypted_data = \"ACCESS_DENIED_ERROR_404\"\r\n\r\n# Write your try...except block below",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar que el bloque except capture el error y muestre la alerta",
+                    "expected_output": "Decryption failed!"
+                }
+            },
+            "tiempo_limite": 20.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 9,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Escribe tu cÃ³digo aquÃ­ abajo\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar que imprima el saludo exacto",
+                    "expected_output": "Hola, RedOwl"
+                }
+            },
+            "tiempo_limite": 50.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 10,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Define tus variables y realiza la suma aquÃ­\r\n        \r\n        \r\n        \r\n        // Imprime el total\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar que la suma de variables se imprima correctamente",
+                    "expected_output": "150"
+                }
+            },
+            "tiempo_limite": 20.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 11,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int nivel = 6;\r\n        \r\n        // Escribe tu condicional if-else aquÃ­ abajo\r\n        \r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar que con nivel 6 el acceso sea concedido",
+                    "expected_output": "Acceso concedido"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 12,
+        "fields": {
+            "codigo_base": "// Escribe tu cÃ³digo aquÃ­ abajo para imprimir el mensaje",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar que imprima el saludo exacto en la consola",
+                    "expected_output": "Hola, JavaScript"
+                }
+            },
+            "tiempo_limite": 20.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 13,
+        "fields": {
+            "codigo_base": "// 1. Declara las variables de oro y plata\r\n\r\n\r\n// 2. Realiza la suma\r\n\r\n\r\n// 3. Imprime el total en consola",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar que la suma de las monedas se imprima correctamente",
+                    "expected_output": "75"
+                }
+            },
+            "tiempo_limite": 25.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 14,
+        "fields": {
+            "codigo_base": "let edad = 18;\r\n\r\n// Escribe tu condicional if/else aquÃ­ abajo",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar que con edad 18 el acceso sea Permitido",
+                    "expected_output": "Permitido"
+                }
+            },
+            "tiempo_limite": 40.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 15,
+        "fields": {
+            "codigo_base": "# Crea tu lista aquÃ­ y luego imprÃ­mela:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar la creaciÃ³n correcta de la lista",
+                    "expected_output": "['mapa', 'brujula', 'pluma']"
+                }
+            },
+            "tiempo_limite": 20.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 16,
+        "fields": {
+            "codigo_base": "mochila = ['libro']\r\n\r\n# Usa append para agregar 'pocion' y luego imprime:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar inserciÃ³n en la lista",
+                    "expected_output": "['libro', 'pocion']"
+                }
+            },
+            "tiempo_limite": 19.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 17,
+        "fields": {
+            "codigo_base": "pasos = [1, 2, 3]\r\n\r\n# Escribe tu ciclo for aquÃ­ para imprimir cada paso:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar iteraciÃ³n del for loop",
+                    "expected_output": "1\n2\n3"
+                }
+            },
+            "tiempo_limite": 20.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 18,
+        "fields": {
+            "codigo_base": "energia = 3\r\n\r\n# Escribe tu ciclo while aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar cuenta regresiva del while",
+                    "expected_output": "3\n2\n1"
+                }
+            },
+            "tiempo_limite": 19.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 19,
+        "fields": {
+            "codigo_base": "# Define tu funciÃ³n saludar aquÃ­:\r\n\r\n\r\n\r\n# Llama a tu funciÃ³n aquÃ­ abajo:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar la invocaciÃ³n de la funciÃ³n",
+                    "expected_output": "Hola Maestro"
+                }
+            },
+            "tiempo_limite": 18.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 20,
+        "fields": {
+            "codigo_base": "# Crea tu diccionario aquÃ­:\r\n\r\n\r\n# ImprÃ­melo:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar estructura del diccionario",
+                    "expected_output": "{'nombre': 'BÃºho', 'nivel': 10}"
+                }
+            },
+            "tiempo_limite": 49.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 21,
+        "fields": {
+            "codigo_base": "jugador = {'nombre': 'BÃºho', 'nivel': 10}\r\n\r\n# Imprime solo el nivel del jugador:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar acceso a la clave nivel",
+                    "expected_output": "10"
+                }
+            },
+            "tiempo_limite": 34.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 22,
+        "fields": {
+            "codigo_base": "numero = 7\r\n\r\n# Escribe tu lÃ³gica de par o impar aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar uso del mÃ³dulo matematico",
+                    "expected_output": "Impar"
+                }
+            },
+            "tiempo_limite": 39.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 23,
+        "fields": {
+            "codigo_base": "# Define la funciÃ³n multiplicar:\r\n\r\n\r\n\r\n# Imprime el resultado de la funciÃ³n pasÃ¡ndole 3 y 4:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar el return de la funciÃ³n",
+                    "expected_output": "12"
+                }
+            },
+            "tiempo_limite": 31.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 24,
+        "fields": {
+            "codigo_base": "notas = [10, 5, 8]\r\n\r\n# Escribe tu ciclo y condicionales aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar integraciÃ³n de for loop y condicionales",
+                    "expected_output": "Aprobado\nReprobado\nAprobado"
+                }
+            },
+            "tiempo_limite": 49.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 25,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int nivel = 5;\r\n        \r\n        // Escribe tu bloque if / else aquÃ­:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar lÃ³gica de if/else con llaves",
+                    "expected_output": "Avanzado"
+                }
+            },
+            "tiempo_limite": 43.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 26,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        String saludo = \"Bienvenido \";\r\n        String nombre = \"BÃºho\";\r\n        \r\n        // Imprime la concatenaciÃ³n aquÃ­:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar concatenaciÃ³n de la clase String",
+                    "expected_output": "Bienvenido BÃºho"
+                }
+            },
+            "tiempo_limite": 50.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 27,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Crea tu arreglo de enteros aquÃ­:\r\n        \r\n        // Imprime el primer elemento (Ã­ndice 0):\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar creaciÃ³n de arreglo y acceso por Ã­ndice",
+                    "expected_output": "1"
+                }
+            },
+            "tiempo_limite": 47.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 28,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Escribe tu ciclo for aquÃ­ para imprimir del 1 al 3:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar iteraciÃ³n exacta del ciclo for",
+                    "expected_output": "1\n2\n3"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 29,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int energia = 3;\r\n        \r\n        // Escribe tu ciclo while aquÃ­:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar iteraciÃ³n y decremento del ciclo while",
+                    "expected_output": "3\n2\n1"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 30,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Llama al mÃ©todo saludar() aquÃ­:\r\n        \r\n    }\r\n    \r\n    // Define tu mÃ©todo public static void saludar() aquÃ­ abajo:\r\n    \r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar creaciÃ³n e invocaciÃ³n de mÃ©todo estÃ¡tico",
+                    "expected_output": "Hola Maestro"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 31,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Imprime el resultado de llamar a sumar(5, 5):\r\n        \r\n    }\r\n    \r\n    // Define el mÃ©todo sumar aquÃ­ abajo:\r\n    \r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar retorno de tipo int en mÃ©todo",
+                    "expected_output": "10"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 32,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int[] armas = {10, 20, 30};\r\n        \r\n        // Escribe tu ciclo for-each aquÃ­:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar uso del ciclo for-each",
+                    "expected_output": "10\n20\n30"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 33,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int numero = 7;\r\n        \r\n        // Escribe tu if / else aquÃ­:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar lÃ³gica matemÃ¡tica del operador mÃ³dulo",
+                    "expected_output": "Impar"
+                }
+            },
+            "tiempo_limite": 59.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 34,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        String hechizo = \"Fuego\";\r\n        \r\n        // Imprime la longitud de la palabra usando hechizo.length():\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar uso del mÃ©todo length()",
+                    "expected_output": "5"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 35,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Llama al mÃ©todo mayor(10, 20) y manda el resultado a imprimir:\r\n        \r\n    }\r\n    \r\n    // Crea tu mÃ©todo mayor aquÃ­ abajo:\r\n    \r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar retorno condicional en un mÃ©todo",
+                    "expected_output": "20"
+                }
+            },
+            "tiempo_limite": 61.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 36,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int[] notas = {10, 5, 8};\r\n        \r\n        // Escribe tu lÃ³gica combinada aquÃ­:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar integraciÃ³n de ciclos y condicionales en Java",
+                    "expected_output": "Aprobado\nReprobado\nAprobado"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 37,
+        "fields": {
+            "codigo_base": "let nivel = 5;\r\n\r\n// Escribe tu if / else aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar ejecuciÃ³n del bloque if verdadero",
+                    "expected_output": "Avanzado"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 38,
+        "fields": {
+            "codigo_base": "let saludo = \"Bienvenido \";\r\nlet nombre = \"BÃºho\";\r\n\r\n// Imprime la concatenaciÃ³n aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar concatenaciÃ³n de strings en JS",
+                    "expected_output": "Bienvenido BÃºho"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 39,
+        "fields": {
+            "codigo_base": "// Crea tu arreglo aquÃ­:\r\n\r\n\r\n// Imprime el primer elemento (Ã­ndice 0):",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar creaciÃ³n de arreglo y acceso por Ã­ndice",
+                    "expected_output": "mapa"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 40,
+        "fields": {
+            "codigo_base": "let mochila = ['libro'];\r\n\r\n// 1. Usa push para agregar 'pocion':\r\n\r\n\r\n// 2. Imprime el tamaÃ±o del arreglo usando .length:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar uso de push() y propiedad length",
+                    "expected_output": "2"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 41,
+        "fields": {
+            "codigo_base": "// Escribe tu ciclo for aquÃ­ para imprimir del 1 al 3:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar iteraciÃ³n del bucle for",
+                    "expected_output": "1\n2\n3"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 42,
+        "fields": {
+            "codigo_base": "let energia = 3;\r\n\r\n// Escribe tu ciclo while aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar decremento y condiciÃ³n del while",
+                    "expected_output": "3\n2\n1"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 43,
+        "fields": {
+            "codigo_base": "// Define tu funcion saludar() aquÃ­:\r\n\r\n\r\n\r\n// Llama (ejecuta) tu funciÃ³n aquÃ­ abajo:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar declaraciÃ³n e invocaciÃ³n de funciÃ³n",
+                    "expected_output": "Hola Maestro"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 44,
+        "fields": {
+            "codigo_base": "// Crea tu objeto aquÃ­:\r\n\r\n\r\n// Imprime solo el nivel del jugador:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar creaciÃ³n de objeto y acceso a propiedad",
+                    "expected_output": "10"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 45,
+        "fields": {
+            "codigo_base": "let numero = 7;\r\n\r\n// Escribe tu condicional aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar uso lÃ³gico del operador mÃ³dulo",
+                    "expected_output": "Impar"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 46,
+        "fields": {
+            "codigo_base": "// Define la funciÃ³n sumar aquÃ­:\r\n\r\n\r\n\r\n// Imprime el resultado de invocar sumar(10, 10):",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar retorno de la funciÃ³n matemÃ¡tica",
+                    "expected_output": "20"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 47,
+        "fields": {
+            "codigo_base": "let armas = [10, 20, 30];\r\n\r\n// Escribe tu ciclo for...of aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar iteraciÃ³n del ciclo for...of",
+                    "expected_output": "10\n20\n30"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 48,
+        "fields": {
+            "codigo_base": "let notas = [10, 5, 8];\r\n\r\n// Escribe aquÃ­ tu lÃ³gica combinada (ciclo + condicional):",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verificar integraciÃ³n final de ciclos y condicionales",
+                    "expected_output": "Aprobado\nReprobado\nAprobado"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 49,
+        "fields": {
+            "codigo_base": "# Create your list comprehension here:\r\nsquares = \r\n\r\n# Print the list:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Check list comprehension output",
+                    "expected_output": "[4, 16, 36, 64, 100]"
+                }
+            },
+            "tiempo_limite": 59.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 50,
+        "fields": {
+            "codigo_base": "words = ['apple', 'bat', 'cat']\r\n\r\n# Create the dictionary comprehension here:\r\n\r\n\r\n# Print the dictionary:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Check dictionary comprehension output",
+                    "expected_output": "{'apple': 5, 'bat': 3, 'cat': 3}"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 51,
+        "fields": {
+            "codigo_base": "# Define your lambda function here:\r\nmultiply = \r\n\r\n# Print the result of multiply(5, 6):",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verify lambda execution",
+                    "expected_output": "30"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 52,
+        "fields": {
+            "codigo_base": "nums = [1, 2, 3, 4]\r\n\r\n# Use map and lambda here, then print the converted list:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verify map function output",
+                    "expected_output": "[2, 4, 6, 8]"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 53,
+        "fields": {
+            "codigo_base": "ages = [12, 18, 25, 15, 30]\r\n\r\n# Use filter and lambda here, then print the converted list:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verify filter function output",
+                    "expected_output": "[18, 25, 30]"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 54,
+        "fields": {
+            "codigo_base": "# Define your sum_all function here:\r\n\r\n\r\n\r\n# Print the result:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verify *args implementation",
+                    "expected_output": "100"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 55,
+        "fields": {
+            "codigo_base": "# Define your print_info function here:\r\n\r\n\r\n\r\n# Call the function:\r\nprint_info(name='Owl', age=5)",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verify **kwargs iteration",
+                    "expected_output": "name: Owl\nage: 5"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 56,
+        "fields": {
+            "codigo_base": "# Write your try / except block here:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verify exception handling",
+                    "expected_output": "Cannot divide by zero"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 57,
+        "fields": {
+            "codigo_base": "# Define the generator here:\r\n\r\n\r\n\r\n# Iterate and print:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verify generator yield loop",
+                    "expected_output": "3\n2\n1"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 58,
+        "fields": {
+            "codigo_base": "# Write the decorator here:\r\n\r\n\r\n\r\n# Apply it to the greet function:\r\ndef greet():\r\n    return 'hello'\r\n\r\n# Print the result:\r\nprint(greet())",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verify decorator modification",
+                    "expected_output": "HELLO"
+                }
+            },
+            "tiempo_limite": 65.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 59,
+        "fields": {
+            "codigo_base": "# Define the class Warrior here:\r\n\r\n\r\n\r\n# Create the instance and print the name:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verify class instantiation",
+                    "expected_output": "Arthur"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 60,
+        "fields": {
+            "codigo_base": "# Define the Animal class:\r\n\r\n\r\n# Define the Dog subclass:\r\n\r\n\r\n# Instantiate Dog and print its speak() output:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Verify inheritance and method overriding",
+                    "expected_output": "Woof"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 61,
+        "fields": {
+            "codigo_base": "gatos = 8\r\nperros = 5\r\n\r\n# Imprime la suma de gatos y perros aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar suma de variables numÃ©ricas",
+                    "expected_output": "13"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 62,
+        "fields": {
+            "codigo_base": "saludo = \"Hola\"\r\nmascota = \"Owl\"\r\n\r\n# Imprime el saludo combinado aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar uniÃ³n correcta de cadenas de texto",
+                    "expected_output": "Hola Owl"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 63,
+        "fields": {
+            "codigo_base": "edad = 20\r\n\r\n# Escribe tu bloque if aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar estructura if con salida esperada",
+                    "expected_output": "Acceso permitido"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 64,
+        "fields": {
+            "codigo_base": "inventario = ['pocion', 'escudo', 'espada']\r\n\r\n# Imprime el segundo elemento de la lista aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar acceso por Ã­ndice de lista",
+                    "expected_output": "escudo"
+                }
+            },
+            "tiempo_limite": 58.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 65,
+        "fields": {
+            "codigo_base": "contador = 0\r\n\r\nwhile contador < 3:\r\n    # Imprime el contador e incremÃ©ntalo aquÃ­:",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar flujo e incremento de bucle while",
+                    "expected_output": "0\n1\n2"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 66,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Escribe tu comando de impresiÃ³n aquÃ­:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar impresiÃ³n bÃ¡sica con System.out.println",
+                    "expected_output": "Hola RedOwl"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 67,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Declara las variables 'puntos' y 'bono', y muestra su suma:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar declaraciÃ³n y suma de tipos int",
+                    "expected_output": "150"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 68,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int calificacion = 85;\r\n        \r\n        // Escribe el bloque if-else aquÃ­:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar bifurcaciÃ³n condicional if-else",
+                    "expected_output": "Aprobado"
+                }
+            },
+            "tiempo_limite": 74.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 69,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Escribe tu ciclo for aquÃ­:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar iteraciÃ³n controlada del ciclo for",
+                    "expected_output": "1\n2\n3"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 70,
+        "fields": {
+            "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        boolean estaLogueado = true;\r\n        \r\n        // EvalÃºa la variable booleana aquÃ­:\r\n        \r\n    }\r\n}",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar evaluaciÃ³n de banderas booleanas",
+                    "expected_output": "Bienvenido"
+                }
+            },
+            "tiempo_limite": 60.0
+        }
+    },
+    {
+        "model": "aprendizaje.curso",
+        "pk": 8,
+        "fields": {
+            "nombre": "JavaScript Intermedio y DOM",
+            "lenguaje": "JavaScript",
+            "es_ingles_tecnico": false
+        }
+    },
+    {
+        "model": "aprendizaje.curso",
+        "pk": 9,
+        "fields": {
+            "nombre": "Technical English for Devs",
+            "lenguaje": "English",
+            "es_ingles_tecnico": true
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 100,
+        "fields": {
+            "curso": 8,
+            "orden": 1,
+            "titulo": "Variables y Tipos de Datos"
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 101,
+        "fields": {
+            "curso": 9,
+            "orden": 1,
+            "titulo": "Data Types Vocabulary"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 200,
+        "fields": {
+            "leccion": 100,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Â¿QuÃ© palabra clave se usa en JavaScript moderno para declarar una variable que puede cambiar su valor en el futuro?",
+            "xp_recompensa": 10
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 200,
+        "fields": {
+            "ejercicio": 200,
+            "tipo_reto": "OM",
+            "configuracion": {
+                "opciones": [
+                    "const",
+                    "let",
+                    "var",
+                    "int"
                 ],
-                "expected": "Ninja Rojo Juan"
-            }
-        },
-        "tiempo_limite": 5.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 5,
-    "fields": {
-        "codigo_base": "# 1. Pide el nivel al usuario y conviértelo a entero\r\nnivel = \r\n\r\n# 2. Crea la lógica de condicionales (if, elif, else)\r\n\r\n\r\n# 3. Imprime el rango correspondiente",
-        "casos_prueba": {
-            "test": "final_eval"
-        },
-        "tiempo_limite": 10.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 6,
-    "fields": {
-        "codigo_base": "network_pings = [45, 120, 89, 210, 30, 105, 12]\r\n\r\n# 1. Create the list comprehension here\r\nhigh_pings = \r\n\r\n# 2. Print the high_pings list",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar que imprima la lista filtrada correctamente",
-                "expected_output": "[120, 210, 105]"
-            }
-        },
-        "tiempo_limite": 10.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 7,
-    "fields": {
-        "codigo_base": "# 1. Define the Firewall class and its methods\r\nclass Firewall:\r\n\r\n\r\n\r\n\r\n# 2. Instantiate the class and call the method",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar que el método show_status imprima el texto exacto",
-                "expected_output": "Firewall is ACTIVE"
-            }
-        },
-        "tiempo_limite": 15.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 8,
-    "fields": {
-        "codigo_base": "encrypted_data = \"ACCESS_DENIED_ERROR_404\"\r\n\r\n# Write your try...except block below",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar que el bloque except capture el error y muestre la alerta",
-                "expected_output": "Decryption failed!"
-            }
-        },
-        "tiempo_limite": 20.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 9,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Escribe tu código aquí abajo\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar que imprima el saludo exacto",
-                "expected_output": "Hola, RedOwl"
-            }
-        },
-        "tiempo_limite": 50.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 10,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Define tus variables y realiza la suma aquí\r\n        \r\n        \r\n        \r\n        // Imprime el total\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar que la suma de variables se imprima correctamente",
-                "expected_output": "150"
-            }
-        },
-        "tiempo_limite": 20.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 11,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int nivel = 6;\r\n        \r\n        // Escribe tu condicional if-else aquí abajo\r\n        \r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar que con nivel 6 el acceso sea concedido",
-                "expected_output": "Acceso concedido"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 12,
-    "fields": {
-        "codigo_base": "// Escribe tu código aquí abajo para imprimir el mensaje",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar que imprima el saludo exacto en la consola",
-                "expected_output": "Hola, JavaScript"
-            }
-        },
-        "tiempo_limite": 20.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 13,
-    "fields": {
-        "codigo_base": "// 1. Declara las variables de oro y plata\r\n\r\n\r\n// 2. Realiza la suma\r\n\r\n\r\n// 3. Imprime el total en consola",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar que la suma de las monedas se imprima correctamente",
-                "expected_output": "75"
-            }
-        },
-        "tiempo_limite": 25.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 14,
-    "fields": {
-        "codigo_base": "let edad = 18;\r\n\r\n// Escribe tu condicional if/else aquí abajo",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar que con edad 18 el acceso sea Permitido",
-                "expected_output": "Permitido"
-            }
-        },
-        "tiempo_limite": 40.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 15,
-    "fields": {
-        "codigo_base": "# Crea tu lista aquí y luego imprímela:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar la creación correcta de la lista",
-                "expected_output": "['mapa', 'brujula', 'pluma']"
-            }
-        },
-        "tiempo_limite": 20.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 16,
-    "fields": {
-        "codigo_base": "mochila = ['libro']\r\n\r\n# Usa append para agregar 'pocion' y luego imprime:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar inserción en la lista",
-                "expected_output": "['libro', 'pocion']"
-            }
-        },
-        "tiempo_limite": 19.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 17,
-    "fields": {
-        "codigo_base": "pasos = [1, 2, 3]\r\n\r\n# Escribe tu ciclo for aquí para imprimir cada paso:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar iteración del for loop",
-                "expected_output": "1\n2\n3"
-            }
-        },
-        "tiempo_limite": 20.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 18,
-    "fields": {
-        "codigo_base": "energia = 3\r\n\r\n# Escribe tu ciclo while aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar cuenta regresiva del while",
-                "expected_output": "3\n2\n1"
-            }
-        },
-        "tiempo_limite": 19.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 19,
-    "fields": {
-        "codigo_base": "# Define tu función saludar aquí:\r\n\r\n\r\n\r\n# Llama a tu función aquí abajo:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar la invocación de la función",
-                "expected_output": "Hola Maestro"
-            }
-        },
-        "tiempo_limite": 18.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 20,
-    "fields": {
-        "codigo_base": "# Crea tu diccionario aquí:\r\n\r\n\r\n# Imprímelo:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar estructura del diccionario",
-                "expected_output": "{'nombre': 'Búho', 'nivel': 10}"
-            }
-        },
-        "tiempo_limite": 49.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 21,
-    "fields": {
-        "codigo_base": "jugador = {'nombre': 'Búho', 'nivel': 10}\r\n\r\n# Imprime solo el nivel del jugador:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar acceso a la clave nivel",
-                "expected_output": "10"
-            }
-        },
-        "tiempo_limite": 34.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 22,
-    "fields": {
-        "codigo_base": "numero = 7\r\n\r\n# Escribe tu lógica de par o impar aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar uso del módulo matematico",
-                "expected_output": "Impar"
-            }
-        },
-        "tiempo_limite": 39.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 23,
-    "fields": {
-        "codigo_base": "# Define la función multiplicar:\r\n\r\n\r\n\r\n# Imprime el resultado de la función pasándole 3 y 4:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar el return de la función",
-                "expected_output": "12"
-            }
-        },
-        "tiempo_limite": 31.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 24,
-    "fields": {
-        "codigo_base": "notas = [10, 5, 8]\r\n\r\n# Escribe tu ciclo y condicionales aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar integración de for loop y condicionales",
-                "expected_output": "Aprobado\nReprobado\nAprobado"
-            }
-        },
-        "tiempo_limite": 49.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 25,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int nivel = 5;\r\n        \r\n        // Escribe tu bloque if / else aquí:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar lógica de if/else con llaves",
-                "expected_output": "Avanzado"
-            }
-        },
-        "tiempo_limite": 43.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 26,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        String saludo = \"Bienvenido \";\r\n        String nombre = \"Búho\";\r\n        \r\n        // Imprime la concatenación aquí:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar concatenación de la clase String",
-                "expected_output": "Bienvenido Búho"
-            }
-        },
-        "tiempo_limite": 50.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 27,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Crea tu arreglo de enteros aquí:\r\n        \r\n        // Imprime el primer elemento (índice 0):\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar creación de arreglo y acceso por índice",
-                "expected_output": "1"
-            }
-        },
-        "tiempo_limite": 47.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 28,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Escribe tu ciclo for aquí para imprimir del 1 al 3:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar iteración exacta del ciclo for",
-                "expected_output": "1\n2\n3"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 29,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int energia = 3;\r\n        \r\n        // Escribe tu ciclo while aquí:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar iteración y decremento del ciclo while",
-                "expected_output": "3\n2\n1"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 30,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Llama al método saludar() aquí:\r\n        \r\n    }\r\n    \r\n    // Define tu método public static void saludar() aquí abajo:\r\n    \r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar creación e invocación de método estático",
-                "expected_output": "Hola Maestro"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 31,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Imprime el resultado de llamar a sumar(5, 5):\r\n        \r\n    }\r\n    \r\n    // Define el método sumar aquí abajo:\r\n    \r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar retorno de tipo int en método",
-                "expected_output": "10"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 32,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int[] armas = {10, 20, 30};\r\n        \r\n        // Escribe tu ciclo for-each aquí:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar uso del ciclo for-each",
-                "expected_output": "10\n20\n30"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 33,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int numero = 7;\r\n        \r\n        // Escribe tu if / else aquí:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar lógica matemática del operador módulo",
-                "expected_output": "Impar"
-            }
-        },
-        "tiempo_limite": 59.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 34,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        String hechizo = \"Fuego\";\r\n        \r\n        // Imprime la longitud de la palabra usando hechizo.length():\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar uso del método length()",
-                "expected_output": "5"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 35,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Llama al método mayor(10, 20) y manda el resultado a imprimir:\r\n        \r\n    }\r\n    \r\n    // Crea tu método mayor aquí abajo:\r\n    \r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar retorno condicional en un método",
-                "expected_output": "20"
-            }
-        },
-        "tiempo_limite": 61.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 36,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int[] notas = {10, 5, 8};\r\n        \r\n        // Escribe tu lógica combinada aquí:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar integración de ciclos y condicionales en Java",
-                "expected_output": "Aprobado\nReprobado\nAprobado"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 37,
-    "fields": {
-        "codigo_base": "let nivel = 5;\r\n\r\n// Escribe tu if / else aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar ejecución del bloque if verdadero",
-                "expected_output": "Avanzado"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 38,
-    "fields": {
-        "codigo_base": "let saludo = \"Bienvenido \";\r\nlet nombre = \"Búho\";\r\n\r\n// Imprime la concatenación aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar concatenación de strings en JS",
-                "expected_output": "Bienvenido Búho"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 39,
-    "fields": {
-        "codigo_base": "// Crea tu arreglo aquí:\r\n\r\n\r\n// Imprime el primer elemento (índice 0):",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar creación de arreglo y acceso por índice",
-                "expected_output": "mapa"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 40,
-    "fields": {
-        "codigo_base": "let mochila = ['libro'];\r\n\r\n// 1. Usa push para agregar 'pocion':\r\n\r\n\r\n// 2. Imprime el tamaño del arreglo usando .length:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar uso de push() y propiedad length",
-                "expected_output": "2"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 41,
-    "fields": {
-        "codigo_base": "// Escribe tu ciclo for aquí para imprimir del 1 al 3:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar iteración del bucle for",
-                "expected_output": "1\n2\n3"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 42,
-    "fields": {
-        "codigo_base": "let energia = 3;\r\n\r\n// Escribe tu ciclo while aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar decremento y condición del while",
-                "expected_output": "3\n2\n1"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 43,
-    "fields": {
-        "codigo_base": "// Define tu funcion saludar() aquí:\r\n\r\n\r\n\r\n// Llama (ejecuta) tu función aquí abajo:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar declaración e invocación de función",
-                "expected_output": "Hola Maestro"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 44,
-    "fields": {
-        "codigo_base": "// Crea tu objeto aquí:\r\n\r\n\r\n// Imprime solo el nivel del jugador:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar creación de objeto y acceso a propiedad",
-                "expected_output": "10"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 45,
-    "fields": {
-        "codigo_base": "let numero = 7;\r\n\r\n// Escribe tu condicional aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar uso lógico del operador módulo",
-                "expected_output": "Impar"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 46,
-    "fields": {
-        "codigo_base": "// Define la función sumar aquí:\r\n\r\n\r\n\r\n// Imprime el resultado de invocar sumar(10, 10):",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar retorno de la función matemática",
-                "expected_output": "20"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 47,
-    "fields": {
-        "codigo_base": "let armas = [10, 20, 30];\r\n\r\n// Escribe tu ciclo for...of aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar iteración del ciclo for...of",
-                "expected_output": "10\n20\n30"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 48,
-    "fields": {
-        "codigo_base": "let notas = [10, 5, 8];\r\n\r\n// Escribe aquí tu lógica combinada (ciclo + condicional):",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verificar integración final de ciclos y condicionales",
-                "expected_output": "Aprobado\nReprobado\nAprobado"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 49,
-    "fields": {
-        "codigo_base": "# Create your list comprehension here:\r\nsquares = \r\n\r\n# Print the list:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Check list comprehension output",
-                "expected_output": "[4, 16, 36, 64, 100]"
-            }
-        },
-        "tiempo_limite": 59.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 50,
-    "fields": {
-        "codigo_base": "words = ['apple', 'bat', 'cat']\r\n\r\n# Create the dictionary comprehension here:\r\n\r\n\r\n# Print the dictionary:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Check dictionary comprehension output",
-                "expected_output": "{'apple': 5, 'bat': 3, 'cat': 3}"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 51,
-    "fields": {
-        "codigo_base": "# Define your lambda function here:\r\nmultiply = \r\n\r\n# Print the result of multiply(5, 6):",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verify lambda execution",
-                "expected_output": "30"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 52,
-    "fields": {
-        "codigo_base": "nums = [1, 2, 3, 4]\r\n\r\n# Use map and lambda here, then print the converted list:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verify map function output",
-                "expected_output": "[2, 4, 6, 8]"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 53,
-    "fields": {
-        "codigo_base": "ages = [12, 18, 25, 15, 30]\r\n\r\n# Use filter and lambda here, then print the converted list:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verify filter function output",
-                "expected_output": "[18, 25, 30]"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 54,
-    "fields": {
-        "codigo_base": "# Define your sum_all function here:\r\n\r\n\r\n\r\n# Print the result:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verify *args implementation",
-                "expected_output": "100"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 55,
-    "fields": {
-        "codigo_base": "# Define your print_info function here:\r\n\r\n\r\n\r\n# Call the function:\r\nprint_info(name='Owl', age=5)",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verify **kwargs iteration",
-                "expected_output": "name: Owl\nage: 5"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 56,
-    "fields": {
-        "codigo_base": "# Write your try / except block here:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verify exception handling",
-                "expected_output": "Cannot divide by zero"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 57,
-    "fields": {
-        "codigo_base": "# Define the generator here:\r\n\r\n\r\n\r\n# Iterate and print:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verify generator yield loop",
-                "expected_output": "3\n2\n1"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 58,
-    "fields": {
-        "codigo_base": "# Write the decorator here:\r\n\r\n\r\n\r\n# Apply it to the greet function:\r\ndef greet():\r\n    return 'hello'\r\n\r\n# Print the result:\r\nprint(greet())",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verify decorator modification",
-                "expected_output": "HELLO"
-            }
-        },
-        "tiempo_limite": 65.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 59,
-    "fields": {
-        "codigo_base": "# Define the class Warrior here:\r\n\r\n\r\n\r\n# Create the instance and print the name:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verify class instantiation",
-                "expected_output": "Arthur"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 60,
-    "fields": {
-        "codigo_base": "# Define the Animal class:\r\n\r\n\r\n# Define the Dog subclass:\r\n\r\n\r\n# Instantiate Dog and print its speak() output:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Verify inheritance and method overriding",
-                "expected_output": "Woof"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 61,
-    "fields": {
-        "codigo_base": "gatos = 8\r\nperros = 5\r\n\r\n# Imprime la suma de gatos y perros aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Validar suma de variables numéricas",
-                "expected_output": "13"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 62,
-    "fields": {
-        "codigo_base": "saludo = \"Hola\"\r\nmascota = \"Owl\"\r\n\r\n# Imprime el saludo combinado aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Validar unión correcta de cadenas de texto",
-                "expected_output": "Hola Owl"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 63,
-    "fields": {
-        "codigo_base": "edad = 20\r\n\r\n# Escribe tu bloque if aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Validar estructura if con salida esperada",
-                "expected_output": "Acceso permitido"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 64,
-    "fields": {
-        "codigo_base": "inventario = ['pocion', 'escudo', 'espada']\r\n\r\n# Imprime el segundo elemento de la lista aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Validar acceso por índice de lista",
-                "expected_output": "escudo"
-            }
-        },
-        "tiempo_limite": 58.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 65,
-    "fields": {
-        "codigo_base": "contador = 0\r\n\r\nwhile contador < 3:\r\n    # Imprime el contador e increméntalo aquí:",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Validar flujo e incremento de bucle while",
-                "expected_output": "0\n1\n2"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 66,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Escribe tu comando de impresión aquí:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Validar impresión básica con System.out.println",
-                "expected_output": "Hola RedOwl"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 67,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Declara las variables 'puntos' y 'bono', y muestra su suma:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Validar declaración y suma de tipos int",
-                "expected_output": "150"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 68,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        int calificacion = 85;\r\n        \r\n        // Escribe el bloque if-else aquí:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Validar bifurcación condicional if-else",
-                "expected_output": "Aprobado"
-            }
-        },
-        "tiempo_limite": 74.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 69,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        // Escribe tu ciclo for aquí:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Validar iteración controlada del ciclo for",
-                "expected_output": "1\n2\n3"
-            }
-        },
-        "tiempo_limite": 60.0
-    }
-},
-{
-    "model": "aprendizaje.retocodigo",
-    "pk": 70,
-    "fields": {
-        "codigo_base": "public class Main {\r\n    public static void main(String[] args) {\r\n        boolean estaLogueado = true;\r\n        \r\n        // Evalúa la variable booleana aquí:\r\n        \r\n    }\r\n}",
-        "casos_prueba": {
-            "test_1": {
-                "descripcion": "Validar evaluación de banderas booleanas",
-                "expected_output": "Bienvenido"
-            }
-        },
-        "tiempo_limite": 60.0
+                "respuesta_correcta": "let"
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 201,
+        "fields": {
+            "leccion": 100,
+            "tipo_ejercicio": "C",
+            "enunciado": "Escribe un programa en JavaScript que imprima 'Hola Mundo' en la consola.",
+            "xp_recompensa": 20
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 201,
+        "fields": {
+            "ejercicio": 201,
+            "codigo_base": "// Escribe tu cÃ³digo aquÃ­ debajo\n",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar salida estÃ¡ndar",
+                    "expected_output": "Hola Mundo"
+                }
+            },
+            "tiempo_limite": 30.0
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 202,
+        "fields": {
+            "leccion": 101,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Enlaza cada tÃ©rmino en espaÃ±ol con su traducciÃ³n tÃ©cnica correcta en inglÃ©s.",
+            "xp_recompensa": 20
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 202,
+        "fields": {
+            "ejercicio": 202,
+            "tipo_reto": "EP",
+            "configuracion": {
+                "pares": [
+                    {
+                        "termino_A": "Cadena de texto",
+                        "termino_B": "String"
+                    },
+                    {
+                        "termino_A": "Entero",
+                        "termino_B": "Integer"
+                    },
+                    {
+                        "termino_A": "Arreglo",
+                        "termino_B": "Array"
+                    },
+                    {
+                        "termino_A": "Booleano",
+                        "termino_B": "Boolean"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 102,
+        "fields": {
+            "curso": 8,
+            "orden": 2,
+            "titulo": "SelecciÃ³n de Elementos DOM"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 210,
+        "fields": {
+            "leccion": 102,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Â¿QuÃ© mÃ©todo usarÃ­as para seleccionar un Ãºnico elemento HTML basÃ¡ndote en su atributo 'id'?",
+            "xp_recompensa": 10
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 210,
+        "fields": {
+            "ejercicio": 210,
+            "tipo_reto": "OM",
+            "configuracion": {
+                "opciones": [
+                    "querySelector",
+                    "getElementsByClassName",
+                    "getElementById",
+                    "querySelectorAll"
+                ],
+                "respuesta_correcta": "getElementById"
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 211,
+        "fields": {
+            "leccion": 102,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Enlaza cada selector de JavaScript con lo que devuelve.",
+            "xp_recompensa": 15
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 211,
+        "fields": {
+            "ejercicio": 211,
+            "tipo_reto": "EP",
+            "configuracion": {
+                "pares": [
+                    {
+                        "termino_A": "getElementById",
+                        "termino_B": "Un Ãºnico elemento"
+                    },
+                    {
+                        "termino_A": "querySelectorAll",
+                        "termino_B": "Un NodeList (lista de elementos)"
+                    },
+                    {
+                        "termino_A": "getElementsByTagName",
+                        "termino_B": "Una HTMLCollection basada en la etiqueta"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 212,
+        "fields": {
+            "leccion": 102,
+            "tipo_ejercicio": "C",
+            "enunciado": "Usa document.getElementById para seleccionar el elemento con id 'titulo' y cambia su texto a 'DOM Dominado'.",
+            "xp_recompensa": 30
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 212,
+        "fields": {
+            "ejercicio": 212,
+            "codigo_base": "const elemento = // Tu cÃ³digo aquÃ­\r\n",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar modificaciÃ³n del DOM",
+                    "expected_output": "DOM Dominado"
+                }
+            },
+            "tiempo_limite": 40.0
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 103,
+        "fields": {
+            "curso": 8,
+            "orden": 3,
+            "titulo": "Eventos y Listeners"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 213,
+        "fields": {
+            "leccion": 103,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Completa la sintaxis para escuchar un clic en un botÃ³n.",
+            "xp_recompensa": 15
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 213,
+        "fields": {
+            "ejercicio": 213,
+            "tipo_reto": "RH",
+            "configuracion": {
+                "texto_antes": "boton.",
+                "texto_despues": "('click', function() { alert('Clic'); });",
+                "respuesta_correcta": "addEventListener"
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 214,
+        "fields": {
+            "leccion": 103,
+            "tipo_ejercicio": "C",
+            "enunciado": "Crea un EventListener para que al hacer 'click' en el botÃ³n (id 'btn'), se imprima 'BotÃ³n presionado' en consola.",
+            "xp_recompensa": 25
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 214,
+        "fields": {
+            "ejercicio": 214,
+            "codigo_base": "const btn = document.getElementById('btn');\r\n\r\n// AÃ±ade el evento aquÃ­\r\n",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar evento click",
+                    "expected_output": "BotÃ³n presionado"
+                }
+            },
+            "tiempo_limite": 45.0
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 104,
+        "fields": {
+            "curso": 8,
+            "orden": 4,
+            "titulo": "Modificando el DOM dinÃ¡micamente"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 215,
+        "fields": {
+            "leccion": 104,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Ordena los pasos lÃ³gicos para crear un nuevo pÃ¡rrafo e insertarlo en la pÃ¡gina.",
+            "xp_recompensa": 20
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 215,
+        "fields": {
+            "ejercicio": 215,
+            "tipo_reto": "OT",
+            "configuracion": {
+                "elementos_ordenados": [
+                    "1. document.createElement('p')",
+                    "2. p.textContent = 'Nuevo texto'",
+                    "3. Seleccionar el elemento padre (ej. body)",
+                    "4. padre.appendChild(p)"
+                ]
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 105,
+        "fields": {
+            "curso": 9,
+            "orden": 2,
+            "titulo": "Functions & Methods Vocabulary"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 216,
+        "fields": {
+            "leccion": 105,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Match the English technical verb with its correct Spanish translation.",
+            "xp_recompensa": 15
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 216,
+        "fields": {
+            "ejercicio": 216,
+            "tipo_reto": "EP",
+            "configuracion": {
+                "pares": [
+                    {
+                        "termino_A": "To fetch",
+                        "termino_B": "Obtener / Recuperar"
+                    },
+                    {
+                        "termino_A": "To deploy",
+                        "termino_B": "Desplegar"
+                    },
+                    {
+                        "termino_A": "To debug",
+                        "termino_B": "Depurar"
+                    },
+                    {
+                        "termino_A": "To parse",
+                        "termino_B": "Analizar sintÃ¡cticamente"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 217,
+        "fields": {
+            "leccion": 105,
+            "tipo_ejercicio": "Q",
+            "enunciado": "What is the correct definition of 'Parameter' in programming?",
+            "xp_recompensa": 10
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 217,
+        "fields": {
+            "ejercicio": 217,
+            "tipo_reto": "OM",
+            "configuracion": {
+                "opciones": [
+                    "A variable passed into a function.",
+                    "A visual component on the screen.",
+                    "A type of database.",
+                    "An error in the code."
+                ],
+                "respuesta_correcta": "A variable passed into a function."
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 106,
+        "fields": {
+            "curso": 9,
+            "orden": 3,
+            "titulo": "Error Handling & Debugging"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 218,
+        "fields": {
+            "leccion": 106,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Fill in the blank to complete the concept: We use a Try/______ block to handle errors gracefully.",
+            "xp_recompensa": 15
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 218,
+        "fields": {
+            "ejercicio": 218,
+            "tipo_reto": "RH",
+            "configuracion": {
+                "texto_antes": "We use a Try / ",
+                "texto_despues": " block.",
+                "respuesta_correcta": "Catch"
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 219,
+        "fields": {
+            "leccion": 106,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Order the logical sequence of troubleshooting a bug.",
+            "xp_recompensa": 20
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 219,
+        "fields": {
+            "ejercicio": 219,
+            "tipo_reto": "OT",
+            "configuracion": {
+                "elementos_ordenados": [
+                    "1. Reproduce the bug",
+                    "2. Analyze the stack trace",
+                    "3. Isolate the problematic code",
+                    "4. Apply a fix and test again"
+                ]
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 102,
+        "fields": {
+            "curso": 8,
+            "orden": 2,
+            "titulo": "SelecciÃ³n de Elementos DOM"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 210,
+        "fields": {
+            "leccion": 102,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Â¿QuÃ© mÃ©todo usarÃ­as para seleccionar un Ãºnico elemento HTML basÃ¡ndote en su atributo 'id'?",
+            "xp_recompensa": 10
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 210,
+        "fields": {
+            "ejercicio": 210,
+            "tipo_reto": "OM",
+            "configuracion": {
+                "opciones": [
+                    "querySelector",
+                    "getElementsByClassName",
+                    "getElementById",
+                    "querySelectorAll"
+                ],
+                "respuesta_correcta": "getElementById"
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 211,
+        "fields": {
+            "leccion": 102,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Enlaza cada selector de JavaScript con lo que devuelve.",
+            "xp_recompensa": 15
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 211,
+        "fields": {
+            "ejercicio": 211,
+            "tipo_reto": "EP",
+            "configuracion": {
+                "pares": [
+                    {
+                        "termino_A": "getElementById",
+                        "termino_B": "Un Ãºnico elemento"
+                    },
+                    {
+                        "termino_A": "querySelectorAll",
+                        "termino_B": "Un NodeList (lista de elementos)"
+                    },
+                    {
+                        "termino_A": "getElementsByTagName",
+                        "termino_B": "Una HTMLCollection basada en la etiqueta"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 212,
+        "fields": {
+            "leccion": 102,
+            "tipo_ejercicio": "C",
+            "enunciado": "Usa document.getElementById para seleccionar el elemento con id 'titulo' y cambia su texto a 'DOM Dominado'.",
+            "xp_recompensa": 30
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 212,
+        "fields": {
+            "ejercicio": 212,
+            "codigo_base": "const elemento = // Tu cÃ³digo aquÃ­\r\n",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar modificaciÃ³n del DOM",
+                    "expected_output": "DOM Dominado"
+                }
+            },
+            "tiempo_limite": 40.0
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 103,
+        "fields": {
+            "curso": 8,
+            "orden": 3,
+            "titulo": "Eventos y Listeners"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 213,
+        "fields": {
+            "leccion": 103,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Completa la sintaxis para escuchar un clic en un botÃ³n.",
+            "xp_recompensa": 15
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 213,
+        "fields": {
+            "ejercicio": 213,
+            "tipo_reto": "RH",
+            "configuracion": {
+                "texto_antes": "boton.",
+                "texto_despues": "('click', function() { alert('Clic'); });",
+                "respuesta_correcta": "addEventListener"
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 214,
+        "fields": {
+            "leccion": 103,
+            "tipo_ejercicio": "C",
+            "enunciado": "Crea un EventListener para que al hacer 'click' en el botÃ³n (id 'btn'), se imprima 'BotÃ³n presionado' en consola.",
+            "xp_recompensa": 25
+        }
+    },
+    {
+        "model": "aprendizaje.retocodigo",
+        "pk": 214,
+        "fields": {
+            "ejercicio": 214,
+            "codigo_base": "const btn = document.getElementById('btn');\r\n\r\n// AÃ±ade el evento aquÃ­\r\n",
+            "casos_prueba": {
+                "test_1": {
+                    "descripcion": "Validar evento click",
+                    "expected_output": "BotÃ³n presionado"
+                }
+            },
+            "tiempo_limite": 45.0
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 104,
+        "fields": {
+            "curso": 8,
+            "orden": 4,
+            "titulo": "Modificando el DOM dinÃ¡micamente"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 215,
+        "fields": {
+            "leccion": 104,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Ordena los pasos lÃ³gicos para crear un nuevo pÃ¡rrafo e insertarlo en la pÃ¡gina.",
+            "xp_recompensa": 20
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 215,
+        "fields": {
+            "ejercicio": 215,
+            "tipo_reto": "OT",
+            "configuracion": {
+                "elementos_ordenados": [
+                    "1. document.createElement('p')",
+                    "2. p.textContent = 'Nuevo texto'",
+                    "3. Seleccionar el elemento padre (ej. body)",
+                    "4. padre.appendChild(p)"
+                ]
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 105,
+        "fields": {
+            "curso": 9,
+            "orden": 2,
+            "titulo": "Functions & Methods Vocabulary"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 216,
+        "fields": {
+            "leccion": 105,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Match the English technical verb with its correct Spanish translation.",
+            "xp_recompensa": 15
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 216,
+        "fields": {
+            "ejercicio": 216,
+            "tipo_reto": "EP",
+            "configuracion": {
+                "pares": [
+                    {
+                        "termino_A": "To fetch",
+                        "termino_B": "Obtener / Recuperar"
+                    },
+                    {
+                        "termino_A": "To deploy",
+                        "termino_B": "Desplegar"
+                    },
+                    {
+                        "termino_A": "To debug",
+                        "termino_B": "Depurar"
+                    },
+                    {
+                        "termino_A": "To parse",
+                        "termino_B": "Analizar sintÃ¡cticamente"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 217,
+        "fields": {
+            "leccion": 105,
+            "tipo_ejercicio": "Q",
+            "enunciado": "What is the correct definition of 'Parameter' in programming?",
+            "xp_recompensa": 10
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 217,
+        "fields": {
+            "ejercicio": 217,
+            "tipo_reto": "OM",
+            "configuracion": {
+                "opciones": [
+                    "A variable passed into a function.",
+                    "A visual component on the screen.",
+                    "A type of database.",
+                    "An error in the code."
+                ],
+                "respuesta_correcta": "A variable passed into a function."
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.leccion",
+        "pk": 106,
+        "fields": {
+            "curso": 9,
+            "orden": 3,
+            "titulo": "Error Handling & Debugging"
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 218,
+        "fields": {
+            "leccion": 106,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Fill in the blank to complete the concept: We use a Try/______ block to handle errors gracefully.",
+            "xp_recompensa": 15
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 218,
+        "fields": {
+            "ejercicio": 218,
+            "tipo_reto": "RH",
+            "configuracion": {
+                "texto_antes": "We use a Try / ",
+                "texto_despues": " block.",
+                "respuesta_correcta": "Catch"
+            }
+        }
+    },
+    {
+        "model": "aprendizaje.ejercicio",
+        "pk": 219,
+        "fields": {
+            "leccion": 106,
+            "tipo_ejercicio": "Q",
+            "enunciado": "Order the logical sequence of troubleshooting a bug.",
+            "xp_recompensa": 20
+        }
+    },
+    {
+        "model": "aprendizaje.retointeractivo",
+        "pk": 219,
+        "fields": {
+            "ejercicio": 219,
+            "tipo_reto": "OT",
+            "configuracion": {
+                "elementos_ordenados": [
+                    "1. Reproduce the bug",
+                    "2. Analyze the stack trace",
+                    "3. Isolate the problematic code",
+                    "4. Apply a fix and test again"
+                ]
+            }
+        }
     }
-}
 ]

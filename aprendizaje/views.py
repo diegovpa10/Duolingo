@@ -340,6 +340,32 @@ def crear_oferta(request):
         
     return render(request, 'aprendizaje/crear_oferta.html', {'form': form})
 
+@login_required
+def editar_oferta(request, oferta_id):
+    # Verificamos que sea un reclutador
+    if not hasattr(request.user, 'reclutador'):
+        return redirect('lista_cursos')
+        
+    reclutador = request.user.reclutador
+    
+    # Obtenemos la oferta asegurando que pertenece a este reclutador
+    oferta = get_object_or_404(OfertaLaboral, id=oferta_id, reclutador=reclutador)
+    
+    if request.method == 'POST':
+        # Le pasamos instance=oferta para decirle a Django que actualice, no que cree una nueva
+        form = OfertaLaboralForm(request.POST, instance=oferta)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard_reclutador')
+    else:
+        # Pre-llenamos el formulario con los datos actuales
+        form = OfertaLaboralForm(instance=oferta)
+        
+    return render(request, 'aprendizaje/editar_oferta.html', {
+        'form': form, 
+        'oferta': oferta
+    })
+
 @login_required(login_url='login')
 def red_amigos(request):
     usuario_actual = request.user
