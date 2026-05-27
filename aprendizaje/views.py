@@ -18,7 +18,7 @@ from django.http import JsonResponse
 from .models import (Curso, Leccion, Ejercicio, Estudiante, Reclutador, 
                      PerfilProfesional, Amistad, OfertaLaboral, RankingSemanal, 
                      LigaSemanal, Postulacion, Notificacion, Novedad, 
-                     DesafioDiario, ProgresoDesafio, ProgresoLeccion)
+                     DesafioDiario, ProgresoDesafio, ProgresoLeccion, CofreAbierto)
 from .forms import (RegistroRedOwlForm, EditarEstudianteForm, 
                     EditarPerfilProfesionalForm, EditarReclutadorForm, 
                     OfertaLaboralForm)
@@ -35,10 +35,18 @@ def lista_cursos(request):
 def detalle_curso(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)  
     lecciones = Leccion.objects.filter(curso=curso).order_by('orden')
+    cofres_abiertos_ids = set() # Por defecto vacío si es un usuario invitado
     
     # Pre-calculamos el estado de bloqueo y completado para inyectarlo al HTML
     if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
         estudiante = request.user.estudiante
+        
+        # 📦 NUEVO: Traer los IDs de las lecciones cuyos cofres YA abrió este estudiante
+        # (Esto sirve para que si recarga la página, el cofre aparezca como abierto "🔓")
+        cofres_abiertos_ids = set(
+            CofreAbierto.objects.filter(estudiante=estudiante).values_list('leccion_previa_id', flat=True)
+        )
+        
         for leccion in lecciones:
             leccion.bloqueada = leccion.esta_bloqueada_para(estudiante)
             progreso = ProgresoLeccion.objects.filter(estudiante=estudiante, leccion=leccion).first()
@@ -51,8 +59,62 @@ def detalle_curso(request, curso_id):
 
     return render(request, 'aprendizaje/detalle_curso.html', {
         'curso': curso, 
-        'lecciones': lecciones
+        'lecciones': lecciones,
+        'cofres_abiertos_ids': cofres_abiertos_ids # <-- NUEVO: Se lo inyectamos a la plantilla
     })
+
+# 📦 NUEVA VISTA AJAX (Agrégala justo aquí abajo)
+@login_required(login_url='login')
+def abrir_cofre_ajax(request, leccion_id):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+        
+    estudiante = request.user.estudiante
+    leccion_previa = get_object_or_404(Leccion, id=leccion_id)
+
+    # 1. Seguridad: Verificar si ya abrió este cofre antes
+    if CofreAbierto.objects.filter(estudiante=estudiante, leccion_previa=leccion_previa).exists():
+        return JsonResponse({'error': 'Este cofre ya fue reclamado.'}, status=400)
+
+    # 2. Seguridad: Verificar si de verdad completó la lección anterior
+    # Usamos tu misma estructura de validación con tu modelo ProgresoLeccion
+    progreso = ProgresoLeccion.objects.filter(estudiante=estudiante, leccion=leccion_previa).first()
+    if not (progreso and progreso.completada):
+        return JsonResponse({'error': 'Primero debes completar la lección anterior para abrir este cofre.'}, status=400)
+
+    # 3. Registrar de forma segura que el cofre ya fue abierto
+    CofreAbierto.objects.create(estudiante=estudiante, leccion_previa=leccion_previa)
+
+    # 4. Algoritmo de probabilidad del videojuego (70% XP / 30% Protector de Racha)
+    suerte = random.randint(1, 100)
+    
+    if suerte <= 70:
+        # 70% de Probabilidad: XP Aleatoria entre 20 y 50 puntos
+        xp_ganada = random.randint(20, 50)
+        estudiante.xp_total = (estudiante.xp_total or 0) + xp_ganada
+        estudiante.save()
+        
+        return JsonResponse({
+            'success': True,
+            'tipo': 'xp',
+            'titulo': '¡Puntos de Experiencia!',
+            'mensaje': f'¡Has encontrado +{xp_ganada} XP dentro de la caja!',
+            'icono': '💎',
+            'nuevo_total_xp': estudiante.xp_total
+        })
+    else:
+        # 30% de Probabilidad: Ítem épico (Protector de racha)
+        estudiante.protectores_racha = (estudiante.protectores_racha or 0) + 1
+        estudiante.save()
+        
+        return JsonResponse({
+            'success': True,
+            'tipo': 'protector',
+            'titulo': '¡ÍTEM ÉPICO!',
+            'mensaje': '¡Has obtenido 1 Protector de Racha (🔥🛡️)! Tus días sin ingresar ahora están protegidos.',
+            'icono': '🛡️',
+            'protectores_conteo': estudiante.protectores_racha
+        })
 
 def detalle_leccion(request, leccion_id):
     leccion = get_object_or_404(Leccion, id=leccion_id)
@@ -401,56 +463,31 @@ def red_amigos(request):
 @login_required(login_url='login')
 def ligas(request):
     contexto = {}
-    top_global = Estudiante.objects.all().order_by('-xp_total')[:50]
-    contexto['top_global'] = top_global
-    contexto['color_liga'] = "#ffaa00"  
-    contexto['emoji_liga'] = "🛡️"
+    
+    # 1. Traemos el Top Global (Salón de la fama) idéntico a como lo tenías
+    contexto['top_global'] = Estudiante.objects.all().order_by('-xp_total')[:50]
+    contexto['competidores'] = [] # Valor por defecto
 
-    estilos_ligas = {
-        "bronce": {"color": "#cd7f32", "emoji": "🟤"},
-        "plata": {"color": "#c0c0c0", "emoji": "⚪"},
-        "oro": {"color": "#ffaa00", "emoji": "🟡"},
-        "diamante": {"color": "#00e5ff", "emoji": "💎"},
-    }
-
+    # 2. Lógica adaptada para el Estudiante
     if hasattr(request.user, 'estudiante'):
         contexto['tipo_usuario'] = 'estudiante'
         estudiante_actual = request.user.estudiante
+        
+        # Obtenemos su grupo de competencia de esta semana
         ranking_usuario = RankingSemanal.objects.filter(estudiante=estudiante_actual).order_by('-semana_inicio').first()
         
         if ranking_usuario:
-            competidores = RankingSemanal.objects.filter(
+            # Traemos a sus competidores semanales de su misma liga y semana
+            contexto['competidores'] = RankingSemanal.objects.filter(
                 liga=ranking_usuario.liga,
                 semana_inicio=ranking_usuario.semana_inicio
             ).order_by('-xp_ganada_esta_semana')
-            
-            contexto['nombre_liga'] = ranking_usuario.liga.division
-            contexto['competidores'] = competidores
-        else:
-            liga_info = estudiante_actual.obtener_liga_info
-            contexto['nombre_liga'] = liga_info['nombre']
-            contexto['competidores'] = []
 
-        nombre_clean = contexto['nombre_liga'].lower()
-        key_encontrada = "bronce"  
-        for key in estilos_ligas:
-            if key in nombre_clean:
-                key_encontrada = key
-                break
-        
-        contexto['color_liga'] = estilos_ligas[key_encontrada]['color']
-        contexto['emoji_liga'] = estilos_ligas[key_encontrada]['emoji']
-
+    # 3. Lógica para Reclutadores o Administradores
     elif hasattr(request.user, 'reclutador'):
         contexto['tipo_usuario'] = 'reclutador'
-        contexto['nombre_liga'] = "Ranking de Talentos"
-        contexto['color_liga'] = "#00e5ff"  
-        contexto['emoji_liga'] = "⭐"
     else:
-        contexto['tipo_usuario'] = 'reclutador'
-        contexto['nombre_liga'] = "Ranking Global"
-        contexto['color_liga'] = "#888888"
-        contexto['emoji_liga'] = "🌐"
+        contexto['tipo_usuario'] = 'otro'
 
     return render(request, 'aprendizaje/ligas.html', contexto)
 

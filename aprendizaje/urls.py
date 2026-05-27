@@ -26,4 +26,5 @@ urlpatterns = [
     path('reclutador/oferta/<int:oferta_id>/postulantes/', views.ver_postulantes, name='ver_postulantes'),
     path('notificaciones/marcar-leidas/', views.marcar_notificaciones_leidas, name='marcar_notificaciones_leidas'),
     path('novedades/', views.novedades_view, name='novedades'),
+    path('abrir-cofre/<int:leccion_id>/', views.abrir_cofre_ajax, name='abrir_cofre'),
 ]

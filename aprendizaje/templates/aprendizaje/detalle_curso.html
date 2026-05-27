@@ -377,6 +377,64 @@
         filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.7));
     }
 
+    /* --- NODO COFRE BASE --- */
+    .nodo-cofre {
+        position: relative;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 4px dashed #666;
+        background-color: #222;
+        box-shadow: none;
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
+
+    /* ESTADO 1: BLOQUEADO */
+    .cofre-bloqueado {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .cofre-bloqueado .nodo-icon { filter: grayscale(1); }
+
+    /* ESTADO 2: DISPONIBLE (Brilla y late pidiendo que lo abras) */
+    .cofre-disponible {
+        border: 4px solid #ffaa00;
+        cursor: pointer;
+        background: radial-gradient(circle, #332200 0%, #1a1100 100%);
+        animation: pulso-dorado 2s infinite alternate;
+    }
+    
+    @keyframes pulso-dorado {
+        0% { box-shadow: 0 0 5px rgba(255, 170, 0, 0.4); transform: scale(0.95); }
+        100% { box-shadow: 0 0 20px rgba(255, 170, 0, 0.8); transform: scale(1.05); }
+    }
+
+    /* Tiembla de emoción al pasar el cursor */
+    .cofre-disponible:hover {
+        animation: temblar 0.3s infinite linear;
+    }
+
+    @keyframes temblar {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        10% { transform: translate(-1px, -2px) rotate(-1deg); }
+        30% { transform: translate(0px, 2px) rotate(0deg); }
+        50% { transform: translate(1px, -1px) rotate(1deg); }
+        70% { transform: translate(-1px, 1px) rotate(-1deg); }
+        100% { transform: translate(1px, -2px) rotate(0deg); }
+    }
+
+    /* ESTADO 3: ABIERTO */
+    .cofre-abierto {
+        border: 4px solid #444;
+        background-color: #111;
+        cursor: default;
+        opacity: 0.6;
+    }
+
 </style>
 
 <div class="dashboard-layout">
@@ -432,9 +490,22 @@
                 {% endif %}
 
                 {% if forloop.counter|divisibleby:3 and not forloop.last %}
-                    <div class="nodo-leccion" style="border-style: dashed; border-color: #666; transform: translateX(0) scale(0.8); cursor: default; box-shadow: none;">
-                        <div class="nodo-icon">📦</div>
-                    </div>
+    
+                    {% if leccion.id in cofres_abiertos_ids %}
+                        <div class="nodo-leccion nodo-cofre cofre-abierto" title="Ya reclamaste esta recompensa">
+                            <div class="nodo-icon">🔓</div> </div>
+                    {% elif leccion.esta_completada %}
+                        <div class="nodo-leccion nodo-cofre cofre-disponible" 
+                            onclick="reclamarCofre(this, '{{ leccion.id }}')" 
+                            title="¡Haz clic para abrir tu recompensa!">
+                            <div class="nodo-icon" style="font-size: 1.8rem;">📦</div>
+                        </div>
+                    {% else %}
+                        <div class="nodo-leccion nodo-cofre cofre-bloqueado" title="Completa esta lección para desbloquear el cofre">
+                            <div class="nodo-icon" style="font-size: 1.4rem;">📦</div>
+                        </div>
+                    {% endif %}
+
                 {% endif %}
                 
             {% empty %}
@@ -503,5 +574,50 @@
     </aside>
 
 </div>
+
+<script>
+function reclamarCofre(elemento, leccionId) {
+    // Evitamos doble clic accidental desactivando el trigger inmediato
+    elemento.onclick = null;
+    
+    // Obtener el token de seguridad CSRF que Django exige para peticiones POST
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || "{{ csrf_token }}";
+
+    fetch(`/abrir-cofre/${leccionId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 1. Transformamos el cofre visualmente a estado "Abierto"
+            elemento.classList.remove('cofre-disponible');
+            elemento.classList.add('cofre-abierto');
+            elemento.removeAttribute('onclick');
+            elemento.querySelector('.nodo-icon').innerHTML = '🔓';
+            elemento.title = "Ya reclamaste esta recompensa";
+
+            // 2. Alertar al usuario de su premio (Puedes cambiar este alert clásico por un Modal SweetAlert2 luego)
+            alert(`${data.icono} ${data.titulo}\n\n${data.mensaje}`);
+
+            // 3. Actualizar dinámicamente las barras o textos de estadísticas de la pantalla de forma reactiva
+            if (data.tipo === 'xp') {
+                // Si tienes un elemento de XP total en el panel superior, lo actualizamos
+                const xpElement = document.querySelector('.xp-stat');
+                if (xpElement) xpElement.innerHTML = `💎 ${data.nuevo_total_xp}`;
+            }
+        } else {
+            alert("Error: " + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("Ocurrió un error de conexión al abrir el cofre.");
+    });
+}
+</script>
 
 {% endblock %}

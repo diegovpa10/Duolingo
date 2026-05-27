@@ -18,6 +18,7 @@ class Estudiante(models.Model):
     racha_ejercicios = models.IntegerField(default=0)
     avatar = models.ImageField(upload_to='avatares/', default='avatares/default_owl.png', null=True, blank=True)
     escuela = models.CharField(max_length=200, blank=True, null=True)
+    protectores_racha = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Estudiante: {self.usuario.username}"
@@ -360,3 +361,12 @@ class ProgresoDesafio(models.Model):
 
     def __str__(self):
         return f"{self.estudiante.usuario.username} - {self.desafio.nombre} - {self.fecha}"
+    
+class CofreAbierto(models.Model):
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name='cofres_abiertos')
+    # Usaremos la lección justo anterior para identificar el cofre de esa posición
+    leccion_previa = models.ForeignKey('Leccion', on_delete=models.CASCADE)
+    fecha_apertura = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('estudiante', 'leccion_previa') # Un estudiante solo abre un cofre por hito una vez
