@@ -486,22 +486,40 @@ def bolsa_trabajo(request):
     if perfil and perfil.habilidades:
         habilidades_estudiante = [hab.lower().strip() for hab in perfil.habilidades]
 
+    # Obtenemos todos los cursos disponibles en la plataforma
+    todos_los_cursos = Curso.objects.all()
+
     ofertas_procesadas = []
     for oferta in ofertas_activas:
         postulacion_actual = Postulacion.objects.filter(estudiante=estudiante, oferta=oferta).first()
-        cumple_requisitos = False
         
-        if perfil and habilidades_estudiante and oferta.requisitos:
-            requisitos_texto = oferta.requisitos.lower()
+        # 1. EVALUAR RESTRICCIÓN (Solo importan los obligatorios)
+        cumple_requisitos = False
+        if not oferta.requisitos_obligatorios:
+            # Si el reclutador no puso requisitos obligatorios, todos pueden postularse
+            cumple_requisitos = True
+        elif perfil and habilidades_estudiante:
+            req_obligatorios_texto = oferta.requisitos_obligatorios.lower()
             for hab in habilidades_estudiante:
-                if hab in requisitos_texto:
+                if hab in req_obligatorios_texto:
                     cumple_requisitos = True
                     break 
         
+        # 2. SISTEMA DE RECOMENDACIÓN DE CURSOS
+        cursos_recomendados = []
+        # Juntamos todos los requisitos (obligatorios y extras) para buscar palabras clave
+        texto_total_req = f"{oferta.requisitos_obligatorios or ''} {oferta.requisitos_extras or ''}".lower()
+        
+        for curso in todos_los_cursos:
+            # Si el lenguaje del curso (ej. "python") aparece en los requisitos, lo recomendamos
+            if curso.lenguaje and curso.lenguaje.lower() in texto_total_req:
+                cursos_recomendados.append(curso)
+
         ofertas_procesadas.append({
             'oferta': oferta,
             'postulacion_actual': postulacion_actual,  
-            'puede_postularse': cumple_requisitos
+            'puede_postularse': cumple_requisitos,
+            'cursos_recomendados': cursos_recomendados # Mandamos las recomendaciones a la plantilla
         })
 
     return render(request, 'aprendizaje/bolsa_trabajo.html', {

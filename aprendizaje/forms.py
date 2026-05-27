@@ -83,11 +83,12 @@ class EditarPerfilProfesionalForm(forms.ModelForm):
 class OfertaLaboralForm(forms.ModelForm):
     class Meta:
         model = OfertaLaboral
-        fields = ['titulo', 'descripcion', 'requisitos', 'rango_salarial']
+        fields = ['titulo', 'descripcion', 'requisitos_obligatorios', 'requisitos_extras', 'rango_salarial']
         widgets = {
             'titulo': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Ej: Desarrollador Backend Junior'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 4, 'placeholder': 'Describe las responsabilidades de la misión...'}),
-            'requisitos': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 3, 'placeholder': 'Ej: Python, Django, SQL...'}),
+            'requisitos_obligatorios': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 2, 'placeholder': 'Ej: Python, Django (Trata de poner máximo 2 o 3)'}),
+            'requisitos_extras': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 2, 'placeholder': 'Ej: SQL, Git, Docker (Opcional pero deseable)'}),
             'rango_salarial': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Ej: $500 - $1000 USD'}),
         }
 

@@ -121,7 +121,12 @@ class OfertaLaboral(models.Model):
     reclutador = models.ForeignKey(Reclutador, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)
     descripcion = models.TextField(null=True, blank=True)
-    requisitos = models.TextField(null=True, blank=True)
+    
+    # --- DIVISIÓN DE REQUISITOS ---
+    requisitos_obligatorios = models.TextField(null=True, blank=True, help_text="Máximo 2 o 3 habilidades clave (Ej. Python, Django).")
+    requisitos_extras = models.TextField(null=True, blank=True, help_text="Habilidades deseables que suman puntos (Ej. Docker, SQL).")
+    # ------------------------------
+    
     rango_salarial = models.CharField(max_length=100, blank=True, null=True)
     fecha_publicacion = models.DateField(auto_now_add=True)
     activa = models.BooleanField(default=True)
