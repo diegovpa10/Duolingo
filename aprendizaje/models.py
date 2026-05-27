@@ -25,38 +25,47 @@ class Estudiante(models.Model):
     
     def verificar_y_limpiar_racha(self):
         """
-        Comprueba si el estudiante dejó pasar más de un día sin completar lecciones.
-        Si es así, la racha se rompe y vuelve a 0.
-        Se debe ejecutar cada vez que el estudiante entra a su panel principal.
+        Comprueba si dejó pasar más de un día. 
+        Si tiene un protector, lo gasta y salva la racha. Si no, racha = 0.
         """
         hoy = date.today()
         if self.fecha_ultima_leccion:
-            diferencia = hoy - self.fecha_ultima_leccion
-            # Si ha pasado más de 1 día completo desde su última lección (ej: hoy es miércoles y su última lección fue el lunes)
-            if diferencia.days > 1:
-                self.racha_dias = 0
+            diferencia = (hoy - self.fecha_ultima_leccion).days
+            
+            if diferencia > 1:
+                # 🛡️ ¡ENTRA EL PROTECTOR DE RACHA!
+                if self.protectores_racha > 0:
+                    self.protectores_racha -= 1
+                    # Truco: Fingimos que su última lección fue ayer para que hoy pueda continuarla
+                    self.fecha_ultima_leccion = hoy - timedelta(days=1)
+                else:
+                    # Sin protectores, racha aniquilada
+                    self.racha_dias = 0
+                
                 self.save()
 
     def extender_racha(self):
-        """
-        Suma un día a la racha o la mantiene si ya hizo un ejercicio hoy.
-        Se ejecuta SOLO cuando completa un ejercicio NUEVO.
-        """
+        """Suma un día a la racha o inicia una nueva."""
         hoy = date.today()
-        ayer = hoy - timedelta(days=1)
-
-        if self.fecha_ultima_leccion == hoy:
-            # Ya hizo un ejercicio hoy, la racha se mantiene igual (no se suma doble)
-            pass
-        elif self.fecha_ultima_leccion == ayer:
-            # Su última lección fue ayer, ¡mantiene la continuidad! Suma 1 día
-            self.racha_dias += 1
-            self.fecha_ultima_leccion = hoy
-        else:
-            # No tenía racha activa o se había roto. Inicia una racha nueva de 1 día
+        
+        # Primero revisamos si necesita gastar un protector o perder la racha
+        self.verificar_y_limpiar_racha()
+        
+        if not self.fecha_ultima_leccion:
             self.racha_dias = 1
             self.fecha_ultima_leccion = hoy
-        
+        else:
+            diferencia = (hoy - self.fecha_ultima_leccion).days
+            
+            if diferencia == 0:
+                pass # Ya hizo ejercicio hoy, la racha se queda igual
+            elif diferencia == 1:
+                self.racha_dias += 1 # Viene de ayer (o fue salvado por protector), suma 1
+                self.fecha_ultima_leccion = hoy
+            else:
+                self.racha_dias = 1 # Racha nueva
+                self.fecha_ultima_leccion = hoy
+                
         self.save()
 
     # 🛡️ SISTEMA DE LIGAS DINÁMICO

@@ -411,6 +411,14 @@ form input[type="checkbox"] { margin-left: 5px; cursor: pointer; }
                     </div>
                     <span class="energia-texto">{{ user.estudiante.energia }}/10</span>
                 </div>
+
+                <div class="stat-item" title="Protectores de racha disponibles" 
+                    style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 20px; display: flex; align-items: center; gap: 5px; border: 1px solid {% if request.user.estudiante.protectores_racha > 0 %}#00e5ff{% else %}#444{% endif %};">
+                    <span>🛡️</span>
+                    <strong style="color: {% if request.user.estudiante.protectores_racha > 0 %}#00e5ff{% else %}#888{% endif %};">
+                        {{ request.user.estudiante.protectores_racha }}
+                    </strong>
+                </div>
             {% endif %}
 
             <div style="position: relative; display: inline-block;" id="notif-wrapper">

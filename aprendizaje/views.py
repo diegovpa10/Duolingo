@@ -28,6 +28,11 @@ from .utils import registrar_avance_misiones
 def lista_cursos(request):
     if hasattr(request.user, 'reclutador'):
         return redirect('dashboard_reclutador')
+        
+    # 🚀 ACCIÓN PASIVA: Evaluamos la racha del estudiante inmediatamente al cargar la página
+    if hasattr(request.user, 'estudiante'):
+        request.user.estudiante.verificar_y_limpiar_racha()
+        
     # Obtenemos todos los cursos
     cursos = Curso.objects.all() 
     return render(request, 'aprendizaje/lista_cursos.html', {'cursos': cursos})
@@ -236,29 +241,17 @@ def detalle_leccion(request, leccion_id):
         if request.user.is_authenticated and hasattr(request.user, 'estudiante'):
             estudiante = request.user.estudiante
             
-            # 🚀 NUEVO: Buscamos o creamos el progreso para ESTE estudiante
             progreso_leccion, created = ProgresoLeccion.objects.get_or_create(
                 estudiante=estudiante, 
                 leccion=leccion
             )
             
-            # Si el registro no estaba marcado como completado, damos la recompensa
             if not progreso_leccion.completada:
                 puntos_a_ganar = ejercicio_actual.xp_recompensa if ejercicio_actual else 15
                 estudiante.xp_total += puntos_a_ganar 
                 
-                hoy = timezone.now().date()
-                ayer = hoy - timedelta(days=1)
-                
-                if estudiante.fecha_ultima_leccion == hoy:
-                    pass 
-                elif estudiante.fecha_ultima_leccion == ayer:
-                    estudiante.racha_dias += 1
-                else:
-                    estudiante.racha_dias = 1
-                    
-                estudiante.fecha_ultima_leccion = hoy
-                estudiante.save()
+                # 🚀 AQUÍ ESTÁ LA MAGIA: Una sola línea controla toda la racha y los protectores
+                estudiante.extender_racha()
                 
                 ranking_actual = RankingSemanal.objects.filter(estudiante=estudiante).order_by('-semana_inicio').first()
                 if ranking_actual:
@@ -270,7 +263,6 @@ def detalle_leccion(request, leccion_id):
                 
                 mensaje += f" ¡Ganaste {puntos_a_ganar} XP!"
                     
-                # 🚀 NUEVO: Guardamos el progreso como completado en la tabla intermedia
                 progreso_leccion.completada = True
                 progreso_leccion.save()
 
